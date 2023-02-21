@@ -1,22 +1,56 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-      <ul class="navbar-nav me-auto mb-2 mb-md-0">
-        <li class="nav-item">
-          <!-- Add a router link to the homepage (don't use the a tag!) -->
-          <router-link to="/" class="nav-link" active-class="active">Home</router-link>
-        </li>
-        <li class="nav-item">
-          <!-- add a router link to the products page (don't use the a tag!) -->
-          <router-link to="/products" class="nav-link" active-class="active">Products</router-link>
-        </li>
-      </ul>
+  <nav class="navbar navbar-expand-lg sticky bg-white navbar-light">
+    <div class="container">
+      <router-link to="/" class="nav-link" active-class="active navbar-brand">FoodieFaves</router-link>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item">
+          </li>
+          <li class="nav-item">
+            <router-link to="/userreview" class="nav-link" active-class="active">
+              <font-awesome-icon icon="fa-solid fa-pencil" />
+              Beoordeling</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/login" class="nav-link btn btn-primary" active-class="active">
+              Inloggen
+            </router-link>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
-</template>
+<!-- Navbar --></template>
 
 <script setup lang="ts">
 
 </script>
 
-<style></style>
+<style>
+.nav-link {
+  font-size: 17px;
+  font-weight: 600;
+  color: #000 !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.btn-primary {
+  background-color: #000;
+  border: none;
+  color: #fff !important;
+  border-radius: 100px;
+  border: 1px solid #000 !important;
+}
+
+.btn-primary:hover {
+  color: #000 !important;
+  background-color: #fff !important;
+
+}
+
+.navbar-brand {
+  font-size: 25px !important;
+}
+</style>
