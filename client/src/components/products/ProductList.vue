@@ -24,7 +24,7 @@ const router = useRouter();
 const products = ref<Product[]>([]);
 
 function redirect(location: string){
-  router.push('/' + location);
+  router.push(location);
 }
 </script>
 
