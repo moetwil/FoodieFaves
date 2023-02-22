@@ -1,5 +1,5 @@
 <template>
-    <li class="card py-3 px-3 col-6">
+    <li class="card py-3 px-3 col my-3">
         <div class="d-flex">
             <div class="left">
                 <span>
@@ -24,6 +24,13 @@
                         The process was smooth, after providing the required info, Pragyesh sent me an
                         outstanding packet of wireframes. Thank you a lot!
                     </p>
+
+                    <div class="rating d-flex justify-content-center flex-column mt-2">
+                        <span class="text-body-3">Eten: 4.2</span>
+                        <span class="text-body-3">Bediening: 6.1</span>
+                        <span class="text-body-3">Prijs-kwaliteit: 1/5</span>
+                    </div>
+
                 </div>
                 <span class="publish py-3 d-inline-block w-100">Published 4 weeks ago</span>
             </div>
@@ -39,6 +46,10 @@
 body {
     margin-top: 20px;
     background: #eee;
+}
+
+.text-body-3 {
+    font-size: 14px;
 }
 
 .review-list ul li .left span {
@@ -84,7 +95,7 @@ body {
 }
 
 .review-list ul li .review-description p {
-    font-size: 14px;
+    font-size: 17px;
     margin: 0;
 }
 
