@@ -52,5 +52,6 @@
 
 .navbar-brand {
   font-size: 25px !important;
+  padding-left: 0px !important;
 }
 </style>
