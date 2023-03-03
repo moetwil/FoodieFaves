@@ -1,20 +1,31 @@
 <?php
 namespace Services;
 
+use Models\User;
 use Repositories\UserRepository;
 
 class UserService {
 
-    private $repository;
+    private $userRepository;
 
-    function __construct()
+    function __construct(UserRepository $userRepository)
     {
-        $this->repository = new UserRepository();
+        $this->userRepository = $userRepository;
     }
 
-    public function checkUsernamePassword($username, $password) {
-        return $this->repository->checkUsernamePassword($username, $password);
+    public function authenticateUser(string $username, string $password): ?User {
+        $user = $this->userRepository->getUserByUsername($username);
+        
+        if (!$user) {
+            return null;
+        }
+
+        if (!password_verify($password, $user->getPassword())) {
+            return null;
+        }
+
+        $user->setPassword("");
+        return $user;
     }
 }
-
 ?>

@@ -1,32 +1,21 @@
 <?php
-
 namespace Repositories;
 
 use PDO;
 use PDOException;
-use Repositories\Repository;
+use Models\User;
 
 class UserRepository extends Repository
 {
-    function checkUsernamePassword($username, $password)
+    public function getUserById($id)
     {
         try {
-            // retrieve the user with the given username
-            $stmt = $this->connection->prepare("SELECT id, username, password, email FROM user WHERE username = :username");
-            $stmt->bindParam(':username', $username);
+            $stmt = $this->connection->prepare("SELECT * FROM User WHERE id = :id");
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
-
-            // verify if the password matches the hash in the database
-            $result = $this->verifyPassword($password, $user->password);
-
-            if (!$result)
-                return false;
-
-            // do not pass the password hash to the caller
-            $user->password = "";
 
             return $user;
         } catch (PDOException $e) {
@@ -34,15 +23,94 @@ class UserRepository extends Repository
         }
     }
 
-    // hash the password (currently uses bcrypt)
-    function hashPassword($password)
+    public function getUserByUsername($username)
     {
-        return password_hash($password, PASSWORD_DEFAULT);
+        try {
+            $stmt = $this->connection->prepare("SELECT * FROM User WHERE username = :username");
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
+            $user = $stmt->fetch();
+
+            return $user;
+        } catch (PDOException $e) {
+            echo $e;
+        }
     }
 
-    // verify the password hash
-    function verifyPassword($input, $hash)
+    public function checkUsernamePassword($username, $password)
     {
-        return password_verify($input, $hash);
+        try {
+            $stmt = $this->connection->prepare("SELECT * FROM User WHERE username = :username");
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
+            $user = $stmt->fetch();
+
+            // verify if the password matches the hash in the database
+            $result = password_verify($password, $user->getPassword());
+
+            if (!$result) {
+                return false;
+            }
+
+            // do not pass the password hash to the caller
+            $user->setPassword("");
+
+            return $user;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+    public function addUser(User $user)
+    {
+        try {
+            $stmt = $this->connection->prepare("INSERT INTO User (first_name, last_name, username, email, password) VALUES (:first_name, :last_name, :username, :email, :password)");
+            $stmt->bindParam(':first_name', $user->getFirstName());
+            $stmt->bindParam(':last_name', $user->getLastName());
+            $stmt->bindParam(':username', $user->getUsername());
+            $stmt->bindParam(':email', $user->getEmail());
+            $stmt->bindParam(':password', $user->getPassword());
+            $stmt->execute();
+
+            return $user;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+
+    public function updateUser(User $user)
+    {
+        try {
+            $stmt = $this->connection->prepare("UPDATE User SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, password = :password WHERE id = :id");
+            $stmt->bindParam(':first_name', $user->getFirstName());
+            $stmt->bindParam(':last_name', $user->getLastName());
+            $stmt->bindParam(':username', $user->getUsername());
+            $stmt->bindParam(':email', $user->getEmail());
+            $stmt->bindParam(':password', $user->getPassword());
+            $stmt->bindParam(':id', $user->getId());
+            $stmt->execute();
+
+            return $user;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+    public function deleteUser(User $user)
+    {
+        try {
+            $stmt = $this->connection->prepare("DELETE FROM User WHERE id = :id");
+            $stmt->bindParam(':id', $user->getId());
+            $stmt->execute();
+
+            return true;
+        } catch (PDOException $e) {
+            echo $e;
+        }
     }
 }
