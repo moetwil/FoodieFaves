@@ -1,6 +1,6 @@
 <template>
     <div class="col-md-4">
-        <div class="card p-3 mb-2">
+        <div class="card p-3 mb-2 bg-light">
             <div class="d-flex justify-content-between">
                 <div class="d-flex flex-row align-items-center">
                     <div class="icon">
@@ -33,7 +33,7 @@
 
 <style scoped>
 .card {
-    background-color: #f9f9f988;
+    /* background-color: #f9f9f988; */
 }
 
 .card {

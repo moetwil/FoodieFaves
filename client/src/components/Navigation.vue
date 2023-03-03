@@ -21,7 +21,7 @@
       </div>
     </div>
   </nav>
-<!-- Navbar --></template>
+</template>
 
 <script setup lang="ts">
 

@@ -116,4 +116,8 @@ ul li {
     align-items: center;
     font-weight: 700;
 }
+
+.card {
+    /* border: none !important; */
+}
 </style>
