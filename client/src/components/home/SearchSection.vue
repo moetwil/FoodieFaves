@@ -12,28 +12,35 @@
                         <div class="result-name">{{ result.name }}</div>
                         <div class="result-location">{{ result.city }}</div>
                     </div>
+                    <div v-if="showNoResults" class="search-result">
+                        <div class="result-name">Niets gevonden</div>
+                        <div class="result-location">Probeer een andere zoekopdracht.</div>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
-
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import Restaurant from "./../../interfaces/Restaurant";
 
 const searchQuery = ref('');
 const searchResults = ref<Restaurant[]>([]);
+const noResultsMessage = "Niets gevonden";
+const noResults = { id: -1, name: noResultsMessage, city: '' };
 
 watch(searchQuery, async (newQuery: string) => {
     const response = await fetch(`http://localhost/api/restaurants/search/${newQuery}`);
     const results = await response.json();
-    searchResults.value = results;
+    searchResults.value = results.length ? results : [];
 });
 
-</script>
 
+const showNoResults = computed(() => searchResults.value.length === 0 && searchQuery.value !== '');
+
+
+</script>
 <style scoped>
 #searchInput {
     width: 100%;
