@@ -107,6 +107,9 @@ class UserRepository extends Repository
             $stmt->bindParam(':user_type', $user->user_type);
             $stmt->execute();
 
+            // get the id of the newly created user
+            $user->id = $this->connection->lastInsertId();
+
             return $user;
         } catch (PDOException $e) {
             echo $e;

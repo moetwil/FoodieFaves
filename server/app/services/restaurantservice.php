@@ -8,21 +8,21 @@ class RestaurantService {
 
     private $restaurantRepository;
 
-    function __construct(RestaurantRepository $restaurantRepository)
+    function __construct()
     {
-        $this->restaurantRepository = $restaurantRepository;
+        $this->restaurantRepository = new RestaurantRepository();
     }
 
     public function addRestaurant(Restaurant $restaurant): ?Restaurant {
-        return $this->restaurantRepository->addRestaurant($restaurant);
+        return $this->restaurantRepository->createRestaurant($restaurant);
     }
 
-    public function getRestaurantById(int $id): ?Restaurant {
+    public function getRestaurantById($id) {
         return $this->restaurantRepository->getRestaurantById($id);
     }
 
-    public function updateRestaurant(Restaurant $restaurant): ?Restaurant {
-        return $this->restaurantRepository->updateRestaurant($restaurant);
+    public function updateRestaurant($id, Restaurant $restaurant): ?Restaurant {
+        return $this->restaurantRepository->updateRestaurant($id, $restaurant);
     }
 
     public function deleteRestaurant(int $id): bool {

@@ -40,5 +40,13 @@ $router->post('/api/users/register', 'UserController@register');
 $router->put('/api/users/(\d+)', 'UserController@update');
 $router->delete('/api/users/(\d+)', 'UserController@delete');
 
+// routes for the restaurants endpoint
+$router->post('/api/restaurants', 'RestaurantController@create');
+$router->get('/api/restaurants/(\d+)', 'RestaurantController@getById');
+$router->get('/api/restaurants', 'RestaurantController@getAll');
+$router->get('/api/restaurants/owner/(\d+)', 'RestaurantController@getAllByOwner');
+$router->put('/api/restaurants/(\d+)', 'RestaurantController@update');
+$router->delete('/api/restaurants/(\d+)', 'RestaurantController@delete');
+
 // Run it!
 $router->run();

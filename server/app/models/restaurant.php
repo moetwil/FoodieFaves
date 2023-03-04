@@ -5,12 +5,12 @@ class Restaurant {
   public $id;
   public $name;
   public $street;
-  public $houseNumber;
+  public $house_number;
   public $city;
-  public $zipCode;
+  public $zip_code;
   public $country;
-  public $phoneNumber;
-  public $ownerId;
-  public $profilePicture;
-  public $restaurantTypeId;
+  public $phone_number;
+  public $owner_id;
+  public $profile_picture;
+  public $restaurant_type_id;
 }
