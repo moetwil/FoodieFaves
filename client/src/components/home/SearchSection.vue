@@ -77,6 +77,10 @@ const showNoResults = computed(() => searchResults.value.length === 0 && searchQ
     padding: 10px;
 }
 
+.search-result:hover {
+    background-color: #f1f1f1;
+}
+
 .result-name {
     font-weight: bold;
     font-size: 16px;
