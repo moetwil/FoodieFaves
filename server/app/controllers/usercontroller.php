@@ -5,6 +5,7 @@ namespace Controllers;
 use Exception;
 use Services\UserService;
 use \Firebase\JWT\JWT;
+use \Dotenv\Dotenv;
 
 class UserController extends Controller
 {
@@ -21,8 +22,9 @@ class UserController extends Controller
         // read user data from request body
         $postedUser = $this->createObjectFromPostedJson("Models\\User");
 
+
         // get user from db
-        $user = $this->service->checkUsernamePassword($postedUser->username, $postedUser->password);
+        $user = $this->service->authenticateUser($postedUser->username, $postedUser->password);
 
         // if the method returned false, the username and/or password were incorrect
         if(!$user) {
@@ -36,11 +38,38 @@ class UserController extends Controller
         $this->respond($tokenResponse);    
     }
 
-    public function generateJwt($user) {
-        $secret_key = "YOUR_SECRET_KEY";
+    public function register() {
+        // read user data from request body
+        $postedUser = $this->createObjectFromPostedJson("Models\\User");
 
-        $issuer = "THE_ISSUER"; // this can be the domain/servername that issues the token
-        $audience = "THE_AUDIENCE"; // this can be the domain/servername that checks the token
+        // check if the username already exists
+        $user = $this->service->getUserByUsername($postedUser->username);
+        if($user) {
+            $this->respondWithError(409, "Username already exists");
+            return;
+        }
+
+        // check if the email already exists
+        $user = $this->service->getUserByEmail($postedUser->email);
+        if($user) {
+            $this->respondWithError(409, "Email already exists");
+            return;
+        }
+
+        //create user
+        $user = $this->service->createUser($postedUser);
+
+        // generate jwt
+        $tokenResponse = $this->generateJwt($user);       
+
+        $this->respond($tokenResponse);    
+    }
+
+    public function generateJwt($user) {
+        $secret_key = getenv('JWT_SECRET_KEY');
+
+        $issuer = "localhost"; // this can be the domain/servername that issues the token
+        $audience = "FoodieFaves"; // this can be the domain/servername that checks the token
 
         $issuedAt = time(); // issued at
         $notbefore = $issuedAt; //not valid before 

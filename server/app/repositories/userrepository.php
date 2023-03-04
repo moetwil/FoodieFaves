@@ -33,12 +33,38 @@ class UserRepository extends Repository
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
 
+            if(!$user) {
+                return null;
+            }
+
             return $user;
         } catch (PDOException $e) {
             echo $e;
         }
     }
 
+    public function getUserByEmail($email)
+    {
+        try {
+            $stmt = $this->connection->prepare("SELECT * FROM User WHERE email = :email");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
+            $user = $stmt->fetch();
+
+            if(!$user) {
+                return null;
+            }
+
+            return $user;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+
+    
     public function checkUsernamePassword($username, $password)
     {
         try {
@@ -50,14 +76,14 @@ class UserRepository extends Repository
             $user = $stmt->fetch();
 
             // verify if the password matches the hash in the database
-            $result = password_verify($password, $user->getPassword());
+            $result = password_verify($password, $user->password);
 
             if (!$result) {
                 return false;
             }
 
             // do not pass the password hash to the caller
-            $user->setPassword("");
+            $user->password = null;
 
             return $user;
         } catch (PDOException $e) {
@@ -65,15 +91,20 @@ class UserRepository extends Repository
         }
     }
 
-    public function addUser(User $user)
+    public function createUser(User $user)
     {
         try {
-            $stmt = $this->connection->prepare("INSERT INTO User (first_name, last_name, username, email, password) VALUES (:first_name, :last_name, :username, :email, :password)");
-            $stmt->bindParam(':first_name', $user->getFirstName());
-            $stmt->bindParam(':last_name', $user->getLastName());
-            $stmt->bindParam(':username', $user->getUsername());
-            $stmt->bindParam(':email', $user->getEmail());
-            $stmt->bindParam(':password', $user->getPassword());
+
+            // hash the password
+            $user->password = $this->hashPassword($user->password);
+
+            $stmt = $this->connection->prepare("INSERT INTO User (first_name, last_name, username, email, password, user_type) VALUES (:first_name, :last_name, :username, :email, :password, :user_type)");
+            $stmt->bindParam(':first_name', $user->first_name);
+            $stmt->bindParam(':last_name', $user->last_name);
+            $stmt->bindParam(':username', $user->username);
+            $stmt->bindParam(':email', $user->email);
+            $stmt->bindParam(':password', $user->password);
+            $stmt->bindParam(':user_type', $user->user_type);
             $stmt->execute();
 
             return $user;
@@ -87,12 +118,12 @@ class UserRepository extends Repository
     {
         try {
             $stmt = $this->connection->prepare("UPDATE User SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, password = :password WHERE id = :id");
-            $stmt->bindParam(':first_name', $user->getFirstName());
-            $stmt->bindParam(':last_name', $user->getLastName());
-            $stmt->bindParam(':username', $user->getUsername());
-            $stmt->bindParam(':email', $user->getEmail());
-            $stmt->bindParam(':password', $user->getPassword());
-            $stmt->bindParam(':id', $user->getId());
+            $stmt->bindParam(':first_name', $user->first_name);
+            $stmt->bindParam(':last_name', $user->last_name);
+            $stmt->bindParam(':username', $user->username);
+            $stmt->bindParam(':email', $user->email);
+            $stmt->bindParam(':password', $user->password);
+            $stmt->bindParam(':id', $user->id);
             $stmt->execute();
 
             return $user;
@@ -105,12 +136,24 @@ class UserRepository extends Repository
     {
         try {
             $stmt = $this->connection->prepare("DELETE FROM User WHERE id = :id");
-            $stmt->bindParam(':id', $user->getId());
+            $stmt->bindParam(':id', $user->id);
             $stmt->execute();
 
             return true;
         } catch (PDOException $e) {
             echo $e;
         }
+    }
+
+    // hash the password (currently uses bcrypt)
+    function hashPassword($password)
+    {
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    // verify the password hash
+    function verifyPassword($input, $hash)
+    {
+        return password_verify($input, $hash);
     }
 }

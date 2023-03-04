@@ -69,4 +69,21 @@ class Controller
         }
         return $object;
     }
+
+
+    // function createObjectFromPostedJson($className)
+    // {
+    //     // create object from posted json but use the constructor
+    //     $json = file_get_contents('php://input');
+    //     $data = json_decode($json);
+
+    //     // create object but pass in every variable from $data as parameter
+    //     $object = new $className(...(array)$data);
+    //     return $object;
+    // }
+
+
+
+
+
 }
