@@ -21,14 +21,13 @@
                 </h4>
                 <div class="review-description">
                     <p>
-                        The process was smooth, after providing the required info, Pragyesh sent me an
-                        outstanding packet of wireframes. Thank you a lot!
+                        {{ review.review_text }}
                     </p>
 
                     <div class="rating d-flex justify-content-center flex-column mt-2">
-                        <span class="text-body-3">Eten: 4.2</span>
-                        <span class="text-body-3">Bediening: 6.1</span>
-                        <span class="text-body-3">Prijs-kwaliteit: 1/5</span>
+                        <span class="text-body-3">Eten: {{ review.food_rating }}</span>
+                        <span class="text-body-3">Bediening: {{ review.service_rating }}</span>
+                        <span class="text-body-3">Prijs-kwaliteit: {{ review.price_value_rating }}</span>
                     </div>
 
                 </div>
@@ -39,6 +38,15 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, PropType, ref } from 'vue';
+import Review from "./../../interfaces/Review";
+
+const { review } = defineProps({
+    review: {
+        type: Object as PropType<Review>,
+        required: true
+    }
+})
 
 </script>
 

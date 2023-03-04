@@ -121,4 +121,19 @@ class RestaurantRepository  extends Repository{
         }
     }
 
+    public function getRestaurantReviewsAmount($id)
+    {
+        try {
+            $stmt = $this->connection->prepare("SELECT COUNT(*) FROM Review WHERE restaurant_id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            $reviewsAmount = $stmt->fetchColumn();
+
+            return $reviewsAmount;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
 }

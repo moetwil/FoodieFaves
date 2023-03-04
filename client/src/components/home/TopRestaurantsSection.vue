@@ -6,15 +6,33 @@
             </h2>
         </div>
         <div class="row">
-            <Restaurant />
-            <Restaurant />
-            <Restaurant />
+            <RestaurantComponent v-for="restaurant in restaurants" :key="restaurant.id" :restaurant="restaurant" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import Restaurant from "../home/Restaurant.vue";
+import { onMounted, ref } from "vue";
+import RestaurantComponent from "../home/Restaurant.vue";
+import Restaurant from "./../../interfaces/Restaurant";
+
+// const restaurants = ref([]);
+const restaurants = ref<Restaurant[]>([]);
+
+// on mounted fetch restaurants
+onMounted(() => {
+    fetchRestaurants();
+});
+
+async function fetchRestaurants() {
+    const response = await fetch("http://localhost/api/restaurants");
+    const data = await response.json();
+
+    restaurants.value = data;
+
+}
+
+
 </script>
 
 <style scoped></style>

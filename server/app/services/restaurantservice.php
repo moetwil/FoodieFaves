@@ -36,4 +36,8 @@ class RestaurantService {
     public function getAllRestaurantsByOwner(int $ownerId): ?array {
         return $this->restaurantRepository->getAllRestaurantsByOwner($ownerId);
     }
+
+    public function getRestaurantReviewsAmount($id){
+        return $this->restaurantRepository->getRestaurantReviewsAmount($id);
+    }
 }
