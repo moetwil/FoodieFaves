@@ -33,7 +33,8 @@ $router->get('/api/restaurants/owner/(\d+)', 'RestaurantController@getAllByOwner
 $router->put('/api/restaurants/(\d+)', 'RestaurantController@update');
 $router->delete('/api/restaurants/(\d+)', 'RestaurantController@delete');
 $router->get('/api/restaurants/(\d+)/reviews', 'RestaurantController@getRestaurantReviewsAmount');
-#average rating
+// average restaurant rating
+$router->get('/api/restaurants/(\d+)/rating', 'RestaurantController@getRestaurantRating');
 
 // reviews endpoints
 $router->post('/api/reviews', 'ReviewController@create');

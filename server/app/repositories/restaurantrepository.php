@@ -10,12 +10,14 @@ class RestaurantRepository  extends Repository{
     public function getRestaurantById($id)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM Restaurant WHERE id = :id");
+            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id FROM Restaurant WHERE id = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurant = $stmt->fetch();
+            
+            $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
 
             return $restaurant;
 
@@ -92,11 +94,15 @@ class RestaurantRepository  extends Repository{
     public function getAllRestaurants() 
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM Restaurant");
+            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id FROM Restaurant");
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurants = $stmt->fetchAll();
+
+            foreach($restaurants as $restaurant){
+                $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
+            }
 
             return $restaurants;
         } catch (PDOException $e) {
@@ -131,6 +137,45 @@ class RestaurantRepository  extends Repository{
             $reviewsAmount = $stmt->fetchColumn();
 
             return $reviewsAmount;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+    function getRestaurantPicture($id){
+        try {
+            $stmt = $this->connection->prepare("SELECT profile_picture FROM Restaurant WHERE id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            $restaurantPicture = $stmt->fetchColumn();
+
+            if($restaurantPicture == null){
+                return null;
+            }
+            // convert blob to base64
+            $restaurantPicture = base64_encode($restaurantPicture);
+
+
+            return $restaurantPicture;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
+    // create a function to get the average rating of a restaurant from the the 3 columns food_rating, service_rating, price_value_rating and return a value 1-5
+    public function getRestaurantRating($id)
+    {
+        try {
+            $stmt = $this->connection->prepare("SELECT (AVG(food_rating) + AVG(service_rating) + AVG(price_value_rating)) / 3 AS rating_avg
+            FROM Review
+            WHERE restaurant_id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            $restaurantRating = $stmt->fetchColumn();
+
+            return $restaurantRating;
         } catch (PDOException $e) {
             echo $e;
         }

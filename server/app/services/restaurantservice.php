@@ -40,4 +40,8 @@ class RestaurantService {
     public function getRestaurantReviewsAmount($id){
         return $this->restaurantRepository->getRestaurantReviewsAmount($id);
     }
+
+    public function getRestaurantRating($id){
+        return $this->restaurantRepository->getRestaurantRating($id);
+    }
 }

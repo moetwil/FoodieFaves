@@ -4,11 +4,11 @@
             <div class="d-flex justify-content-between">
                 <div class="d-flex flex-row align-items-center">
                     <div class="icon">
-                        <img :src=restaurant.profile_picture />
+                        <img :src="'data:image/png;base64,' + restaurant.profile_picture" />
                         <!-- <img src="https://img.icons8.com/ios/50/000000/restaurant.png" /> -->
                     </div>
                 </div>
-                <div class="badge"> <span>4/5 ⭐</span> </div>
+                <div class="badge" v-if="averageRating"> <span>{{ averageRating }}/5 ⭐</span> </div>
             </div>
             <div class="mt-5">
                 <h3 class="heading">{{ restaurant.name }}</h3>
@@ -29,10 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, PropType, ref } from 'vue';
+import { onMounted, PropType, ref, computed } from 'vue';
 import Restaurant from "./../../interfaces/Restaurant";
 
 const reviewAmount = ref(0);
+const rating = ref(0);
 
 const { restaurant } = defineProps({
     restaurant: {
@@ -43,7 +44,16 @@ const { restaurant } = defineProps({
 
 onMounted(() => {
     fetchReviewAmount();
+    fetchRating();
 });
+
+const averageRating = computed(() => {
+    if (rating.value) {
+        return Math.round(rating.value * 10) / 10;
+    } else {
+        return null;
+    }
+})
 
 async function fetchReviewAmount() {
     const response = await fetch(`http://localhost/api/restaurants/${restaurant.id}/reviews`);
@@ -51,17 +61,18 @@ async function fetchReviewAmount() {
     reviewAmount.value = data;
 }
 
+async function fetchRating() {
+    const response = await fetch(`http://localhost/api/restaurants/${restaurant.id}/rating`);
+    const data = await response.json();
+    rating.value = data;
+}
+
 </script>
 
 <style scoped>
 .card {
-    /* background-color: #f9f9f988; */
-}
-
-.card {
     border: none;
     border-radius: 10px;
-    /* border-color: #efefef; */
 }
 
 .c-details span {
@@ -73,11 +84,18 @@ async function fetchReviewAmount() {
     width: 75px;
     height: 75px;
     background-color: #eee;
-    border-radius: 25px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 39px
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 25px;
 }
 
 .badge span {

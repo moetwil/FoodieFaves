@@ -138,5 +138,22 @@ class RestaurantController extends Controller
         $this->respond($amount);
     }
 
+    public function getRestaurantRating($id){
+        try {
+            $restaurant = $this->service->getRestaurantById($id);
+
+            if($restaurant == null) {
+                $this->respondWithError(404, "Restaurant not found");
+                return;
+            }
+
+            $rating = $this->service->getRestaurantRating($id);
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
+
+        $this->respond($rating);
+    }
+
 
 }
