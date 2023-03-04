@@ -5,6 +5,7 @@ namespace Controllers;
 use Exception;
 use Services\UserService;
 use \Firebase\JWT\JWT;
+use \Dotenv\Dotenv;
 
 class UserController extends Controller
 {
@@ -21,8 +22,9 @@ class UserController extends Controller
         // read user data from request body
         $postedUser = $this->createObjectFromPostedJson("Models\\User");
 
+
         // get user from db
-        $user = $this->service->checkUsernamePassword($postedUser->username, $postedUser->password);
+        $user = $this->service->authenticateUser($postedUser->username, $postedUser->password);
 
         // if the method returned false, the username and/or password were incorrect
         if(!$user) {
@@ -36,20 +38,107 @@ class UserController extends Controller
         $this->respond($tokenResponse);    
     }
 
+    public function register() {
+        // read user data from request body
+        $postedUser = $this->createObjectFromPostedJson("Models\\User");
+
+        // check if the username already exists
+        $user = $this->service->getUserByUsername($postedUser->username);
+        if($user) {
+            $this->respondWithError(409, "Username already exists");
+            return;
+        }
+
+        // check if the email already exists
+        $user = $this->service->getUserByEmail($postedUser->email);
+        if($user) {
+            $this->respondWithError(409, "Email already exists");
+            return;
+        }
+
+        //create user
+        $user = $this->service->createUser($postedUser);
+
+        // generate jwt
+        $tokenResponse = $this->generateJwt($user);       
+
+        $this->respond($tokenResponse);    
+    }
+
+    public function update($id){
+        // read user data from request body
+        $postedUser = $this->createObjectFromPostedJson("Models\\User");
+        
+
+        // check if the username already exists
+        $user = $this->service->getUserByUsername($postedUser->username);
+        if($user && $user->id != $id) {
+            $this->respondWithError(409, "Username already exists");
+            return;
+        }
+
+        // check if the email already exists
+        $user = $this->service->getUserByEmail($postedUser->email);
+        if($user && $user->id != $id) {
+            $this->respondWithError(409, "Email already exists");
+            return;
+        }
+
+        // update user
+        $user = $this->service->updateUser($id, $postedUser);
+
+        $this->respond($user);
+    }
+
+    public function delete($id){
+        $res = $this->service->deleteUser($id);
+        
+        if($res) {
+            $this->respond("User deleted");
+        } else {
+            $this->respondWithError(500, "User could not be deleted");
+        }
+    }
+
+    public function getById($id) {
+        $user = $this->service->getUserById($id);
+
+        if($user) {
+            $this->respond($user);
+        } else {
+            $this->respondWithError(404, "User not found");
+        }
+    }
+
+    // public function getById($id) 
+    // {
+    //     // Check for JWT authentication
+    //     $decodedJwt = $this->checkForJwt();
+    //     if (!$decodedJwt) {
+    //         return;
+    //     }
+
+    //     // Execute main logic of endpoint
+    //     $user = $this->service->getUserById($id);
+
+    //     if($user) {
+    //         $this->respond($user);
+    //     } else {
+    //         $this->respondWithError(404, "User not found");
+    //     }
+    // }
+
+
     public function generateJwt($user) {
-        $secret_key = "YOUR_SECRET_KEY";
+        $secret_key = "gF9yx9bszP9em3f4";
 
-        $issuer = "THE_ISSUER"; // this can be the domain/servername that issues the token
-        $audience = "THE_AUDIENCE"; // this can be the domain/servername that checks the token
+        $issuer = "localhost";
+        $audience = "FoodieFaves";
 
-        $issuedAt = time(); // issued at
-        $notbefore = $issuedAt; //not valid before 
-        $expire = $issuedAt + 600; // expiration time is set at +600 seconds (10 minutes)
+        $issuedAt = time();
+        $notbefore = $issuedAt;
+        $expire = $issuedAt + 600;
 
-        // JWT expiration times should be kept short (10-30 minutes)
-        // A refresh token system should be implemented if we want clients to stay logged in for longer periods
-
-        // note how these claims are 3 characters long to keep the JWT as small as possible
         $payload = array(
             "iss" => $issuer,
             "aud" => $audience,
