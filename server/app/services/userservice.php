@@ -43,5 +43,14 @@ class UserService {
         $user = $this->userRepository->createUser($user);
         return $user;
     }
+
+    public function updateUser($id, $postedUser): ?User {
+        $user = $this->userRepository->updateUser($id, $postedUser);
+        return $user;
+    }
+
+    public function deleteUser($id) {
+        return $this->userRepository->deleteUser($id);
+    }
 }
 ?>

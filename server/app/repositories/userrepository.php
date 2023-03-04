@@ -114,7 +114,7 @@ class UserRepository extends Repository
     }
 
 
-    public function updateUser(User $user)
+    public function updateUser($id, User $user)
     {
         try {
             $stmt = $this->connection->prepare("UPDATE User SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, password = :password WHERE id = :id");
@@ -123,7 +123,7 @@ class UserRepository extends Repository
             $stmt->bindParam(':username', $user->username);
             $stmt->bindParam(':email', $user->email);
             $stmt->bindParam(':password', $user->password);
-            $stmt->bindParam(':id', $user->id);
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
 
             return $user;
@@ -132,14 +132,16 @@ class UserRepository extends Repository
         }
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser($id)
     {
         try {
             $stmt = $this->connection->prepare("DELETE FROM User WHERE id = :id");
-            $stmt->bindParam(':id', $user->id);
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            return true;
+            // return true if the user was deleted else return false
+            return $stmt->rowCount() > 0;
+
         } catch (PDOException $e) {
             echo $e;
         }

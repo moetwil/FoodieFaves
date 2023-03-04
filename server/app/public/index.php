@@ -17,6 +17,9 @@ $router = new \Bramus\Router\Router();
 
 $router->setNamespace('Controllers');
 
+// add /api prefix to all routes
+
+
 // routes for the products endpoint
 // $router->get('/products', 'ProductController@getAll');
 // $router->get('/products/(\d+)', 'ProductController@getOne');
@@ -32,8 +35,10 @@ $router->setNamespace('Controllers');
 // $router->delete('/categories/(\d+)', 'CategoryController@delete');
 
 // routes for the users endpoint
-$router->post('/users/login', 'UserController@login');
-$router->post('/users/register', 'UserController@register');
+$router->post('/api/users/login', 'UserController@login');
+$router->post('/api/users/register', 'UserController@register');
+$router->put('/api/users/(\d+)', 'UserController@update');
+$router->delete('/api/users/(\d+)', 'UserController@delete');
 
 // Run it!
 $router->run();

@@ -65,6 +65,41 @@ class UserController extends Controller
         $this->respond($tokenResponse);    
     }
 
+    public function update($id){
+        // read user data from request body
+        $postedUser = $this->createObjectFromPostedJson("Models\\User");
+        
+
+        // check if the username already exists
+        $user = $this->service->getUserByUsername($postedUser->username);
+        if($user && $user->id != $id) {
+            $this->respondWithError(409, "Username already exists");
+            return;
+        }
+
+        // check if the email already exists
+        $user = $this->service->getUserByEmail($postedUser->email);
+        if($user && $user->id != $id) {
+            $this->respondWithError(409, "Email already exists");
+            return;
+        }
+
+        // update user
+        $user = $this->service->updateUser($id, $postedUser);
+
+        $this->respond($user);
+    }
+
+    public function delete($id){
+        $res = $this->service->deleteUser($id);
+        
+        if($res) {
+            $this->respond("User deleted");
+        } else {
+            $this->respondWithError(500, "User could not be deleted");
+        }
+    }
+
     public function generateJwt($user) {
         $secret_key = getenv('JWT_SECRET_KEY');
 
