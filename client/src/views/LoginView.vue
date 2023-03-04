@@ -16,7 +16,7 @@
                         </div>
 
 
-                        <button @click="login" class="nav-link btn btn-primary" type="button">Log In</button>
+                        <button @click="handleLogin" class="nav-link btn btn-primary" type="button">Log In</button>
                     </form>
                 </div>
             </div>
@@ -25,32 +25,31 @@
 </template>
 
 <script setup lang="ts">
-import axios from "axios";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import Banner from "./../components/Banner.vue";
+import axios from './../utils/axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import Banner from './../components/Banner.vue';
 
 const router = useRouter();
 
-
 // VARIABLES
-const pageTitle = "Login";
-const username = ref("");
-const password = ref("");
+const pageTitle = 'Login';
+const username = ref('');
+const password = ref('');
 
 // METHODS
-async function login() {
+async function handleLogin() {
     try {
-        const response = await axios.post("http://localhost/api/users/login", {
+        const response = await axios.post('/users/login', {
             username: username.value,
-            password: password.value
+            password: password.value,
         });
 
         const data = response.data;
 
-        if (data.success) {
-            localStorage.setItem("token", data.token);
-            router.push("/");
+        if (data.message = 'Successful login') {
+            localStorage.setItem('token', data.token);
+            router.push('/');
         } else {
             alert(data.message);
         }
@@ -58,10 +57,8 @@ async function login() {
         alert(error.message);
     }
 }
-
-
-
 </script>
+
 
 <style>
 .login-container {

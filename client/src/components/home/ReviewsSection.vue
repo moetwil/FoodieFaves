@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from './../../utils/axios';
 import ReviewComponent from "../home/Review.vue";
 import { onMounted, ref } from "vue";
 import RestaurantComponent from "../home/Restaurant.vue";
@@ -22,22 +23,25 @@ import Review from "./../../interfaces/Review";
 
 const reviews = ref<Review[]>([]);
 
-
-// on mounted fetch restaurants
+// on mounted fetch reviews
 onMounted(() => {
     fetchReviews();
 });
 
 async function fetchReviews() {
-    // change to get all later!!
-    const response = await fetch("http://localhost/api/reviews/restaurant/2");
-    const data = await response.json();
+    try {
+        const response = await axios.get(`/reviews/restaurant/2`);
+        const data = response.data;
 
-    // set max 3 reviews
-    if (data.length > 3) data.length = 3;
+        // set max 3 reviews
+        if (data.length > 3) data.length = 3;
 
-    reviews.value = data;
+        reviews.value = data;
+    } catch (error) {
+        console.error(error);
+    }
 }
 </script>
+
 
 <style scoped></style>

@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import { onMounted, PropType, ref, computed } from 'vue';
 import Restaurant from "./../../interfaces/Restaurant";
+import axios from "./../../utils/axios";
 
 const reviewAmount = ref(0);
 const rating = ref(0);
@@ -40,7 +41,7 @@ const { restaurant } = defineProps({
         type: Object as PropType<Restaurant>,
         required: true
     }
-})
+});
 
 onMounted(() => {
     fetchReviewAmount();
@@ -53,21 +54,27 @@ const averageRating = computed(() => {
     } else {
         return null;
     }
-})
+});
 
 async function fetchReviewAmount() {
-    const response = await fetch(`http://localhost/api/restaurants/${restaurant.id}/reviews`);
-    const data = await response.json();
-    reviewAmount.value = data;
+    try {
+        const response = await axios.get(`/restaurants/${restaurant.id}/reviews`);
+        reviewAmount.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 async function fetchRating() {
-    const response = await fetch(`http://localhost/api/restaurants/${restaurant.id}/rating`);
-    const data = await response.json();
-    rating.value = data;
+    try {
+        const response = await axios.get(`/restaurants/${restaurant.id}/rating`);
+        rating.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
 }
-
 </script>
+
 
 <style scoped>
 .card {

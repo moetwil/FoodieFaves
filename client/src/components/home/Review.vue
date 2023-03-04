@@ -42,6 +42,7 @@
 import { onMounted, PropType, ref, computed } from 'vue';
 import Review from "./../../interfaces/Review";
 import User from "./../../interfaces/User";
+import axios from "./../../utils/axios";
 
 // VARIABLES
 const user = ref<User>();
@@ -62,22 +63,21 @@ const averageRating = computed(() => {
     return rating % 1 === 0 ? rating : rating.toFixed(1);
 });
 
-
-
-
-
 // GET DATA
 onMounted(() => {
     fetchUser();
 });
 
 async function fetchUser() {
-    const response = await fetch("http://localhost/api/users/" + review.user_id);
-    const data = await response.json();
-    user.value = data;
+    try {
+        const response = await axios.get(`users/${review.user_id}`);
+        user.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
 }
-
 </script>
+
 
 <style scoped>
 body {

@@ -8,14 +8,13 @@
           <li class="nav-item">
           </li>
           <li class="nav-item">
-            <router-link to="/userreview" class="nav-link" active-class="active">
+            <router-link to="/write-review" class="nav-link" active-class="active">
               <font-awesome-icon icon="fa-solid fa-pencil" />
               Beoordeling</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/login" class="nav-link btn btn-primary" active-class="active">
-              Inloggen
-            </router-link>
+            <button v-if="!isLoggedIn" class="nav-link btn btn-primary" @click="goToLogin">Inloggen</button>
+            <button v-if="isLoggedIn" class="nav-link btn btn-primary" @click="logout">Uitloggen</button>
           </li>
         </ul>
       </div>
@@ -24,7 +23,21 @@
 </template>
 
 <script setup lang="ts">
+import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+
+const isLoggedIn = localStorage.getItem('token') !== null;
+
+function goToLogin() {
+  router.push('/login');
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  router.go(0);
+}
 </script>
 
 <style>

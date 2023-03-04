@@ -35,6 +35,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, watch, computed } from 'vue';
 import Restaurant from "./../../interfaces/Restaurant";
 
@@ -45,9 +46,16 @@ const noResults = { id: -1, name: noResultsMessage, city: '' };
 const perPage = 3;
 let currentPage = ref(1);
 
+const api = axios.create({
+    baseURL: 'http://localhost/api/',
+    headers: {
+        Authorization: 'Bearer your_token_here', // replace with your actual authorization token if needed
+    },
+});
+
 watch(searchQuery, async (newQuery: string) => {
-    const response = await fetch(`http://localhost/api/restaurants/search/${newQuery}`);
-    const results = await response.json();
+    const response = await api.get(`restaurants/search/${newQuery}`);
+    const results = response.data;
     searchResults.value = results.length ? results : [];
 });
 
@@ -74,6 +82,8 @@ const showPagination = computed(() => {
     return searchResults.value.length > perPage;
 });
 </script>
+
+
 <style scoped>
 #searchInput {
     width: 100%;

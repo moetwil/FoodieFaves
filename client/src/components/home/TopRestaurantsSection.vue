@@ -15,8 +15,8 @@
 import { onMounted, ref } from "vue";
 import RestaurantComponent from "../home/Restaurant.vue";
 import Restaurant from "./../../interfaces/Restaurant";
+import axios from "./../../utils/axios";
 
-// const restaurants = ref([]);
 const restaurants = ref<Restaurant[]>([]);
 
 // on mounted fetch restaurants
@@ -25,14 +25,14 @@ onMounted(() => {
 });
 
 async function fetchRestaurants() {
-    const response = await fetch("http://localhost/api/restaurants");
-    const data = await response.json();
-
-    restaurants.value = data;
-
+    try {
+        const response = await axios.get("/restaurants");
+        restaurants.value = response.data;
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-
 </script>
+
 
 <style scoped></style>
