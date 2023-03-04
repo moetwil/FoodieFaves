@@ -55,3 +55,23 @@ h2,h3,h4 {
   color: #929292;
 }
 
+.btn-primary {
+  background-color: #000;
+  border: none;
+  color: #fff !important;
+  border-radius: 100px;
+  border: 1px solid #000 !important;
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff !important;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+
+.btn-primary:hover {
+  color: #000 !important;
+  background-color: #fff !important;
+
+}
+
+

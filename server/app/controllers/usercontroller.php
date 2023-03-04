@@ -110,20 +110,35 @@ class UserController extends Controller
         }
     }
 
+    // public function getById($id) 
+    // {
+    //     // Check for JWT authentication
+    //     $decodedJwt = $this->checkForJwt();
+    //     if (!$decodedJwt) {
+    //         return;
+    //     }
+
+    //     // Execute main logic of endpoint
+    //     $user = $this->service->getUserById($id);
+
+    //     if($user) {
+    //         $this->respond($user);
+    //     } else {
+    //         $this->respondWithError(404, "User not found");
+    //     }
+    // }
+
+
     public function generateJwt($user) {
-        $secret_key = getenv('JWT_SECRET_KEY');
+        $secret_key = "gF9yx9bszP9em3f4";
 
-        $issuer = "localhost"; // this can be the domain/servername that issues the token
-        $audience = "FoodieFaves"; // this can be the domain/servername that checks the token
+        $issuer = "localhost";
+        $audience = "FoodieFaves";
 
-        $issuedAt = time(); // issued at
-        $notbefore = $issuedAt; //not valid before 
-        $expire = $issuedAt + 600; // expiration time is set at +600 seconds (10 minutes)
+        $issuedAt = time();
+        $notbefore = $issuedAt;
+        $expire = $issuedAt + 600;
 
-        // JWT expiration times should be kept short (10-30 minutes)
-        // A refresh token system should be implemented if we want clients to stay logged in for longer periods
-
-        // note how these claims are 3 characters long to keep the JWT as small as possible
         $payload = array(
             "iss" => $issuer,
             "aud" => $audience,

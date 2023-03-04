@@ -36,20 +36,6 @@
   padding-right: 20px !important;
 }
 
-.btn-primary {
-  background-color: #000;
-  border: none;
-  color: #fff !important;
-  border-radius: 100px;
-  border: 1px solid #000 !important;
-}
-
-.btn-primary:hover {
-  color: #000 !important;
-  background-color: #fff !important;
-
-}
-
 .navbar-brand {
   font-size: 25px !important;
   padding-left: 0px !important;
