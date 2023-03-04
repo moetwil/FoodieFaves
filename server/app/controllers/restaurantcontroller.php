@@ -155,5 +155,15 @@ class RestaurantController extends Controller
         $this->respond($rating);
     }
 
+    public function search($query){
+        try {
+            $restaurants = $this->service->search($query);
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
+
+        $this->respond($restaurants);
+    }
+
 
 }

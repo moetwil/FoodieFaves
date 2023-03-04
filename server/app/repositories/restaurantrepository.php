@@ -181,4 +181,23 @@ class RestaurantRepository  extends Repository{
         }
     }
 
+    public function search($query){
+        try {
+            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id FROM `Restaurant` WHERE name LIKE :query OR city LIKE :query");
+            $stmt->bindParam(':query', $query);
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
+            $restaurants = $stmt->fetchAll();
+
+            foreach($restaurants as $restaurant){
+                $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
+            }
+
+            return $restaurants;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
 }

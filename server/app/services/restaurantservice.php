@@ -44,4 +44,8 @@ class RestaurantService {
     public function getRestaurantRating($id){
         return $this->restaurantRepository->getRestaurantRating($id);
     }
+
+    public function search($query){
+        return $this->restaurantRepository->search($query);
+    }
 }
