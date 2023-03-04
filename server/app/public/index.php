@@ -20,6 +20,7 @@ $router->setNamespace('Controllers');
 
 # DEFINE ROUTES
 // users endpoints
+$router->get('/api/users/(\d+)', 'UserController@getById');
 $router->post('/api/users/login', 'UserController@login');
 $router->post('/api/users/register', 'UserController@register');
 $router->put('/api/users/(\d+)', 'UserController@update');

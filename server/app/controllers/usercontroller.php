@@ -100,6 +100,16 @@ class UserController extends Controller
         }
     }
 
+    public function getById($id) {
+        $user = $this->service->getUserById($id);
+
+        if($user) {
+            $this->respond($user);
+        } else {
+            $this->respondWithError(404, "User not found");
+        }
+    }
+
     public function generateJwt($user) {
         $secret_key = getenv('JWT_SECRET_KEY');
 

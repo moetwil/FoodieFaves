@@ -39,6 +39,11 @@ class UserService {
         return $user;
     }
 
+    public function getUserById($id): ?User {
+        $user = $this->userRepository->getUserById($id);
+        return $user;
+    }
+
     public function createUser(User $user): ?User {
         $user = $this->userRepository->createUser($user);
         return $user;

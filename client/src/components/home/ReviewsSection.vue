@@ -33,8 +33,10 @@ async function fetchReviews() {
     const response = await fetch("http://localhost/api/reviews/restaurant/2");
     const data = await response.json();
 
-    reviews.value = data;
+    // set max 3 reviews
+    if (data.length > 3) data.length = 3;
 
+    reviews.value = data;
 }
 </script>
 

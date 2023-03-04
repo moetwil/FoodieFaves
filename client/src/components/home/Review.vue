@@ -3,20 +3,21 @@
         <div class="d-flex">
             <div class="left">
                 <span>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="profile-pict-img img-fluid"
-                        alt="" />
+                    <img v-if="user && user.profile_picture" :src="'data:image/png;base64,' + user.profile_picture"
+                        class="profile-pict-img img-fluid" alt="" />
+
                 </span>
             </div>
             <div class="right">
                 <h4>
-                    Luc Moetwil
+                    {{ fullName }}
                     <span class="gig-rating text-body-2">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
                             <path fill="currentColor"
                                 d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z">
                             </path>
                         </svg>
-                        5.0
+                        {{ averageRating }}/5
                     </span>
                 </h4>
                 <div class="review-description">
@@ -31,22 +32,50 @@
                     </div>
 
                 </div>
-                <span class="publish py-3 d-inline-block w-100">Published 4 weeks ago</span>
+                <span class="publish py-3 d-inline-block w-100">Published: {{ review.date }}</span>
             </div>
         </div>
     </li>
 </template>
 
 <script setup lang="ts">
-import { onMounted, PropType, ref } from 'vue';
+import { onMounted, PropType, ref, computed } from 'vue';
 import Review from "./../../interfaces/Review";
+import User from "./../../interfaces/User";
 
+// VARIABLES
+const user = ref<User>();
 const { review } = defineProps({
     review: {
         type: Object as PropType<Review>,
         required: true
     }
 })
+
+// COMPUTED
+const fullName = computed(() => {
+    return user.value?.first_name + " " + user.value?.last_name;
+})
+
+const averageRating = computed(() => {
+    const rating = (review.food_rating + review.service_rating + review.price_value_rating) / 3;
+    return rating % 1 === 0 ? rating : rating.toFixed(1);
+});
+
+
+
+
+
+// GET DATA
+onMounted(() => {
+    fetchUser();
+});
+
+async function fetchUser() {
+    const response = await fetch("http://localhost/api/users/" + review.user_id);
+    const data = await response.json();
+    user.value = data;
+}
 
 </script>
 
