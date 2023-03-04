@@ -23,7 +23,7 @@ class ReviewRepository extends Repository
         }
     }
 
- public function getByRestaurant($restaurantId)
+    public function getByRestaurant($restaurantId)
     {
         try {
             $stmt = $this->connection->prepare("SELECT * FROM Review WHERE restaurant_id = :restaurant_id");
@@ -58,21 +58,20 @@ class ReviewRepository extends Repository
     public function createReview(Review $review) 
     {
         try {
-            $stmt = $this->connection->prepare("INSERT INTO Review (food_rating, service_rating, price_value_rating, review_text, date, restaurant_id, user_id, image, flagged, approved) VALUES (:food_rating, :service_rating, :price_value_rating, :review_text, :date, :restaurant_id, :user_id, :image, :flagged, :approved)");
-            $stmt->bindParam(':food_rating', $review->foodRating);
-            $stmt->bindParam(':service_rating', $review->serviceRating);
-            $stmt->bindParam(':price_value_rating', $review->priceValueRating);
-            $stmt->bindParam(':review_text', $review->reviewText);
-            $stmt->bindParam(':date', $review->date);
-            $stmt->bindParam(':restaurant_id', $review->restaurantId);
-            $stmt->bindParam(':user_id', $review->userId);
+            $stmt = $this->connection->prepare("INSERT INTO Review (food_rating, service_rating, price_value_rating, review_text, restaurant_id, user_id, image, flagged, approved) VALUES (:food_rating, :service_rating, :price_value_rating, :review_text, :restaurant_id, :user_id, :image, :flagged, :approved)");
+            $stmt->bindParam(':food_rating', $review->food_rating);
+            $stmt->bindParam(':service_rating', $review->service_rating);
+            $stmt->bindParam(':price_value_rating', $review->price_value_rating);
+            $stmt->bindParam(':review_text', $review->review_text);
+            $stmt->bindParam(':restaurant_id', $review->restaurant_id);
+            $stmt->bindParam(':user_id', $review->user_id);
             $stmt->bindParam(':image', $review->image);
             $stmt->bindParam(':flagged', $review->flagged);
             $stmt->bindParam(':approved', $review->approved);
             $stmt->execute();
 
-            $reviewId = $this->connection->lastInsertId();
-            $review->id = $reviewId;
+            // set the id of the review to the id of the newly created review
+            $review->id = $this->connection->lastInsertId();
 
             return $review;
         } catch (PDOException $e) {
@@ -80,23 +79,24 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function updateReview(Review $review)
+    public function updateReview($id, Review $review)
     {
         try {
-            $stmt = $this->connection->prepare("UPDATE Review SET food_rating = :food_rating, service_rating = :service_rating, price_value_rating = :price_value_rating, review_text = :review_text, date = :date, restaurant_id = :restaurant_id, user_id = :user_id, image = :image, flagged = :flagged, approved = :approved WHERE id = :id");
-            $stmt->bindParam(':id', $review->id);
-            $stmt->bindParam(':food_rating', $review->foodRating);
-            $stmt->bindParam(':service_rating', $review->serviceRating);
-            $stmt->bindParam(':price_value_rating', $review->priceValueRating);
-            $stmt->bindParam(':review_text', $review->reviewText);
-            $stmt->bindParam(':date', $review->date);
-            $stmt->bindParam(':restaurant_id', $review->restaurantId);
-            $stmt->bindParam(':user_id', $review->userId);
+            $stmt = $this->connection->prepare("UPDATE Review SET food_rating = :food_rating, service_rating = :service_rating, price_value_rating = :price_value_rating, review_text = :review_text, restaurant_id = :restaurant_id, user_id = :user_id, image = :image, flagged = :flagged, approved = :approved WHERE id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':food_rating', $review->food_rating);
+            $stmt->bindParam(':service_rating', $review->service_rating);
+            $stmt->bindParam(':price_value_rating', $review->price_value_rating);
+            $stmt->bindParam(':review_text', $review->review_text);
+            $stmt->bindParam(':restaurant_id', $review->restaurant_id);
+            $stmt->bindParam(':user_id', $review->user_id);
             $stmt->bindParam(':image', $review->image);
             $stmt->bindParam(':flagged', $review->flagged);
             $stmt->bindParam(':approved', $review->approved);
             $stmt->execute();
 
+            // get the updated review
+            $review = $this->getById($id);
             return $review;
         } catch (PDOException $e) {
             echo $e;
@@ -116,12 +116,13 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function flagReview(Review $review)
+    public function flagReview($id)
     {
         try {
             $stmt = $this->connection->prepare("UPDATE Review SET flagged = 1 WHERE id = :id");
-            $stmt->bindParam(':id', $review->id);
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
+
 
             return true;
         } catch (PDOException $e) {
@@ -130,11 +131,11 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function approveReview(Review $review)
+    public function approveReview($id)
     {
         try {
             $stmt = $this->connection->prepare("UPDATE Review SET approved = 1 WHERE id = :id");
-            $stmt->bindParam(':id', $review->id);
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
 
             return true;
