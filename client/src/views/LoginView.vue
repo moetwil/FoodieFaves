@@ -29,7 +29,9 @@ import axios from './../utils/axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from './../components/Banner.vue';
+import { useAuthenticationStore } from '../store/authenticationStore';
 
+const authenticationStore = useAuthenticationStore();
 const router = useRouter();
 
 // VARIABLES
@@ -39,23 +41,15 @@ const password = ref('');
 
 // METHODS
 async function handleLogin() {
-    try {
-        const response = await axios.post('/users/login', {
-            username: username.value,
-            password: password.value,
-        });
+    const res = await authenticationStore.login(username.value, password.value);
 
-        const data = response.data;
-
-        if (data.message = 'Successful login') {
-            localStorage.setItem('token', data.token);
-            router.push('/');
-        } else {
-            alert(data.message);
-        }
-    } catch (error: any) {
-        alert(error.message);
+    if (res) {
+        router.push('/');
     }
+    else {
+        alert("Login failed");
+    }
+
 }
 </script>
 
