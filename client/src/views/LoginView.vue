@@ -29,7 +29,7 @@ import axios from './../utils/axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from './../components/Banner.vue';
-import { useAuthenticationStore } from '../store/authenticationStore';
+import { useAuthenticationStore } from '../stores/authenticationStore';
 
 const authenticationStore = useAuthenticationStore();
 const router = useRouter();

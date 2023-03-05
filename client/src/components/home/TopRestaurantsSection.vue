@@ -6,7 +6,8 @@
             </h2>
         </div>
         <div class="row">
-            <RestaurantComponent v-for="restaurant in restaurants" :key="restaurant.id" :restaurant="restaurant" />
+            <RestaurantComponent @click="goToRestaurant(restaurant)" v-for="restaurant in restaurants" :key="restaurant.id"
+                :restaurant="restaurant" />
         </div>
     </div>
 </template>
@@ -16,13 +17,19 @@ import { onMounted, ref } from "vue";
 import RestaurantComponent from "../home/Restaurant.vue";
 import Restaurant from "./../../interfaces/Restaurant";
 import axios from "./../../utils/axios";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const restaurants = ref<Restaurant[]>([]);
 
 // on mounted fetch restaurants
 onMounted(() => {
     fetchRestaurants();
 });
+
+function goToRestaurant(restaurant: Restaurant) {
+    router.push(`/restaurant/${restaurant.id}`);
+}
 
 async function fetchRestaurants() {
     try {

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import WriteReview from '../views/WriteReviewView.vue';
+import Restaurant from '../views/RestaurantView.vue';
 
 const routes = [
   { path: '/', component: Home },
@@ -11,6 +12,7 @@ const routes = [
     component: WriteReview,
     meta: { requiresAuth: true },
   },
+  { path: '/restaurant/:id', component: Restaurant },
 ];
 
 const router = createRouter({

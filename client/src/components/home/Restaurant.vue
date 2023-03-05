@@ -77,6 +77,12 @@ async function fetchRating() {
 
 
 <style scoped>
+/* on hover */
+.card:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
 .card {
     border: none;
     border-radius: 10px;

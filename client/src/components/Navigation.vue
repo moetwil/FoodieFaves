@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { defineComponent, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthenticationStore } from '../store/authenticationStore';
+import { useAuthenticationStore } from '../stores/authenticationStore';
 
 // VARIABLES
 const authenticationStore = useAuthenticationStore();

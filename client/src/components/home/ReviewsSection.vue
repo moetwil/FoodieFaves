@@ -2,10 +2,14 @@
     <div class="bg-light py-5">
         <div class="container ">
             <h2>Recent toegevoegde reviews</h2>
-            <div class="review-list row">
+            <!-- <div class="review-list row">
                 <ul>
                     <ReviewComponent v-for="review in reviews" :key="review.id" :review="review" />
                 </ul>
+            </div> -->
+
+            <div class="row bg-light">
+                <ReviewComponent v-for="review in reviews" :key="review.id" :review="review" />
             </div>
 
 
@@ -16,7 +20,7 @@
 
 <script setup lang="ts">
 import axios from './../../utils/axios';
-import ReviewComponent from "../home/Review.vue";
+import ReviewComponent from "../Review.vue";
 import { onMounted, ref } from "vue";
 import RestaurantComponent from "../home/Restaurant.vue";
 import Review from "./../../interfaces/Review";
