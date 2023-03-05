@@ -23,20 +23,30 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthenticationStore } from '../stores/authenticationStore';
+
+// VARIABLES
+const authenticationStore = useAuthenticationStore();
+
+
+
 
 const router = useRouter();
 
-const isLoggedIn = localStorage.getItem('token') !== null;
+
+const isLoggedIn = computed(() => authenticationStore.getIsLoggedIn);
 
 function goToLogin() {
   router.push('/login');
 }
 
 function logout() {
-  localStorage.removeItem('token');
-  router.go(0);
+  const res = authenticationStore.logout();
+  if (res) {
+    router.push('/');
+  }
 }
 </script>
 
