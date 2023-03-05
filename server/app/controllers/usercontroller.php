@@ -32,6 +32,9 @@ class UserController extends Controller
             return;
         }
 
+        // reset password hash
+        $user->password = "";
+
         // generate jwt
         $tokenResponse = $this->generateJwt($user);       
 
@@ -157,7 +160,7 @@ class UserController extends Controller
             array(
                 "message" => "Successful login.",
                 "jwt" => $jwt,
-                "username" => $user->username,
+                "user" => $user,
                 "expireAt" => $expire
             );
     }    
