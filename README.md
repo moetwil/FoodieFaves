@@ -10,7 +10,7 @@ Client
 [x] - Restaurant page
 [] - Restaurant page: add pagination
 [] - Restaurant store: ombouwen met getters
-[] - Login: submit on enter
+[x] - Login: submit on enter
 [] - Login: error handling
 [] - Review Store
 [] - Review page: Textarea max aantal karakters

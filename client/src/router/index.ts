@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import WriteReview from '../views/WriteReviewView.vue';
 import Restaurant from '../views/RestaurantView.vue';
+import errorView from '../views/404View.vue';
 
 const routes = [
   { path: '/', component: Home },
@@ -13,6 +14,8 @@ const routes = [
     meta: { requiresAuth: true },
   },
   { path: '/restaurant/:id', component: Restaurant },
+  // create a 404 page
+  { path: '/:pathMatch(.*)*', component: errorView },
 ];
 
 const router = createRouter({

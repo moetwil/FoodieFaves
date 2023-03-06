@@ -8,11 +8,13 @@
                     <form>
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input v-model="username" type="text" id="username" name="username">
+                            <input v-model="username" type="text" id="username" name="username"
+                                @keydown.enter="handleLogin">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input v-model="password" type="password" id="password" name="password">
+                            <input v-model="password" type="password" id="password" name="password"
+                                @keydown.enter="handleLogin">
                         </div>
 
 
