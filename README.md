@@ -7,7 +7,12 @@ General
 [] -
 
 Client
-[] - Restaurant page
+[x] - Restaurant page
+[] - Restaurant page: add pagination
+[] - Restaurant store: ombouwen met getters
+[] - Login: submit on enter
+[] - Login: error handling
+[] - Review Store
 [] -
 
 Server

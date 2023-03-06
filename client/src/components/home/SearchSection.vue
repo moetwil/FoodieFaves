@@ -8,7 +8,8 @@
                 <input class="w-50" type="text" name="search" id="searchInput" placeholder="Zoek een restaurant of stad"
                     v-model="searchQuery" />
                 <div class="search-results">
-                    <div v-for="(result, index) in paginatedResults" :key="result.id" class="search-result">
+                    <div v-for="(result, index) in paginatedResults" :key="result.id" class="search-result"
+                        @click="goToRestaurant(result)">
                         <div class="result-name">{{ result.name }}</div>
                         <div class="result-location">{{ result.city }}</div>
                     </div>
@@ -38,7 +39,9 @@
 import axios from 'axios';
 import { ref, watch, computed } from 'vue';
 import Restaurant from "./../../interfaces/Restaurant";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const searchQuery = ref('');
 const searchResults = ref<Restaurant[]>([]);
 const noResultsMessage = "Niets gevonden";
@@ -81,6 +84,10 @@ const showNoResults = computed(() => {
 const showPagination = computed(() => {
     return searchResults.value.length > perPage;
 });
+
+function goToRestaurant(restaurant: Restaurant) {
+    router.push(`/restaurant/${restaurant.id}`);
+}
 </script>
 
 
@@ -122,6 +129,7 @@ const showPagination = computed(() => {
 
 .search-result:hover {
     background-color: #f1f1f1;
+    cursor: pointer;
 }
 
 .result-name {
