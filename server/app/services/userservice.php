@@ -29,7 +29,7 @@ class UserService {
         return $user;
     }
 
-    public function getUserByUsername(string $username): ?User {
+    public function getUserByUsername(string $username) {
         $user = $this->userRepository->getUserByUsername($username);
         return $user;
     }

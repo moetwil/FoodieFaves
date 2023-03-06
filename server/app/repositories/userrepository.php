@@ -36,6 +36,10 @@ class UserRepository extends Repository
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
 
+            if(!$user) {
+                return ;
+            }
+
             // get the user's profile picture
             $user->profile_picture = $this->getUserPicture($user->id);
 
@@ -54,6 +58,10 @@ class UserRepository extends Repository
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
+
+            if(!$user) {
+                return ;
+            }
 
             // get the user's profile picture
             $user->profile_picture = $this->getUserPicture($user->id);

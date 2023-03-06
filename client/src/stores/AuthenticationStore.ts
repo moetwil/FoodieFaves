@@ -37,6 +37,7 @@ export const useAuthenticationStore = defineStore({
           console.log('LOGIN');
           // set token in local storage
           localStorage.setItem('token', data.token);
+          localStorage.setItem('user_id', data.user._id);
 
           // set user in state
           this.user = data.user;
@@ -53,6 +54,7 @@ export const useAuthenticationStore = defineStore({
 
     logout() {
       localStorage.removeItem('token');
+      localStorage.removeItem('user_id');
       this.user = null;
       this.isLoggedIn = false;
 

@@ -49,8 +49,10 @@ import Review from './../interfaces/Review';
 import RatingSelect from './../components/review/RatingSelect.vue';
 import ImageUpload from './../components//ImageUpload.vue';
 import { useReviewStore } from '../stores/ReviewStore';
+import { useAuthenticationStore } from '../stores/AuthenticationStore';
 
 const reviewStore = useReviewStore();
+const authenticationStore = useAuthenticationStore();
 
 const router = useRouter();
 
@@ -94,6 +96,13 @@ function handleImageUpload(image: string) {
 }
 
 function handleSubmit() {
+
+    const userId = authenticationStore.getUser?.id;
+    if (!userId) {
+        router.push('/login');
+        return;
+    }
+
     const review: Review = {
         restaurant_id: restaurantId,
         food_rating: foodRating.value,
@@ -101,7 +110,7 @@ function handleSubmit() {
         price_value_rating: priceValueRating.value,
         review_text: reviewText.value,
         id: null,
-        user_id: 5,
+        user_id: userId,
         flagged: null,
         approved: null,
         date: null,
@@ -112,6 +121,8 @@ function handleSubmit() {
     reviewStore.setReview(review);
     console.log(reviewStore.getReview);
     reviewStore.createReview();
+
+    router.push(`/restaurant/${restaurantId}`);
 }
 
 
