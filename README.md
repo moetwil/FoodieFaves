@@ -13,6 +13,8 @@ Client
 [] - Login: submit on enter
 [] - Login: error handling
 [] - Review Store
+[] - Review page: Textarea max aantal karakters
+[] - Review page: click on same amount = 0
 [] -
 
 Server

@@ -1,52 +1,69 @@
 <template>
-    <div class="form-group row">
-        <label>{{ label }}</label>
+    <div class="form-group d-flex justify-content-between flex-row">
+        <div class="col-md-8">
+            <label>Beoordeel <span class="type-label">{{ label }} </span></label>
+            <p class="description">{{ description }}</p>
+        </div>
+
         <div>
-            <span v-for="i in 5" :key="i" @click="setRating(i)" @mouseover="highlightStars(i)" @mouseleave="resetStars">
-                <i :class="{ ' fa fa-star highlighted': i <= highlightedRating }"></i>
+            <span v-for="(star, index) in stars" :key="index" @click="setRating(index + 1)"
+                :class="{ 'highlighted': star.highlighted }">
+                <i class="fa fa-star"></i>
             </span>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, toRef, defineEmits } from 'vue';
+import { defineProps, defineEmits, computed, ref, watch } from 'vue';
 
 const emits = defineEmits(['input']);
 
-const { label, value } = defineProps({
+const { id, label, value, description } = defineProps({
+
+    id: {
+        type: String,
+        required: true,
+    },
     label: {
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        required: true,
+    }
+    ,
     value: {
         type: Number,
         required: true,
     },
 });
 
-const data = { value };
-const rating = toRef(data, 'value');
-const highlightedRating = toRef(data, 'value');
+// make a ref to the value prop
+const rating = ref(value)
 
+// watch for changes in the value prop
+watch(rating, (newValue) => {
+    emits('input', newValue, id);
+});
+
+// create an array of stars
+const stars = computed(() => {
+    const highlightedCount = Math.floor(rating.value);
+    const stars = Array.from({ length: 5 }).map((_, index) => ({
+        highlighted: index < highlightedCount,
+    }));
+    const decimal = rating.value - highlightedCount;
+    if (decimal > 0) {
+        stars[highlightedCount].highlighted = true;
+    }
+    return stars;
+});
+
+// set the rating on click
 function setRating(ratingValue: number) {
     rating.value = ratingValue;
-    highlightedRating.value = ratingValue;
-
-    // emit the rating value
-    emits('input', ratingValue);
-}
-
-function highlightStars(ratingValue: number) {
-    highlightedRating.value = ratingValue;
-}
-
-function resetStars() {
-    highlightedRating.value = rating.value;
-}
-
-function $emit(arg0: string, ratingValue: number) {
-    throw new Error('Function not implemented.');
 }
 </script>
 
@@ -59,14 +76,29 @@ span {
     transition: color 0.3s ease;
 }
 
-span.active,
-span.active~span,
-span.highlighted,
-span.highlighted~span {
+span:hover,
+span.highlighted {
     color: gold;
 }
 
-span:hover~span {
+i.highlighted {
     color: gold;
+}
+
+.description {
+    font-size: 14px;
+    color: #5c5c5c;
+}
+
+label {
+    font-size: 22px;
+    font-weight: 600;
+    color: #000;
+}
+
+.type-label {
+    font-size: 22px;
+    font-weight: 700;
+    color: #cc9123;
 }
 </style>

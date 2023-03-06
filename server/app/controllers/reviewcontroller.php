@@ -70,13 +70,15 @@ class ReviewController extends Controller
     {
         try {
             $postedReview = $this->createObjectFromPostedJson("Models\\Review");
+
             $review = $this->service->createReview($postedReview);
+
             
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
 
-        $this->respond($review);
+        // $this->respond($review);
     }
 
     public function update($id)
