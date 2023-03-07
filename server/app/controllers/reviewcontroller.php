@@ -77,8 +77,6 @@ class ReviewController extends Controller
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
-
-        // $this->respond($review);
     }
 
     public function update($id)

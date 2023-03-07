@@ -6,15 +6,35 @@
                 <div class="login-container my-5">
                     <h1>Login</h1>
                     <form>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="username">Username</label>
                             <input v-model="username" type="text" id="username" name="username"
                                 @keydown.enter="handleLogin">
+                            <p class="help"></p>
+                        </div> -->
+                        <div class="field">
+                            <label class="label" for="login">Username</label>
+                            <input v-model="username" @keydown.enter="handleLogin" class="input has-background-dark"
+                                type="text" name="username" id="username">
+                            <div class="d-flex">
+                                <span class="icon px-2"><i></i></span>
+                                <p class="help"></p>
+                            </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="password">Password</label>
                             <input v-model="password" type="password" id="password" name="password"
                                 @keydown.enter="handleLogin">
+                            <p class="help"></p>
+                        </div> -->
+                        <div class="field">
+                            <label class="label" for="password">Password</label>
+                            <input v-model="password" @keydown.enter="handleLogin" class="input has-background-dark"
+                                type="password" name="password" id="password">
+                            <div class="d-flex">
+                                <span class="icon px-2"><i></i></span>
+                                <p class="help"></p>
+                            </div>
                         </div>
 
 
@@ -27,11 +47,16 @@
 </template>
 
 <script setup lang="ts">
-import axios from './../utils/axios';
+// import axios from './../utils/axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from './../components/Banner.vue';
 import { useAuthenticationStore } from '../stores/authenticationStore';
+
+import {
+    FieldMessageType,
+    setFieldMessage, clearFieldMessages, hasAnyFieldErrors,
+} from "./../utils/formUtils.js";
 
 const authenticationStore = useAuthenticationStore();
 const router = useRouter();
@@ -43,6 +68,22 @@ const password = ref('');
 
 // METHODS
 async function handleLogin() {
+    // input elements
+    const loginEl = document.querySelector("input[name=username]") as HTMLDivElement;
+    const passwordEl = document.querySelector("input[name=password]") as HTMLDivElement;
+
+    // ERROR HANDLING
+    clearFieldMessages();
+
+    if (!username.value)
+        setFieldMessage(loginEl, FieldMessageType.Error, "Email or username is required.");
+
+    if (!password.value)
+        setFieldMessage(passwordEl, FieldMessageType.Error, "Password is required.");
+
+    if (hasAnyFieldErrors()) return;
+
+    // LOGIN
     const res = await authenticationStore.login(username.value, password.value);
 
     if (res) {
@@ -59,7 +100,6 @@ async function handleLogin() {
 <style>
 .login-container {
     background-color: #f2f2f2;
-    /* border: 1px solid #ddd; */
     padding: 20px;
     border-radius: 5px;
     max-width: 30vw;
