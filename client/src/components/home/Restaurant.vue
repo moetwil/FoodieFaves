@@ -69,6 +69,7 @@ async function fetchRating() {
     try {
         const response = await axios.get(`/restaurants/${restaurant.id}/rating`);
         rating.value = response.data;
+
     } catch (error) {
         console.error(error);
     }

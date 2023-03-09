@@ -60,5 +60,14 @@ export const useAuthenticationStore = defineStore({
 
       return true;
     },
+    async register(newUser: User) {
+      try {
+        const response = await axios.post('/users/register', newUser);
+        if (response.status === 200) return true;
+      } catch (error: any) {
+        alert(error.message);
+        return false;
+      }
+    },
   },
 });

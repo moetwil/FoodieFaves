@@ -118,6 +118,8 @@ function handleSubmit() {
         image: imageFile.value
     };
 
+    console.log(review);
+
     reviewStore.setReview(review);
     console.log(reviewStore.getReview);
     reviewStore.createReview();

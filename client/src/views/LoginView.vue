@@ -6,12 +6,6 @@
                 <div class="login-container my-5">
                     <h1>Login</h1>
                     <form>
-                        <!-- <div class="form-group">
-                            <label for="username">Username</label>
-                            <input v-model="username" type="text" id="username" name="username"
-                                @keydown.enter="handleLogin">
-                            <p class="help"></p>
-                        </div> -->
                         <div class="field">
                             <label class="label" for="login">Username</label>
                             <input v-model="username" @keydown.enter="handleLogin" class="input has-background-dark"
@@ -21,12 +15,6 @@
                                 <p class="help"></p>
                             </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <label for="password">Password</label>
-                            <input v-model="password" type="password" id="password" name="password"
-                                @keydown.enter="handleLogin">
-                            <p class="help"></p>
-                        </div> -->
                         <div class="field">
                             <label class="label" for="password">Password</label>
                             <input v-model="password" @keydown.enter="handleLogin" class="input has-background-dark"
@@ -40,6 +28,11 @@
 
                         <button @click="handleLogin" class="nav-link btn btn-primary" type="button">Log In</button>
                     </form>
+
+                    <div class="py-3">
+                        <p>Heb je nog geen account? <router-link to="/register" class="nav-link"
+                                active-class="active">Registreer je hier!</router-link></p>
+                    </div>
                 </div>
             </div>
         </div>

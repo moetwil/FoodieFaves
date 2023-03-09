@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-md-9 bg-light px-4 py-3">
                     <div class="row">
-                        <Review v-for="review in restaurantStore.reviews || []" :review="review" :key="review.id" />
+                        <Review v-for="(review, index) in restaurantStore.reviews || []" :review="review" :key="index" />
                     </div>
 
                 </div>

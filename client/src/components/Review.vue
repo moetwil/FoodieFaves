@@ -3,10 +3,10 @@
         <li class="card py-3 px-3 col my-3">
             <div class="row d-flex">
                 <div class="col-md-6 d-flex justify-content-between align-items-center flex-row px-3">
-                    <span>
-                        <img v-if="user && user.profile_picture" :src="'data:image/png;base64,' + user.profile_picture"
-                            class="profile-pict-img img-fluid" alt="" />
-                    </span>
+
+                    <img v-if="user && user.profile_picture" :src="user.profile_picture" class="profile-pict-img img-fluid"
+                        alt="" />
+
                     <h4>{{ fullName }}</h4>
                 </div>
                 <div class="col-md-12 mt-4">
@@ -76,6 +76,7 @@ async function fetchUser() {
     try {
         const response = await axios.get(`users/${review.user_id}`);
         user.value = response.data;
+        console.log(response.data);
     } catch (error) {
         console.error(error);
     }
