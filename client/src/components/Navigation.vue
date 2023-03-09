@@ -12,6 +12,11 @@
               <font-awesome-icon icon="fa-solid fa-pencil" />
               Beoordeling</router-link>
           </li>
+          <li v-if="isLoggedIn" class="nav-item">
+            <router-link to="/my-account" class="nav-link" active-class="active">
+              <font-awesome-icon icon="fa-solid fa-user" />
+              Mijn account</router-link>
+          </li>
           <li class="nav-item">
             <button v-if="!isLoggedIn" class="nav-link btn btn-primary" @click="goToLogin">Inloggen</button>
             <button v-if="isLoggedIn" class="nav-link btn btn-primary" @click="logout">Uitloggen</button>

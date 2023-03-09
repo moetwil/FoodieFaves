@@ -9,8 +9,8 @@
             <input type="file" id="image-upload" @change="handleFileUpload" accept="image/*" hidden>
         </div>
         <div class="col">
-            <div v-if="imageUrl" class="image-preview">
-                <img :src="imageUrl" alt="Preview" class="rounded-circle">
+            <div v-if="imageUrl || initialImage" class="image-preview">
+                <img :src="imageUrl || initialImage" alt="Preview" class="rounded-circle">
             </div>
         </div>
 
@@ -21,10 +21,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+const { initialImage } = defineProps({
+    initialImage: {
+        type: String || null,
+        default: ''
+    }
+})
+
 const emits = defineEmits(['file-selected']);
 
 
-const imageUrl = ref('');
+const imageUrl = ref(initialImage);
 
 function handleFileUpload(event: any) {
     const file = event.target.files[0];

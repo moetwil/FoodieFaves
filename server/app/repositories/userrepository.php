@@ -17,9 +17,6 @@ class UserRepository extends Repository
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
 
-            // get the user's profile picture
-            // $user->profile_picture = $this->getUserPicture($user->id);
-
             return $user;
         } catch (PDOException $e) {
             echo $e;
@@ -29,7 +26,7 @@ class UserRepository extends Repository
     public function getUserByUsername($username)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type FROM User WHERE username = :username");
+            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type, profile_picture FROM User WHERE username = :username");
             $stmt->bindParam(':username', $username);
             $stmt->execute();
 
@@ -40,9 +37,6 @@ class UserRepository extends Repository
                 return ;
             }
 
-            // get the user's profile picture
-            $user->profile_picture = $this->getUserPicture($user->id);
-
             return $user;
         } catch (PDOException $e) {
             echo $e;
@@ -52,7 +46,7 @@ class UserRepository extends Repository
     public function getUserByEmail($email)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM User WHERE email = :email");
+            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type, profile_picture FROM User WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
