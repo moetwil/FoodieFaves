@@ -1,6 +1,7 @@
 <template>
     <div class="row d-flex justify-content-center align-items-center">
-        <div class="col"><label for="image-upload" class="btn btn-primary">
+        <div class="col">
+            <label for="image-upload" class="btn btn-primary">
                 <span class="icon">
                     <i class="fa fa-upload"></i>
                 </span>
@@ -10,16 +11,17 @@
         </div>
         <div class="col">
             <div v-if="imageUrl || initialImage" class="image-preview">
+                <button v-if="imageUrl" class="btn btn-remove" @click="clearImage">
+                    <i class="fa fa-times"></i>
+                </button>
                 <img :src="imageUrl || initialImage" alt="Preview" class="rounded-circle">
             </div>
         </div>
-
-
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const { initialImage } = defineProps({
     initialImage: {
@@ -29,7 +31,6 @@ const { initialImage } = defineProps({
 })
 
 const emits = defineEmits(['file-selected']);
-
 
 const imageUrl = ref(initialImage);
 
@@ -41,6 +42,11 @@ function handleFileUpload(event: any) {
         emits('file-selected', e.target?.result as string);
     };
     reader.readAsDataURL(file);
+}
+
+function clearImage() {
+    imageUrl.value = '';
+    emits('file-selected', '');
 }
 </script>
 
@@ -64,10 +70,20 @@ function handleFileUpload(event: any) {
     background-color: #000 !important;
 }
 
+.btn-remove {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+    border: none;
+    background-color: transparent;
+    color: #ff0000;
+    font-size: 1.5rem;
+}
+
 .image-preview {
+    position: relative;
     width: 100px;
     height: 100px;
-    /* border-radius: 50%; */
     overflow: hidden;
     margin-top: 10px;
 }
