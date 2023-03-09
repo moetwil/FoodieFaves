@@ -11,10 +11,13 @@ Client
 [] - Restaurant page: add pagination
 [] - Restaurant store: ombouwen met getters
 [x] - Login: submit on enter
-[] - Login: error handling
-[] - Review Store
+[x] - Login: error handling
+[x] - Review Store
 [] - Review page: Textarea max aantal karakters
 [] - Review page: click on same amount = 0
+[] - All restaurants page
+[] - All restaurants page: filters
+[x] - My account: change image
 [] -
 
 Server

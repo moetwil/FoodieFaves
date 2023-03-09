@@ -131,7 +131,7 @@ class UserRepository extends Repository
             // hash the password
             $user->password = $this->hashPassword($user->password);
 
-            $stmt = $this->connection->prepare("UPDATE User SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, password = :password, is_admin = :is_admin WHERE id = :id");
+            $stmt = $this->connection->prepare("UPDATE User SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, password = :password, is_admin = :is_admin, profile_picture = :profile_picture WHERE id = :id");
             $stmt->bindParam(':first_name', $user->first_name);
             $stmt->bindParam(':last_name', $user->last_name);
             $stmt->bindParam(':username', $user->username);
@@ -139,6 +139,7 @@ class UserRepository extends Repository
             $stmt->bindParam(':password', $user->password);
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':is_admin', $user->is_admin);
+            $stmt->bindParam(':profile_picture', $user->profile_picture);
             $stmt->execute();
 
             // remove password
