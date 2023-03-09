@@ -1,18 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
+import Register from '../views/RegisterView.vue';
+import MyAccount from '../views/MyAccountView.vue';
 import WriteReview from '../views/WriteReviewView.vue';
 import Restaurant from '../views/RestaurantView.vue';
+import errorView from '../views/404View.vue';
 
 const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
+  { path: '/register', component: Register },
   {
-    path: '/write-review',
+    path: '/my-account',
+    component: MyAccount,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/write-review/:id?',
     component: WriteReview,
     meta: { requiresAuth: true },
   },
   { path: '/restaurant/:id', component: Restaurant },
+  // create a 404 page
+  { path: '/:pathMatch(.*)*', component: errorView },
 ];
 
 const router = createRouter({

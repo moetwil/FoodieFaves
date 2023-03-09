@@ -37,6 +37,7 @@ export const useAuthenticationStore = defineStore({
           console.log('LOGIN');
           // set token in local storage
           localStorage.setItem('token', data.token);
+          localStorage.setItem('user_id', data.user._id);
 
           // set user in state
           this.user = data.user;
@@ -53,10 +54,30 @@ export const useAuthenticationStore = defineStore({
 
     logout() {
       localStorage.removeItem('token');
+      localStorage.removeItem('user_id');
       this.user = null;
       this.isLoggedIn = false;
 
       return true;
+    },
+    async register(newUser: User) {
+      try {
+        const response = await axios.post('/users/register', newUser);
+        if (response.status === 200) return true;
+      } catch (error: any) {
+        alert(error.message);
+        return false;
+      }
+    },
+    async updateUser(updateUser: User) {
+      try {
+        const response = await axios.put(`/users/${updateUser.id}`, updateUser);
+        console.log(response);
+        if (response.status === 200) return true;
+      } catch (error: any) {
+        alert(error.message);
+        return false;
+      }
     },
   },
 });

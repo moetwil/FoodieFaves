@@ -1,20 +1,19 @@
 <template>
     <div class="col-md-6">
         <li class="card py-3 px-3 col my-3">
-            <div class="d-flex">
-                <div class="left px-3">
-                    <span>
-                        <img v-if="user && user.profile_picture" :src="'data:image/png;base64,' + user.profile_picture"
-                            class="profile-pict-img img-fluid" alt="" />
+            <div class="row d-flex">
+                <div class="col-md-6 d-flex justify-content-between align-items-center flex-row px-3">
 
-                    </span>
+                    <img v-if="user && user.profile_picture" :src="user.profile_picture" class="profile-pict-img img-fluid"
+                        alt="" />
+
+                    <h4>{{ fullName }}</h4>
                 </div>
-                <div class="right">
+                <div class="col-md-12 mt-4">
                     <h4>
-                        {{ fullName }}
                         <span class="gig-rating text-body-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="15" height="15">
-                                <path fill="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="25" height="25">
+                                <path fill="#ffbf00"
                                     d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z">
                                 </path>
                             </svg>
@@ -31,8 +30,11 @@
                             <span class="text-body-3">Bediening: {{ review.service_rating }}</span>
                             <span class="text-body-3">Prijs-kwaliteit: {{ review.price_value_rating }}</span>
                         </div>
-
                     </div>
+                    <div class="review-image review-image-container" v-if="review.image">
+                        <img :src="review.image" alt="" class="review-image">
+                    </div>
+
                     <span class="publish py-3 d-inline-block w-100">Published: {{ review.date }}</span>
                 </div>
             </div>
@@ -74,6 +76,7 @@ async function fetchUser() {
     try {
         const response = await axios.get(`users/${review.user_id}`);
         user.value = response.data;
+        console.log(response.data);
     } catch (error) {
         console.error(error);
     }
@@ -113,55 +116,26 @@ body {
     display: flex;
 }
 
-.review-list ul li .right h4 .gig-rating {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    color: #ffbf00;
-}
-
-.review-list ul li .right h4 .gig-rating svg {
-    margin: 0 4px 0 0px;
-}
-
-
-.review-list ul li .right {
-    flex: auto;
-}
-
-.review-list ul li .review-description {
-    margin: 20px 0 0;
-}
-
-.review-list ul li .review-description p {
-    font-size: 17px;
-    margin: 0;
-}
-
-.review-list ul li .publish {
-    font-size: 13px;
-    color: #95979d;
-}
-
 ul,
 ul li {
     list-style: none;
     margin: 0px;
 }
 
-.helpful-thumbs,
-.helpful-thumb {
-    display: flex;
-    align-items: center;
-    font-weight: 700;
+.profile-pict-img {
+    width: 50px;
+    height: 50px;
 }
 
-.card {
-    /* border: none !important; */
-}
-
-img {
-    width: 200px;
+.review-image-container {
+    width: 100px;
     height: auto;
+    margin: 10px 0;
+    position: relative;
+}
+
+.review-image {
+    max-width: 100%;
+    max-height: 100%;
 }
 </style>

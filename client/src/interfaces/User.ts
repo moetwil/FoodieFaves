@@ -1,13 +1,13 @@
 interface User {
-  id: number;
+  id: number | null;
   first_name: string;
   last_name: string;
   username: string;
   email: string;
-  password: string;
-  profile_picture: string;
-  is_admin: boolean;
-  user_type: string;
+  password: string | null;
+  profile_picture: string | null;
+  is_admin: number;
+  user_type: number;
 }
 
 export default User;

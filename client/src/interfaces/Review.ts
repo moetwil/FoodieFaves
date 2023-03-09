@@ -1,15 +1,15 @@
 interface Review {
-  id: number;
+  id: number | null;
   food_rating: number;
   service_rating: number;
   price_value_rating: number;
   review_text: string;
-  date: string;
+  date: string | null;
   restaurant_id: number;
   user_id: number;
-  image: string;
-  flagged: boolean;
-  approved: boolean;
+  image: string | null;
+  flagged: boolean | null;
+  approved: boolean | null;
 }
 
 export default Review;

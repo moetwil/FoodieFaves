@@ -10,15 +10,12 @@ class UserRepository extends Repository
     public function getUserById($id)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type FROM User WHERE id = :id");
+            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type, profile_picture FROM User WHERE id = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
-
-            // get the user's profile picture
-            $user->profile_picture = $this->getUserPicture($user->id);
 
             return $user;
         } catch (PDOException $e) {
@@ -29,15 +26,16 @@ class UserRepository extends Repository
     public function getUserByUsername($username)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type FROM User WHERE username = :username");
+            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type, profile_picture FROM User WHERE username = :username");
             $stmt->bindParam(':username', $username);
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
 
-            // get the user's profile picture
-            $user->profile_picture = $this->getUserPicture($user->id);
+            if(!$user) {
+                return ;
+            }
 
             return $user;
         } catch (PDOException $e) {
@@ -48,12 +46,16 @@ class UserRepository extends Repository
     public function getUserByEmail($email)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM User WHERE email = :email");
+            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type, profile_picture FROM User WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $user = $stmt->fetch();
+
+            if(!$user) {
+                return ;
+            }
 
             // get the user's profile picture
             $user->profile_picture = $this->getUserPicture($user->id);
@@ -99,17 +101,21 @@ class UserRepository extends Repository
             // hash the password
             $user->password = $this->hashPassword($user->password);
 
-            $stmt = $this->connection->prepare("INSERT INTO User (first_name, last_name, username, email, password, user_type) VALUES (:first_name, :last_name, :username, :email, :password, :user_type)");
+            $stmt = $this->connection->prepare("INSERT INTO User (first_name, last_name, username, email, password, profile_picture, user_type) VALUES (:first_name, :last_name, :username, :email, :password, :profile_picture, :user_type)");
             $stmt->bindParam(':first_name', $user->first_name);
             $stmt->bindParam(':last_name', $user->last_name);
             $stmt->bindParam(':username', $user->username);
             $stmt->bindParam(':email', $user->email);
             $stmt->bindParam(':password', $user->password);
             $stmt->bindParam(':user_type', $user->user_type);
+            $stmt->bindParam(':profile_picture', $user->profile_picture);
             $stmt->execute();
 
             // get the id of the newly created user
             $user->id = $this->connection->lastInsertId();
+
+            // remove password
+            $user->password = null;
 
             return $user;
         } catch (PDOException $e) {
@@ -121,14 +127,23 @@ class UserRepository extends Repository
     public function updateUser($id, User $user)
     {
         try {
-            $stmt = $this->connection->prepare("UPDATE User SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, password = :password WHERE id = :id");
+
+            // hash the password
+            $user->password = $this->hashPassword($user->password);
+
+            $stmt = $this->connection->prepare("UPDATE User SET first_name = :first_name, last_name = :last_name, username = :username, email = :email, password = :password, is_admin = :is_admin, profile_picture = :profile_picture WHERE id = :id");
             $stmt->bindParam(':first_name', $user->first_name);
             $stmt->bindParam(':last_name', $user->last_name);
             $stmt->bindParam(':username', $user->username);
             $stmt->bindParam(':email', $user->email);
             $stmt->bindParam(':password', $user->password);
             $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':is_admin', $user->is_admin);
+            $stmt->bindParam(':profile_picture', $user->profile_picture);
             $stmt->execute();
+
+            // remove password
+            $user->password = null;
 
             return $user;
         } catch (PDOException $e) {

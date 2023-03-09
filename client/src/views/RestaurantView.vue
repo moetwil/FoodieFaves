@@ -19,11 +19,12 @@
                     <span class="based-on">Gebaseerd op {{ restaurantStore.reviews.length }} reviews</span>
                     <RatingBrakedown />
 
-                    <button type="button" class="btn-primary py-2 mt-3 ">Schrijf een review</button>
+                    <button @click="goToReview(restaurantStore.restaurant)" type="button"
+                        class="btn-primary py-2 mt-3 ">Schrijf een review</button>
                 </div>
                 <div class="col-md-9 bg-light px-4 py-3">
                     <div class="row">
-                        <Review v-for="review in restaurantStore.reviews || []" :review="review" :key="review.id" />
+                        <Review v-for="(review, index) in restaurantStore.reviews || []" :review="review" :key="index" />
                     </div>
 
                 </div>
@@ -40,6 +41,7 @@ import RatingBrakedown from "./../components/Restaurant/RatingBrakedown.vue";
 import Review from "./../components/Review.vue";
 
 import { useRestaurantStore } from '../stores/RestaurantStore';
+import Restaurant from "../interfaces/Restaurant";
 
 // VARIABLES
 const restaurantStore = useRestaurantStore();
@@ -54,6 +56,15 @@ const pageTitle = computed(() => {
         return "Loading...";
     }
 });
+
+function goToReview(restaurant: Restaurant | null) {
+    if (restaurant) {
+        router.push(`/write-review/${restaurant.id}`);
+    }
+    else {
+        router.push(`/write-review`);
+    }
+}
 
 onMounted(() => {
     // get id from url with router
