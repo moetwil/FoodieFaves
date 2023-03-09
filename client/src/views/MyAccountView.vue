@@ -1,10 +1,10 @@
 <template>
-    <Banner pageTitle="Registeren" />
+    <Banner pageTitle="Mijn account" />
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="login-container my-5">
-                    <h1>Mijn account</h1>
+                <div class="update-account-container my-5">
+                    <h1>Gegevens</h1>
                     <form>
                         <div class="row">
                             <div class="col">
@@ -92,11 +92,11 @@
                                     :initial-image="imageFile ? imageFile : undefined" />
                             </div>
                         </div>
-
-
-
-
-                        <button @click="handleUserUpdate" class="nav-link btn btn-primary" type="button">Registreer</button>
+                        <button @click="handleUserUpdate" class="nav-link btn btn-primary" type="button">Update
+                            account</button>
+                        <div class="mt-4">
+                            <p id="success-message">{{ successMessage }}</p>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -120,6 +120,7 @@ const authenticationStore = useAuthenticationStore();
 const router = useRouter();
 
 // VARIABLES
+const id = ref();
 const firstname = ref('');
 const lastname = ref('');
 const username = ref('');
@@ -127,53 +128,53 @@ const email = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
 const imageFile = ref<string | null>(null);
-
-
-
-
+const successMessage = ref('');
 
 // METHODS
-
 onMounted(() => {
+
+    // if the authentication store has no user object, redirect to login page
+    if (!authenticationStore.user) {
+        router.push('/login');
+    }
+
+    // get userdata from store
     const user = authenticationStore.user;
     if (user) {
+        id.value = user.id;
         firstname.value = user.first_name;
         lastname.value = user.last_name;
         username.value = user.username;
         email.value = user.email;
         imageFile.value = user.profile_picture;
-
-        // set imageFile.value to user.profile_picture or null
-        // imageFile.value = user.profile_picture ? user.profile_picture : undefined;
-
     }
 });
 
 async function handleUserUpdate() {
-
-    // CHECK FOR ERRORS
+    // check if all fields are filled in
     if (checkForErrors()) {
         return;
     }
 
+    // create user object
     const updatedUser: User = {
-        id: null,
+        id: id.value,
         first_name: firstname.value,
         last_name: lastname.value,
         username: username.value,
         email: email.value,
         password: password.value,
         profile_picture: imageFile.value,
-        is_admin: false,
+        is_admin: 0,
         user_type: 0
     }
+    successMessage.value = "Je profiel is succesvol aangepast!";
 
-    console.log(updatedUser);
-
-    const res = authenticationStore.register(updatedUser);
+    const res = await authenticationStore.updateUser(updatedUser);
 
     if (await res === true) {
-        router.push('/login');
+        // set success message
+        successMessage.value = "Je profiel is succesvol aangepast!";
     }
     else {
         alert("Er is iets fout gegaan. Probeer het later opnieuw.")
@@ -182,6 +183,7 @@ async function handleUserUpdate() {
 }
 
 function handleImageUpload(image: string) {
+    console.log(image);
     imageFile.value = image;
 }
 
@@ -209,11 +211,9 @@ function checkForErrors() {
     if (!email.value)
         setFieldMessage(emailEl, FieldMessageType.Error, "Vul alstublieft een email in.");
 
-    if (!password.value)
-        setFieldMessage(passwordEl, FieldMessageType.Error, "Vul alstublieft een wachtwoord in.");
-
-    if (!passwordConfirm.value)
-        setFieldMessage(passwordConfirmEl, FieldMessageType.Error, "Herhaal uw wachtwoord");
+    // check if passwords match
+    if (password.value !== passwordConfirm.value)
+        setFieldMessage(passwordConfirmEl, FieldMessageType.Error, "Wachtwoorden komen niet overeen.");
 
     return hasAnyFieldErrors();
 }
@@ -221,7 +221,7 @@ function checkForErrors() {
 
 
 <style>
-.login-container {
+.update-account-container {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 5px;
@@ -235,34 +235,9 @@ h1 {
     margin-bottom: 20px;
 }
 
-
-label {
-    font-size: 17px;
-    margin-bottom: 10px;
-}
-
-input[type="text"],
-input[type="password"] {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+#success-message {
+    color: green;
     font-size: 16px;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-button[type="submit"]:hover {
-    background-color: #3e8e41;
+    text-align: center;
 }
 </style>

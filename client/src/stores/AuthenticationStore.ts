@@ -69,5 +69,15 @@ export const useAuthenticationStore = defineStore({
         return false;
       }
     },
+    async updateUser(updateUser: User) {
+      try {
+        const response = await axios.put(`/users/${updateUser.id}`, updateUser);
+        console.log(response);
+        if (response.status === 200) return true;
+      } catch (error: any) {
+        alert(error.message);
+        return false;
+      }
+    },
   },
 });

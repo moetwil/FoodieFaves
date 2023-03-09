@@ -23,17 +23,18 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 
+const emits = defineEmits(['file-selected']);
 const { initialImage } = defineProps({
     initialImage: {
         type: String || null,
         default: ''
     }
-})
+});
 
-const emits = defineEmits(['file-selected']);
-
+// VARIABLES
 const imageUrl = ref(initialImage);
 
+// METHODS
 function handleFileUpload(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();

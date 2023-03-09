@@ -4,9 +4,9 @@ interface User {
   last_name: string;
   username: string;
   email: string;
-  password: string;
+  password: string | null;
   profile_picture: string | null;
-  is_admin: boolean;
+  is_admin: number;
   user_type: number;
 }
 
