@@ -49,9 +49,6 @@ function goToLogin() {
 
 function logout() {
   const res = authenticationStore.logout();
-  if (res) {
-    router.push('/');
-  }
 }
 </script>
 

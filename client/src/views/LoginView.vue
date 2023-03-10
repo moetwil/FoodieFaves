@@ -1,5 +1,5 @@
 <template>
-    <Banner :pageTitle="pageTitle" />
+    <Banner pageTitle="Login" />
     <div class="container">
         <div class="row">
             <div class="col">
@@ -24,14 +24,12 @@
                                 <p class="help"></p>
                             </div>
                         </div>
-
-
                         <button @click="handleLogin" class="nav-link btn btn-primary" type="button">Log In</button>
                     </form>
-
                     <div class="py-3">
                         <p>Heb je nog geen account? <router-link to="/register" class="nav-link"
-                                active-class="active">Registreer je hier!</router-link></p>
+                                active-class="active">Registreer je hier!</router-link>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -40,9 +38,7 @@
 </template>
 
 <script setup lang="ts">
-// import axios from './../utils/axios';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import Banner from './../components/Banner.vue';
 import { useAuthenticationStore } from '../stores/authenticationStore';
 import Login from './../interfaces/login';
@@ -51,19 +47,12 @@ import {
     setFieldMessage, clearFieldMessages, hasAnyFieldErrors,
 } from "./../utils/formUtils.js";
 
-const authenticationStore = useAuthenticationStore();
-const router = useRouter();
-
 // VARIABLES
-const pageTitle = 'Login';
-
+const authenticationStore = useAuthenticationStore();
 const loginData = ref<Login>({
     username: '',
     password: ''
 });
-
-// const username = ref('');
-// const password = ref('');
 
 // METHODS
 async function handleLogin() {

@@ -32,32 +32,27 @@ export const useAuthenticationStore = defineStore({
       });
 
       if (response.status === 200) {
-        // set token in local storage
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user_id', response.data.user._id);
-        // set user in state
-        this.user = response.data.user;
-        this.isLoggedIn = true;
-
+        this.setUser(response.data.user, response.data.token);
         this.router.push('/');
       }
     },
-
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('user_id');
       this.user = null;
       this.isLoggedIn = false;
 
-      return true;
+      this.router.push('/login');
     },
     async register(newUser: User) {
       try {
         const response = await axios.post('/users/register', newUser);
-        if (response.status === 200) return true;
+        if (response.status === 200) {
+          this.setUser(response.data.user, response.data.token);
+          this.router.push('/');
+        }
       } catch (error: any) {
         alert(error.message);
-        return false;
       }
     },
     async updateUser(updateUser: User) {
@@ -70,6 +65,14 @@ export const useAuthenticationStore = defineStore({
         alert(error.message);
         return false;
       }
+    },
+    setUser(user: User, token: string) {
+      // set token in local storage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user_id', user.id?.toString() || '');
+      // set user in state
+      this.user = user;
+      this.isLoggedIn = true;
     },
   },
 });

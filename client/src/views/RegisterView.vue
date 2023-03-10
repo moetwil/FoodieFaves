@@ -145,20 +145,11 @@ async function handleRegister() {
         email: email.value,
         password: password.value,
         profile_picture: imageFile.value,
-        is_admin: false,
+        is_admin: 0,
         user_type: 0
     }
 
-    console.log(newUser);
-
-    const res = authenticationStore.register(newUser);
-
-    if (await res === true) {
-        router.push('/login');
-    }
-    else {
-        alert("Er is iets fout gegaan. Probeer het later opnieuw.")
-    }
+    await authenticationStore.register(newUser);
 
 }
 
