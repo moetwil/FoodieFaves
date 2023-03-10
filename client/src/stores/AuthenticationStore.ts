@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import axios from '../utils/axios';
 import User from '../interfaces/User';
+import Login from '../interfaces/login';
 
 interface AuthState {
   user: User | null;
@@ -24,31 +25,21 @@ export const useAuthenticationStore = defineStore({
     },
   },
   actions: {
-    async login(username: string, password: string) {
-      try {
-        const response = await axios.post('/users/login', {
-          username: username,
-          password: password,
-        });
+    async login(data: Login) {
+      const response = await axios.post('/users/login', {
+        username: data.username,
+        password: data.password,
+      });
 
-        const data = response.data;
+      if (response.status === 200) {
+        // set token in local storage
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user_id', response.data.user._id);
+        // set user in state
+        this.user = response.data.user;
+        this.isLoggedIn = true;
 
-        if (data.message === 'Successful login.') {
-          console.log('LOGIN');
-          // set token in local storage
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('user_id', data.user._id);
-
-          // set user in state
-          this.user = data.user;
-          this.isLoggedIn = true;
-
-          return true;
-        } else {
-          return false;
-        }
-      } catch (error: any) {
-        alert(error.message);
+        this.router.push('/');
       }
     },
 
@@ -70,6 +61,7 @@ export const useAuthenticationStore = defineStore({
       }
     },
     async updateUser(updateUser: User) {
+      this.user = updateUser;
       try {
         const response = await axios.put(`/users/${updateUser.id}`, updateUser);
         console.log(response);

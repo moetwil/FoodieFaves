@@ -18,12 +18,13 @@ Client
 [] - All restaurants page
 [] - All restaurants page: filters
 [x] - My account: change image
+[] - My account: password alleen updaten als hij veranderd
 [] -
 
 Server
 [] - Controller: Secret-key to .env
 [] - site eigen JWT ?
 [] - password weghalen bij users
-[] -
+[] - UserRepository: password alleen updaten als hij veranderd
 
 

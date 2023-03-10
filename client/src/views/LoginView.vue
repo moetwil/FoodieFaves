@@ -8,8 +8,8 @@
                     <form>
                         <div class="field">
                             <label class="label" for="login">Username</label>
-                            <input v-model="username" @keydown.enter="handleLogin" class="input has-background-dark"
-                                type="text" name="username" id="username">
+                            <input v-model="loginData.username" @keydown.enter="handleLogin"
+                                class="input has-background-dark" type="text" name="username" id="username">
                             <div class="d-flex">
                                 <span class="icon px-2"><i></i></span>
                                 <p class="help"></p>
@@ -17,8 +17,8 @@
                         </div>
                         <div class="field">
                             <label class="label" for="password">Password</label>
-                            <input v-model="password" @keydown.enter="handleLogin" class="input has-background-dark"
-                                type="password" name="password" id="password">
+                            <input v-model="loginData.password" @keydown.enter="handleLogin"
+                                class="input has-background-dark" type="password" name="password" id="password">
                             <div class="d-flex">
                                 <span class="icon px-2"><i></i></span>
                                 <p class="help"></p>
@@ -45,7 +45,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from './../components/Banner.vue';
 import { useAuthenticationStore } from '../stores/authenticationStore';
-
+import Login from './../interfaces/login';
 import {
     FieldMessageType,
     setFieldMessage, clearFieldMessages, hasAnyFieldErrors,
@@ -56,8 +56,14 @@ const router = useRouter();
 
 // VARIABLES
 const pageTitle = 'Login';
-const username = ref('');
-const password = ref('');
+
+const loginData = ref<Login>({
+    username: '',
+    password: ''
+});
+
+// const username = ref('');
+// const password = ref('');
 
 // METHODS
 async function handleLogin() {
@@ -68,23 +74,15 @@ async function handleLogin() {
     // ERROR HANDLING
     clearFieldMessages();
 
-    if (!username.value)
+    if (!loginData.value.username)
         setFieldMessage(loginEl, FieldMessageType.Error, "Email or username is required.");
 
-    if (!password.value)
+    if (!loginData.value.username)
         setFieldMessage(passwordEl, FieldMessageType.Error, "Password is required.");
 
     if (hasAnyFieldErrors()) return;
 
-    // LOGIN
-    const res = await authenticationStore.login(username.value, password.value);
-
-    if (res) {
-        router.push('/');
-    }
-    else {
-        alert("Login failed");
-    }
+    await authenticationStore.login(loginData.value);
 
 }
 </script>
