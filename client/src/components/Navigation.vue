@@ -8,9 +8,9 @@
           <li class="nav-item">
           </li>
           <li class="nav-item">
-            <router-link to="/write-review" class="nav-link" active-class="active">
-              <font-awesome-icon icon="fa-solid fa-pencil" />
-              Beoordeling</router-link>
+            <router-link to="/restaurants" class="nav-link" active-class="active">
+              <font-awesome-icon icon="fa-solid fa-utensils" />
+              Restaurants</router-link>
           </li>
           <li v-if="isLoggedIn" class="nav-item">
             <router-link to="/my-account" class="nav-link" active-class="active">

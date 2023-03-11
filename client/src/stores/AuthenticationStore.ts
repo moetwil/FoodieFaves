@@ -32,7 +32,7 @@ export const useAuthenticationStore = defineStore({
       });
 
       if (response.status === 200) {
-        this.setUser(response.data.user, response.data.token);
+        this.setUser(response.data.user, response.data.jwt);
         this.router.push('/');
       }
     },
@@ -48,7 +48,7 @@ export const useAuthenticationStore = defineStore({
       try {
         const response = await axios.post('/users/register', newUser);
         if (response.status === 200) {
-          this.setUser(response.data.user, response.data.token);
+          this.setUser(response.data.user, response.data.jwt);
           this.router.push('/');
         }
       } catch (error: any) {
@@ -73,6 +73,14 @@ export const useAuthenticationStore = defineStore({
       // set user in state
       this.user = user;
       this.isLoggedIn = true;
+    },
+    async checkAuth() {
+      const userId = localStorage.getItem('user_id');
+      if (userId && this.user === null) {
+        const response = await axios.get('/users/' + userId);
+        console.log(response.data);
+        this.setUser(response.data, localStorage.getItem('token') || '');
+      }
     },
   },
 });

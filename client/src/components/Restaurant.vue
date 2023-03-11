@@ -30,8 +30,8 @@
 
 <script setup lang="ts">
 import { onMounted, PropType, ref, computed } from 'vue';
-import Restaurant from "./../../interfaces/Restaurant";
-import axios from "./../../utils/axios";
+import Restaurant from "../interfaces/Restaurant";
+import axios from "../utils/axios";
 
 const reviewAmount = ref(0);
 const rating = ref(0);

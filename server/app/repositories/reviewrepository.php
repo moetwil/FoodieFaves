@@ -39,6 +39,20 @@ class ReviewRepository extends Repository
         }
     }
 
+    public function getLastThree(){
+        try {
+            $stmt = $this->connection->prepare("SELECT * FROM Review ORDER BY id DESC LIMIT 3");
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Review');
+            $reviews = $stmt->fetchAll();
+
+            return $reviews;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
     public function getByUser($userId)
     {
         try {

@@ -14,8 +14,9 @@ import {
   faUserSecret,
   faPencil,
   faUser,
+  faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
-library.add(faUserSecret, faPencil, faUser);
+library.add(faUserSecret, faPencil, faUser, faUtensils);
 
 // Create app
 const app = createApp(App);

@@ -5,6 +5,7 @@ import Register from '../views/RegisterView.vue';
 import MyAccount from '../views/MyAccountView.vue';
 import WriteReview from '../views/WriteReviewView.vue';
 import Restaurant from '../views/RestaurantView.vue';
+import Restaurants from '../views/RestaurantsView.vue';
 import errorView from '../views/404View.vue';
 
 const routes = [
@@ -22,6 +23,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   { path: '/restaurant/:id', component: Restaurant },
+  { path: '/restaurants', component: Restaurants },
   // create a 404 page
   { path: '/:pathMatch(.*)*', component: errorView },
 ];

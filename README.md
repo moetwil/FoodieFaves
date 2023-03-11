@@ -3,7 +3,7 @@
 # TODO:
 
 General
-[] - F: Home/Review-section; reviews fetchen van alle reviews 
+[x] - F: Home/Review-section; reviews fetchen van alle reviews 
 [] -
 
 Client

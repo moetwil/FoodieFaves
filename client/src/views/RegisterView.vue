@@ -33,7 +33,6 @@
 
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col">
                                 <div class="field">
@@ -91,10 +90,6 @@
                                 <ImageUpload @file-selected="handleImageUpload" />
                             </div>
                         </div>
-
-
-
-
                         <button @click="handleRegister" class="nav-link btn btn-primary" type="button">Registreer</button>
                     </form>
                 </div>

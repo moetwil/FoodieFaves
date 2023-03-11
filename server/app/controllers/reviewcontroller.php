@@ -167,4 +167,20 @@ class ReviewController extends Controller
             $this->respondWithError(500, $e->getMessage());
         }
     }
+
+    public function getLastThree(){
+        try {
+            $reviews = $this->service->getLastThree();
+
+            if ($reviews == null) {
+                $this->respondWithError(404, "Reviews not found");
+                return;
+            }
+
+            $this->respond($reviews);
+
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
+    }
 }

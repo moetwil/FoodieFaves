@@ -76,7 +76,6 @@ async function fetchUser() {
     try {
         const response = await axios.get(`users/${review.user_id}`);
         user.value = response.data;
-        console.log(response.data);
     } catch (error) {
         console.error(error);
     }
