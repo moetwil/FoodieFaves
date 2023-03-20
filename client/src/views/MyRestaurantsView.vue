@@ -4,7 +4,9 @@
         <div class="container">
             <div class="row mt-5">
                 <div class="col d-flex justify-content-end">
-                    <button class="button btn-secondary py-2">+ Restaurant toevoegen</button>
+                    <router-link to="/restaurant-aanmaken"><button class="button btn-secondary py-2">+ Restaurant
+                            toevoegen</button>
+                    </router-link>
                 </div>
             </div>
             <div class="row d-flex justify-content-center">
@@ -55,8 +57,7 @@ const restaurants = ref<Restaurant[]>([]);
 async function handleDelete(restaurant: Restaurant) {
     const confirmRes = confirm(`Weet je zeker dat je restaurant: ${restaurant.name} wilt verwijderen?`);
     if (!confirmRes) return;
-
-    // await axios.delete(`/restaurants/${id}`);
+    await axios.delete(`/restaurants/${restaurant.id}`);
     fetchRestaurants();
 }
 

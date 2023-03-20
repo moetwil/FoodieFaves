@@ -1,7 +1,7 @@
 <?php
 namespace Services;
 
-use Models\Restaurant;
+use Models\{Restaurant, User};
 use Repositories\RestaurantRepository;
 
 class RestaurantService {
@@ -13,8 +13,8 @@ class RestaurantService {
         $this->restaurantRepository = new RestaurantRepository();
     }
 
-    public function addRestaurant(Restaurant $restaurant): ?Restaurant {
-        return $this->restaurantRepository->createRestaurant($restaurant);
+    public function addRestaurant(Restaurant $restaurant, $userId): ?Restaurant {
+        return $this->restaurantRepository->createRestaurant($restaurant, $userId);
     }
 
     public function getRestaurantById($id) {

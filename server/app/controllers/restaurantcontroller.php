@@ -71,12 +71,16 @@ class RestaurantController extends Controller
     public function create()
     {
         try {
+
+            $decoded = $this->checkForJwt();
+            
+            $userId = $decoded->data->id;
             $postedRestaurant = $this->createObjectFromPostedJson("Models\\Restaurant");
-            $restaurant = $this->service->addRestaurant($postedRestaurant);
+            $restaurant = $this->service->addRestaurant($postedRestaurant, $userId);
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
-
+// 
         $this->respond($restaurant);
     }
 
@@ -101,6 +105,9 @@ class RestaurantController extends Controller
     public function delete($id)
     {
         try {
+
+            $this->checkForJwt();
+
             $restaurant = $this->service->getRestaurantById($id);
 
             if($restaurant == null) {
