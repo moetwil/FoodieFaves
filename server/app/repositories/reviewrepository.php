@@ -130,11 +130,13 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function flagReview($id)
+    public function flagReview($id, $flagged)
     {
         try {
-            $stmt = $this->connection->prepare("UPDATE Review SET flagged = 1 WHERE id = :id");
+            $state = $flagged ? 1 : 0;
+            $stmt = $this->connection->prepare("UPDATE Review SET flagged = :flagged WHERE id = :id");
             $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':flagged', $state);
             $stmt->execute();
 
 

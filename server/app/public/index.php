@@ -46,6 +46,7 @@ $router->get('/api/reviews/user/(\d+)', 'ReviewController@getByUser');
 $router->put('/api/reviews/(\d+)', 'ReviewController@update');
 $router->delete('/api/reviews/(\d+)', 'ReviewController@delete');
 $router->put('/api/reviews/(\d+)/flag', 'ReviewController@flag');
+$router->put('/api/reviews/(\d+)/unflag', 'ReviewController@unflag');
 $router->put('/api/reviews/(\d+)/approve', 'ReviewController@approve');
 
 

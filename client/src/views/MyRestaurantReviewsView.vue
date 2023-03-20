@@ -19,12 +19,15 @@
                         <tbody>
                             <tr v-for="(review, index) in reviews" :key="index">
                                 <td><img v-if="review && review.image" :src="review.image" alt="" /></td>
-                                <td>{{ review.food_rating }}</td>
-                                <td>{{ review.service_rating }}</td>
-                                <td>{{ review.price_value_rating }}</td>
+                                <td>{{ review.food_rating }}/5</td>
+                                <td>{{ review.service_rating }}/5</td>
+                                <td>{{ review.price_value_rating }}/5</td>
                                 <td>{{ review.review_text }}</td>
                                 <td>{{ review.date }}</td>
-                                <td><font-awesome-icon class="action" :icon="['fas', 'flag']" style="color: #ff0000;" />
+                                <td v-if="!review.flagged"><font-awesome-icon class="flag" @click="handleFlag(review)"
+                                        :icon="['fas', 'flag']" /></td>
+                                <td v-else><font-awesome-icon class="flag" @click="handleUnflag(review)"
+                                        :icon="['fas', 'flag']" style="color: #ff0000;" />
                                 </td>
                             </tr>
                         </tbody>
@@ -51,9 +54,6 @@ const ownerId = ref<number | null>(null);
 
 
 // METHODS
-function handleFlag(review: Review) {
-    console.log('flagged');
-}
 
 onMounted(async () => {
     await authenticationStore.checkAuth();
@@ -66,6 +66,25 @@ onMounted(async () => {
 
     await fetchReviews();
 });
+
+async function handleFlag(review: Review) {
+    try {
+        await axios.put(`/reviews/${review.id}/flag`);
+        await fetchReviews();
+    } catch (e) {
+        console.log(e);
+    }
+
+}
+
+async function handleUnflag(review: Review) {
+    try {
+        await axios.put(`/reviews/${review.id}/unflag`);
+        await fetchReviews();
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 async function fetchRestaurant() {
     // get restaurant id from url
@@ -93,7 +112,7 @@ td img {
     object-fit: cover;
 }
 
-.action:hover {
+.flag:hover {
     cursor: pointer !important;
 }
 </style>

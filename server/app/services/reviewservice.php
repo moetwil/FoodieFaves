@@ -49,7 +49,11 @@ class ReviewService {
 
     public function flagReview($id)
     {
-        return $this->reviewRepository->flagReview($id);
+        return $this->reviewRepository->flagReview($id, true);
+    }
+    public function unflagReview($id)
+    {
+        return $this->reviewRepository->flagReview($id, false);
     }
 
     public function approveReview($id)
