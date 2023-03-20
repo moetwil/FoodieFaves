@@ -19,6 +19,7 @@ import {
   faTrash,
   faPenToSquare,
   faQuoteLeft,
+  faFlag,
 } from '@fortawesome/free-solid-svg-icons';
 library.add(
   faUserSecret,
@@ -28,7 +29,8 @@ library.add(
   faBuilding,
   faTrash,
   faPenToSquare,
-  faQuoteLeft
+  faQuoteLeft,
+  faFlag
 );
 
 // Create app

@@ -4,6 +4,7 @@ import Login from '../views/LoginView.vue';
 import Register from '../views/RegisterView.vue';
 import MyAccount from '../views/MyAccountView.vue';
 import MyRestaurants from '../views/MyRestaurantsView.vue';
+import MyRestaurantReviews from '../views/MyRestaurantReviewsView.vue';
 import CreateRestaurant from '../views/CreateRestaurantView.vue';
 import EditRestaurant from '../views/EditRestaurantView.vue';
 import WriteReview from '../views/WriteReviewView.vue';
@@ -33,6 +34,11 @@ const routes = [
   {
     path: '/restaurant-bewerken/:id?',
     component: EditRestaurant,
+    meta: { requiresAuth: true, requiresRestaurantOwner: true },
+  },
+  {
+    path: '/restaurant-reviews/:id?',
+    component: MyRestaurantReviews,
     meta: { requiresAuth: true, requiresRestaurantOwner: true },
   },
   {

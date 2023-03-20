@@ -34,7 +34,8 @@
                                 <td>{{ restaurant.city }}</td>
                                 <td><font-awesome-icon class="action" @click="handleEdit(restaurant)"
                                         icon="fa-solid fa-pen-to-square" /></td>
-                                <td><font-awesome-icon class="action" icon="fa-solid fa-quote-left" /></td>
+                                <td><font-awesome-icon class="action" @click="handleManageReviews(restaurant)"
+                                        icon="fa-solid fa-quote-left" /></td>
                                 <td><font-awesome-icon class="action" @click="handleDelete(restaurant)"
                                         icon="fa-solid fa-trash" /></td>
                             </tr>
@@ -59,6 +60,9 @@ const restaurants = ref<Restaurant[]>([]);
 
 function handleEdit(restaurant: Restaurant) {
     router.push(`/restaurant-bewerken/${restaurant.id}`);
+}
+function handleManageReviews(restaurant: Restaurant) {
+    router.push(`/restaurant-reviews/${restaurant.id}`);
 }
 
 async function handleDelete(restaurant: Restaurant) {
