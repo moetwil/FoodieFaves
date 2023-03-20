@@ -79,9 +79,21 @@ class RestaurantRepository  extends Repository{
     public function deleteRestaurant($restaurantId) 
     {
         try {
+            // start transaction
+            $this->connection->beginTransaction();
+
+            // delete all reviews of the restaurant
+            $stmt = $this->connection->prepare("DELETE FROM Review WHERE restaurant_id = :id");
+            $stmt->bindParam(':id', $restaurantId);
+            $stmt->execute();
+
+            // delete restaurant
             $stmt = $this->connection->prepare("DELETE FROM Restaurant WHERE id = :id");
             $stmt->bindParam(':id', $restaurantId);
             $stmt->execute();
+
+            // commit transaction
+            $this->connection->commit();
 
             return true;
         } catch (PDOException $e) {

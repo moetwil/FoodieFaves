@@ -130,6 +130,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from '../components/Banner.vue';
 import ImageUpload from '../components/ImageUpload.vue';
+import { useAuthenticationStore } from '../stores/authenticationStore';
 import axios from '../utils/axios';
 import {
     FieldMessageType,
@@ -137,6 +138,7 @@ import {
 } from "../utils/formUtils.js";
 import Restaurant from '../interfaces/Restaurant';
 const router = useRouter();
+const authenticationStore = useAuthenticationStore();
 
 // VARIABLES
 const id = ref<number | null>(null);
@@ -153,6 +155,11 @@ const imageFile = ref('');
 
 onMounted(async () => {
     await fetchRestaurant();
+
+    // check if user is owner of restaurant
+    if (authenticationStore.user?.id !== ownerId.value) {
+        router.push('/mijn-restaurants');
+    }
 });
 
 async function handleSubmit() {
