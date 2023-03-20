@@ -106,12 +106,20 @@ class RestaurantController extends Controller
     {
         try {
 
-            $this->checkForJwt();
+            $decoded = $this->checkForJwt();
 
             $restaurant = $this->service->getRestaurantById($id);
 
             if($restaurant == null) {
                 $this->respondWithError(404, "Restaurant not found");
+                return;
+            }
+
+            $ownerId = $restaurant->owner_id;
+
+            // check if user is owner of restaurant
+            if($restaurant->owner_id != $decoded->data->id) {
+                $this->respondWithError(401, "You are not authorized to delete this restaurant");
                 return;
             }
 
@@ -125,7 +133,7 @@ class RestaurantController extends Controller
             $this->respondWithError(500, $e->getMessage());
         }
 
-        $this->respond($response);
+        // $this->respond($response);
     }
 
     public function getRestaurantReviewsAmount($id)
