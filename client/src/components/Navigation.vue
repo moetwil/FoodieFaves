@@ -12,8 +12,13 @@
               <font-awesome-icon icon="fa-solid fa-utensils" />
               Restaurants</router-link>
           </li>
+          <li v-if="isRestaurantOwner" class="nav-item">
+            <router-link to="/mijn-restaurants" class="nav-link" active-class="active">
+              <font-awesome-icon icon="fa-solid fa-building" />
+              Mijn restaurants</router-link>
+          </li>
           <li v-if="isLoggedIn" class="nav-item">
-            <router-link to="/my-account" class="nav-link" active-class="active">
+            <router-link to="/mijn-account" class="nav-link" active-class="active">
               <font-awesome-icon icon="fa-solid fa-user" />
               Mijn account</router-link>
           </li>
@@ -34,14 +39,11 @@ import { useAuthenticationStore } from '../stores/authenticationStore';
 
 // VARIABLES
 const authenticationStore = useAuthenticationStore();
-
-
-
-
 const router = useRouter();
 
 
 const isLoggedIn = computed(() => authenticationStore.getIsLoggedIn);
+const isRestaurantOwner = computed(() => authenticationStore.getIsRestaurantOwner);
 
 function goToLogin() {
   router.push('/login');

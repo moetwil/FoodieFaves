@@ -23,6 +23,9 @@ export const useAuthenticationStore = defineStore({
     getIsLoggedIn(state) {
       return state.isLoggedIn;
     },
+    getIsRestaurantOwner(state) {
+      return state.user?.user_type === 1;
+    },
   },
   actions: {
     async login(data: Login) {
@@ -39,6 +42,7 @@ export const useAuthenticationStore = defineStore({
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('user_id');
+      localStorage.removeItem('user_type');
       this.user = null;
       this.isLoggedIn = false;
 
@@ -70,6 +74,7 @@ export const useAuthenticationStore = defineStore({
       // set token in local storage
       localStorage.setItem('token', token);
       localStorage.setItem('user_id', user.id?.toString() || '');
+      localStorage.setItem('user_type', user.user_type?.toString() || '');
       // set user in state
       this.user = user;
       this.isLoggedIn = true;

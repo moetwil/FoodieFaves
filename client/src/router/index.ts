@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue';
 import Login from '../views/LoginView.vue';
 import Register from '../views/RegisterView.vue';
 import MyAccount from '../views/MyAccountView.vue';
+import MyRestaurants from '../views/MyRestaurantsView.vue';
 import WriteReview from '../views/WriteReviewView.vue';
 import Restaurant from '../views/RestaurantView.vue';
 import Restaurants from '../views/RestaurantsView.vue';
@@ -13,9 +14,14 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   {
-    path: '/my-account',
+    path: '/mijn-account',
     component: MyAccount,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/mijn-restaurants',
+    component: MyRestaurants,
+    meta: { requiresAuth: true, requiresRestaurantOwner: true },
   },
   {
     path: '/write-review/:id?',
@@ -36,9 +42,15 @@ const router = createRouter({
 // Check if user is logged in before each route change
 router.beforeEach((to, from, next) => {
   const isLoggedIn = localStorage.getItem('token') !== null;
+  const userRole = localStorage.getItem('user_type');
 
   if (to.meta.requiresAuth && !isLoggedIn) {
     next('/login');
+  } else if (
+    to.meta.requiresRestaurantOwner &&
+    (!isLoggedIn || userRole !== '1')
+  ) {
+    next('/');
   } else {
     next();
   }
