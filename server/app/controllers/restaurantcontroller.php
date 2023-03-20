@@ -51,8 +51,10 @@ class RestaurantController extends Controller
 
     public function getAllByOwner($id)
     {
+        // $this->respond($id);
         try {
-            $restaurants = $this->service->getAllRestaurantsByOwner($id);
+            $newId = (int)$id;
+            $restaurants = $this->service->getAllRestaurantsByOwner($newId);
 
             if ($restaurants == null) {
                 $this->respondWithError(404, "No restaurants found");
@@ -81,7 +83,6 @@ class RestaurantController extends Controller
     public function update($id)
     {
         try {
-
             $restaurant = $this->service->getRestaurantById($id);
             if($restaurant == null) {
                 $this->respondWithError(404, "Restaurant not found");

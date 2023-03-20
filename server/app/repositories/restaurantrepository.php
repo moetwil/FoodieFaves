@@ -121,6 +121,11 @@ class RestaurantRepository  extends Repository{
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurants = $stmt->fetchAll();
 
+            // get the profile picture of the restaurant
+            foreach($restaurants as $restaurant){
+                $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
+            }
+
             return $restaurants;
         } catch (PDOException $e) {
             echo $e;

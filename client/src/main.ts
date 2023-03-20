@@ -16,8 +16,20 @@ import {
   faUser,
   faUtensils,
   faBuilding,
+  faTrash,
+  faPenToSquare,
+  faQuoteLeft,
 } from '@fortawesome/free-solid-svg-icons';
-library.add(faUserSecret, faPencil, faUser, faUtensils, faBuilding);
+library.add(
+  faUserSecret,
+  faPencil,
+  faUser,
+  faUtensils,
+  faBuilding,
+  faTrash,
+  faPenToSquare,
+  faQuoteLeft
+);
 
 // Create app
 const app = createApp(App);
