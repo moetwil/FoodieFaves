@@ -6,6 +6,7 @@
                 <div class="login-container my-5">
                     <h1>Maak een account aan</h1>
                     <form>
+
                         <div class="row">
                             <div class="col">
                                 <div class="field">
@@ -90,6 +91,24 @@
                                 <ImageUpload @file-selected="handleImageUpload" />
                             </div>
                         </div>
+                        <div class="row pt-1">
+                            <div class="col">
+                                <div class="field">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="checkbox" name="restaurant-owner" id="restaurant-owner"
+                                                v-model="restaurantOwner">
+                                            <label class="px-2" for="restaurant-owner">Ik ben een restaurant
+                                                eigenaar</label>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <span class="icon px-2"><i></i></span>
+                                        <p class="help"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <button @click="handleRegister" class="nav-link btn btn-primary" type="button">Registreer</button>
                     </form>
                 </div>
@@ -122,6 +141,7 @@ const email = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
 const imageFile = ref<string | null>(null);
+const restaurantOwner = ref(false);
 
 
 // METHODS
@@ -141,10 +161,10 @@ async function handleRegister() {
         password: password.value,
         profile_picture: imageFile.value,
         is_admin: 0,
-        user_type: 0
+        user_type: restaurantOwner.value ? 1 : 0,
     }
 
-    await authenticationStore.register(newUser);
+    // await authenticationStore.register(newUser);
 
 }
 
@@ -176,11 +196,17 @@ function checkForErrors() {
     if (!email.value)
         setFieldMessage(emailEl, FieldMessageType.Error, "Vul alstublieft een email in.");
 
+    if (email.value && !email.value.includes("@"))
+        setFieldMessage(emailEl, FieldMessageType.Error, "Vul alstublieft een geldig email in.");
+
     if (!password.value)
         setFieldMessage(passwordEl, FieldMessageType.Error, "Vul alstublieft een wachtwoord in.");
 
     if (!passwordConfirm.value)
         setFieldMessage(passwordConfirmEl, FieldMessageType.Error, "Herhaal uw wachtwoord");
+
+    if (password.value && passwordConfirm.value && password.value !== passwordConfirm.value)
+        setFieldMessage(passwordConfirmEl, FieldMessageType.Error, "Wachtwoorden komen niet overeen.");
 
     return hasAnyFieldErrors();
 }

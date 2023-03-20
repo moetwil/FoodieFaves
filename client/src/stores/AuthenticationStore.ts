@@ -52,7 +52,7 @@ export const useAuthenticationStore = defineStore({
           this.router.push('/');
         }
       } catch (error: any) {
-        alert(error.message);
+        console.error(error);
       }
     },
     async updateUser(updateUser: User) {
