@@ -71,7 +71,6 @@ class RestaurantController extends Controller
     public function create()
     {
         try {
-
             $decoded = $this->checkForJwt();
             
             $userId = $decoded->data->id;
@@ -80,13 +79,14 @@ class RestaurantController extends Controller
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
-// 
         $this->respond($restaurant);
     }
 
     public function update($id)
     {
         try {
+            $this->checkForJwt();
+
             $restaurant = $this->service->getRestaurantById($id);
             if($restaurant == null) {
                 $this->respondWithError(404, "Restaurant not found");

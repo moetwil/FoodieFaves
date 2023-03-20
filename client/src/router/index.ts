@@ -5,6 +5,7 @@ import Register from '../views/RegisterView.vue';
 import MyAccount from '../views/MyAccountView.vue';
 import MyRestaurants from '../views/MyRestaurantsView.vue';
 import CreateRestaurant from '../views/CreateRestaurantView.vue';
+import EditRestaurant from '../views/EditRestaurantView.vue';
 import WriteReview from '../views/WriteReviewView.vue';
 import Restaurant from '../views/RestaurantView.vue';
 import Restaurants from '../views/RestaurantsView.vue';
@@ -27,6 +28,11 @@ const routes = [
   {
     path: '/restaurant-aanmaken',
     component: CreateRestaurant,
+    meta: { requiresAuth: true, requiresRestaurantOwner: true },
+  },
+  {
+    path: '/restaurant-bewerken/:id?',
+    component: EditRestaurant,
     meta: { requiresAuth: true, requiresRestaurantOwner: true },
   },
   {

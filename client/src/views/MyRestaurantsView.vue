@@ -32,7 +32,8 @@
                                 <td>{{ restaurant.street }} {{ restaurant.house_number }}</td>
                                 <td>{{ restaurant.zip_code }}</td>
                                 <td>{{ restaurant.city }}</td>
-                                <td><font-awesome-icon class="action" icon="fa-solid fa-pen-to-square" /></td>
+                                <td><font-awesome-icon class="action" @click="handleEdit(restaurant)"
+                                        icon="fa-solid fa-pen-to-square" /></td>
                                 <td><font-awesome-icon class="action" icon="fa-solid fa-quote-left" /></td>
                                 <td><font-awesome-icon class="action" @click="handleDelete(restaurant)"
                                         icon="fa-solid fa-trash" /></td>
@@ -49,11 +50,16 @@ import { ref, onMounted } from "vue";
 import Banner from "../components/Banner.vue";
 import axios from "./../utils/axios";
 import Restaurant from "./../interfaces/Restaurant";
+import router from "../router";
 
 // VARIABLES
 const restaurants = ref<Restaurant[]>([]);
 
 // METHODS
+
+function handleEdit(restaurant: Restaurant) {
+    router.push(`/restaurant-bewerken/${restaurant.id}`);
+}
 
 async function handleDelete(restaurant: Restaurant) {
     const confirmRes = confirm(`Weet je zeker dat je restaurant: ${restaurant.name} wilt verwijderen?`);

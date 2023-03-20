@@ -18,8 +18,9 @@ Client
 [] - Admin: approve review
 [] - Admin: admin page in menu
 
-[] - My restaurants: overzicht pagina
-[] - My restaurants: restaurant aanmaken pagina
+[x] - My restaurants: overzicht pagina
+[x] - My restaurants: restaurant aanmaken pagina
+[x] - My restaurants: restaurant edit pagina
 [] - My restaurants: flag een review
 
 
