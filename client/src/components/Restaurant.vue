@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between">
                 <div class="d-flex flex-row align-items-center">
                     <div class="icon">
-                        <img :src="'data:image/png;base64,' + restaurant.profile_picture" />
+                        <img v-if="restaurant && restaurant.profile_picture" :src="restaurant.profile_picture" alt="" />
                         <!-- <img src="https://img.icons8.com/ios/50/000000/restaurant.png" /> -->
                     </div>
                 </div>

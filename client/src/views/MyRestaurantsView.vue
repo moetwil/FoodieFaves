@@ -19,14 +19,15 @@
                                 <th scope="col">Adres</th>
                                 <th scope="col">Postcode</th>
                                 <th scope="col">City</th>
-                                <!-- <th scope="col">Bewerk</th>
+                                <th scope="col">Bewerk</th>
                                 <th scope="col">Beheer reviews</th>
-                                <th scope="col">Verwijder</th> -->
+                                <th scope="col">Verwijder</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="restaurant in restaurants" :key="restaurant.id">
-                                <td><img :src="'data:image/png;base64,' + restaurant.profile_picture" /></td>
+                            <tr v-for="(restaurant, index) in restaurants" :key="index">
+                                <td><img v-if="restaurant && restaurant.profile_picture" :src="restaurant.profile_picture"
+                                        alt="" /></td>
                                 <td>{{ restaurant.name }}</td>
                                 <td>{{ restaurant.street }} {{ restaurant.house_number }}</td>
                                 <td>{{ restaurant.zip_code }}</td>

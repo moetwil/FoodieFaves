@@ -17,7 +17,7 @@ class RestaurantRepository  extends Repository{
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurant = $stmt->fetch();
             
-            $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
+            // $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
 
             return $restaurant;
 
@@ -94,15 +94,15 @@ class RestaurantRepository  extends Repository{
     public function getAllRestaurants() 
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id FROM Restaurant");
+            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id, profile_picture FROM Restaurant");
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurants = $stmt->fetchAll();
 
-            foreach($restaurants as $restaurant){
-                $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
-            }
+            // foreach($restaurants as $restaurant){
+            //     $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
+            // }
 
             return $restaurants;
         } catch (PDOException $e) {
@@ -121,10 +121,10 @@ class RestaurantRepository  extends Repository{
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurants = $stmt->fetchAll();
 
-            // get the profile picture of the restaurant
-            foreach($restaurants as $restaurant){
-                $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
-            }
+            // // get the profile picture of the restaurant
+            // foreach($restaurants as $restaurant){
+            //     $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
+            // }
 
             return $restaurants;
         } catch (PDOException $e) {
@@ -195,9 +195,9 @@ class RestaurantRepository  extends Repository{
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurants = $stmt->fetchAll();
 
-            foreach($restaurants as $restaurant){
-                $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
-            }
+            // foreach($restaurants as $restaurant){
+            //     $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
+            // }
 
             return $restaurants;
         } catch (PDOException $e) {

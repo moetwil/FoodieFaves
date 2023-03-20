@@ -31,14 +31,7 @@ class Controller
                 // username is now found in
                 // echo $decoded->data->username;
 
-                // // check if token is expired
-                // $now = new DateTime();
-                // $exp = new DateTime($decoded->exp);
-
-                // if($now > $exp) {
-                //     $this->respondWithError(401, "Token expired");
-                //     return;
-                // }
+                
 
                 return $decoded;
             } catch (Exception $e) {
