@@ -22,7 +22,6 @@ class UserController extends Controller
         // read user data from request body
         $postedUser = $this->createObjectFromPostedJson("Models\\User");
 
-
         // get user from db
         $user = $this->service->authenticateUser($postedUser->username, $postedUser->password);
 
@@ -31,9 +30,6 @@ class UserController extends Controller
             $this->respondWithError(401, "Invalid login");
             return;
         }
-
-        // reset password hash
-        $user->password = "";
 
         // generate jwt
         $tokenResponse = $this->generateJwt($user);       
@@ -72,7 +68,6 @@ class UserController extends Controller
         // read user data from request body
         $postedUser = $this->createObjectFromPostedJson("Models\\User");
         
-
         // check if the username already exists
         $user = $this->service->getUserByUsername($postedUser->username);
         if($user && $user->id != $id) {
@@ -113,31 +108,13 @@ class UserController extends Controller
         }
     }
 
-    // public function getById($id) 
-    // {
-    //     // Check for JWT authentication
-    //     $decodedJwt = $this->checkForJwt();
-    //     if (!$decodedJwt) {
-    //         return;
-    //     }
-
-    //     // Execute main logic of endpoint
-    //     $user = $this->service->getUserById($id);
-
-    //     if($user) {
-    //         $this->respond($user);
-    //     } else {
-    //         $this->respondWithError(404, "User not found");
-    //     }
-    // }
-
-
     public function generateJwt($user) {
+        // SECRET KEY TODO: change and store in .env
         $secret_key = "gF9yx9bszP9em3f4";
 
+        // JWT DATA
         $issuer = "localhost";
         $audience = "FoodieFaves";
-
         $issuedAt = time();
         $notbefore = $issuedAt;
         $expire = $issuedAt + 600;
@@ -151,7 +128,6 @@ class UserController extends Controller
             "data" => array(
                 "id" => $user->id,
                 "username" => $user->username,
-                "email" => $user->email
         ));
 
         $jwt = JWT::encode($payload, $secret_key, 'HS256');
