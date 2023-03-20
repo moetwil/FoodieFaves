@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between">
                 <div class="d-flex flex-row align-items-center">
                     <div class="icon">
-                        <img :src="'data:image/png;base64,' + restaurant.profile_picture" />
+                        <img v-if="restaurant && restaurant.profile_picture" :src="restaurant.profile_picture" alt="" />
                         <!-- <img src="https://img.icons8.com/ios/50/000000/restaurant.png" /> -->
                     </div>
                 </div>
@@ -30,8 +30,8 @@
 
 <script setup lang="ts">
 import { onMounted, PropType, ref, computed } from 'vue';
-import Restaurant from "./../../interfaces/Restaurant";
-import axios from "./../../utils/axios";
+import Restaurant from "../interfaces/Restaurant";
+import axios from "../utils/axios";
 
 const reviewAmount = ref(0);
 const rating = ref(0);

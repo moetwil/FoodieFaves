@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import RestaurantComponent from "../home/Restaurant.vue";
+import RestaurantComponent from "../Restaurant.vue";
 import Restaurant from "./../../interfaces/Restaurant";
 import axios from "./../../utils/axios";
 import { useRouter } from "vue-router";

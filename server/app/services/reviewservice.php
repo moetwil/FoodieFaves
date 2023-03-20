@@ -33,6 +33,10 @@ class ReviewService {
         return $this->reviewRepository->getByUser($userId);
     }
 
+    public function getLastThree(){
+        return $this->reviewRepository->getLastThree();
+    }
+
     public function updateReview($id, Review $review)
     {
         return $this->reviewRepository->updateReview($id, $review);
@@ -45,7 +49,11 @@ class ReviewService {
 
     public function flagReview($id)
     {
-        return $this->reviewRepository->flagReview($id);
+        return $this->reviewRepository->flagReview($id, true);
+    }
+    public function unflagReview($id)
+    {
+        return $this->reviewRepository->flagReview($id, false);
     }
 
     public function approveReview($id)

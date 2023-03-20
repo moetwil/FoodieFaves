@@ -3,16 +3,18 @@
 namespace Controllers;
 
 use Exception;
-use Services\ReviewService;
+use Services\{ReviewService, RestaurantService};
 
 class ReviewController extends Controller
 {
     private $service;
+    private $restaurantService;
 
     // initialize services
     function __construct()
     {
         $this->service = new ReviewService();
+        $this->restaurantService = new RestaurantService();
     }
 
     public function getById($id)
@@ -125,17 +127,31 @@ class ReviewController extends Controller
     public function flag($id)
     {
         try {
-            $review = $this->service->getReviewById($id);
+            $this->authorizeAction($id);
 
-            if($review == null) {
-                $this->respondWithError(404, "Review not found");
-                return;
-            }
-
+            // flag the review
             $response = $this->service->flagReview($id);
 
             if ($response) {
                 $this->respond("Review flagged");
+            } else {
+                $this->respondWithError(500, "Review could not be flagged");
+            }
+
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
+    }
+    public function unflag($id)
+    {
+        try {
+            $this->authorizeAction($id);
+
+            // flag the review
+            $response = $this->service->unflagReview($id);
+
+            if ($response) {
+                $this->respond("Review unflagged");
             } else {
                 $this->respondWithError(500, "Review could not be flagged");
             }
@@ -166,5 +182,46 @@ class ReviewController extends Controller
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
+    }
+
+    public function getLastThree(){
+        try {
+            $reviews = $this->service->getLastThree();
+
+            if ($reviews == null) {
+                $this->respondWithError(404, "Reviews not found");
+                return;
+            }
+
+            $this->respond($reviews);
+
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
+    }
+
+    private function authorizeAction($reviewId){
+        // authorize
+        $decoded = $this->checkForJwt();
+        if($decoded == null) {
+            $this->respondWithError(401, "Not authorized");
+            return;
+        }
+
+        // get the review 
+        $review = $this->service->getReviewById($reviewId);
+        if($review == null) {
+            $this->respondWithError(404, "Review not found");
+            return;
+        }
+
+        // get the restaurant and check if the user is the owner
+        $restaurant = $this->restaurantService->getRestaurantById($review->restaurant_id);
+        if($restaurant->owner_id != $decoded->data->id) {
+            $this->respondWithError(401, "You are not the owner of this restaurant");
+            return;
+        }
+
+        return $review;
     }
 }

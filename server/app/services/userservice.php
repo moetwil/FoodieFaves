@@ -15,7 +15,6 @@ class UserService {
 
     public function authenticateUser(string $username, string $password): ?User {
         $user = $this->userRepository->getUserByUsername($username);
-        return $user;
         
         if (!$user) {
             return null;

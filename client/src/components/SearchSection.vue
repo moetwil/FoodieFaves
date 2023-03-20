@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, watch, computed } from 'vue';
-import Restaurant from "./../../interfaces/Restaurant";
+import Restaurant from "../interfaces/Restaurant";
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

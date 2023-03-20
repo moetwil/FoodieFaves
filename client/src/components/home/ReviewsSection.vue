@@ -9,7 +9,7 @@
             </div> -->
 
             <div class="row bg-light">
-                <ReviewComponent v-for="review in reviews" :key="review.id" :review="review" />
+                <ReviewComponent v-for="(review, index) in reviews" :key="index" :review="review" />
             </div>
 
 
@@ -22,7 +22,7 @@
 import axios from './../../utils/axios';
 import ReviewComponent from "../Review.vue";
 import { onMounted, ref } from "vue";
-import RestaurantComponent from "../home/Restaurant.vue";
+import RestaurantComponent from "../Restaurant.vue";
 import Review from "./../../interfaces/Review";
 
 const reviews = ref<Review[]>([]);
@@ -34,13 +34,8 @@ onMounted(() => {
 
 async function fetchReviews() {
     try {
-        const response = await axios.get(`/reviews/restaurant/2`);
-        const data = response.data;
-
-        // set max 3 reviews
-        if (data.length > 3) data.length = 3;
-
-        reviews.value = data;
+        const response = await axios.get(`/reviews`);
+        reviews.value = response.data;
     } catch (error) {
         console.error(error);
     }

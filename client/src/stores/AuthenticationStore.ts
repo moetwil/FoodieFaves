@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import axios from '../utils/axios';
 import User from '../interfaces/User';
+import Login from '../interfaces/login';
 
 interface AuthState {
   user: User | null;
@@ -22,54 +23,44 @@ export const useAuthenticationStore = defineStore({
     getIsLoggedIn(state) {
       return state.isLoggedIn;
     },
+    getIsRestaurantOwner(state) {
+      return state.user?.user_type === 1;
+    },
   },
   actions: {
-    async login(username: string, password: string) {
-      try {
-        const response = await axios.post('/users/login', {
-          username: username,
-          password: password,
-        });
+    async login(data: Login) {
+      const response = await axios.post('/users/login', {
+        username: data.username,
+        password: data.password,
+      });
 
-        const data = response.data;
-
-        if (data.message === 'Successful login.') {
-          console.log('LOGIN');
-          // set token in local storage
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('user_id', data.user._id);
-
-          // set user in state
-          this.user = data.user;
-          this.isLoggedIn = true;
-
-          return true;
-        } else {
-          return false;
-        }
-      } catch (error: any) {
-        alert(error.message);
+      if (response.status === 200) {
+        this.setUser(response.data.user, response.data.jwt);
+        this.router.push('/');
       }
     },
-
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('user_id');
+      localStorage.removeItem('user_type');
       this.user = null;
       this.isLoggedIn = false;
 
-      return true;
+      this.router.push('/login');
     },
     async register(newUser: User) {
       try {
         const response = await axios.post('/users/register', newUser);
-        if (response.status === 200) return true;
+        if (response.status === 200) {
+          this.setUser(response.data.user, response.data.jwt);
+          this.router.push('/');
+        }
       } catch (error: any) {
-        alert(error.message);
-        return false;
+        console.error(error);
       }
     },
     async updateUser(updateUser: User) {
+      this.user = updateUser;
       try {
         const response = await axios.put(`/users/${updateUser.id}`, updateUser);
         console.log(response);
@@ -77,6 +68,23 @@ export const useAuthenticationStore = defineStore({
       } catch (error: any) {
         alert(error.message);
         return false;
+      }
+    },
+    setUser(user: User, token: string) {
+      // set token in local storage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user_id', user.id?.toString() || '');
+      localStorage.setItem('user_type', user.user_type?.toString() || '');
+      // set user in state
+      this.user = user;
+      this.isLoggedIn = true;
+    },
+    async checkAuth() {
+      const userId = localStorage.getItem('user_id');
+      if (userId && this.user === null) {
+        const response = await axios.get('/users/' + userId);
+        // console.log(response.data);
+        this.setUser(response.data, localStorage.getItem('token') || '');
       }
     },
   },

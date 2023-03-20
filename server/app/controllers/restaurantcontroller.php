@@ -51,8 +51,10 @@ class RestaurantController extends Controller
 
     public function getAllByOwner($id)
     {
+        // $this->respond($id);
         try {
-            $restaurants = $this->service->getAllRestaurantsByOwner($id);
+            $newId = (int)$id;
+            $restaurants = $this->service->getAllRestaurantsByOwner($newId);
 
             if ($restaurants == null) {
                 $this->respondWithError(404, "No restaurants found");
@@ -69,18 +71,21 @@ class RestaurantController extends Controller
     public function create()
     {
         try {
+            $decoded = $this->checkForJwt();
+            
+            $userId = $decoded->data->id;
             $postedRestaurant = $this->createObjectFromPostedJson("Models\\Restaurant");
-            $restaurant = $this->service->addRestaurant($postedRestaurant);
+            $restaurant = $this->service->addRestaurant($postedRestaurant, $userId);
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
-
         $this->respond($restaurant);
     }
 
     public function update($id)
     {
         try {
+            $this->checkForJwt();
 
             $restaurant = $this->service->getRestaurantById($id);
             if($restaurant == null) {
@@ -100,10 +105,21 @@ class RestaurantController extends Controller
     public function delete($id)
     {
         try {
+
+            $decoded = $this->checkForJwt();
+
             $restaurant = $this->service->getRestaurantById($id);
 
             if($restaurant == null) {
                 $this->respondWithError(404, "Restaurant not found");
+                return;
+            }
+
+            $ownerId = $restaurant->owner_id;
+
+            // check if user is owner of restaurant
+            if($restaurant->owner_id != $decoded->data->id) {
+                $this->respondWithError(401, "You are not authorized to delete this restaurant");
                 return;
             }
 
@@ -117,7 +133,7 @@ class RestaurantController extends Controller
             $this->respondWithError(500, $e->getMessage());
         }
 
-        $this->respond($response);
+        // $this->respond($response);
     }
 
     public function getRestaurantReviewsAmount($id)
