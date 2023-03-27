@@ -80,7 +80,7 @@ async function handleLogin() {
 <style>
 /* make container on pc efefef background */
 .form-container {
-    background-color: #efefef;
+    background-color: #f2f2f2;
     padding: 20px;
     border-radius: 5px;
 }

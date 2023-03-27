@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="login-container my-5">
+                <div class="form-container my-5">
                     <h1>Maak een account aan</h1>
                     <form>
 
@@ -63,7 +63,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="field">
-                                    <label class="label" for="password">Password</label>
+                                    <label class="label" for="password">Wachtwoord</label>
                                     <input v-model="password" @keydown.enter="handleRegister"
                                         class="input has-background-dark" type="password" name="password" id="password"
                                         tabindex="5">
@@ -75,7 +75,7 @@
                             </div>
                             <div class="col">
                                 <div class="field">
-                                    <label class="label" for="passwordConfirm">Password herhalen</label>
+                                    <label class="label" for="passwordConfirm">Wachtwoord herhalen</label>
                                     <input v-model="passwordConfirm" @keydown.enter="handleRegister"
                                         class="input has-background-dark" type="password" name="passwordConfirm"
                                         id="passwordConfirm" tabindex="6">
@@ -214,12 +214,19 @@ function checkForErrors() {
 
 
 <style>
-.login-container {
+/* make container on pc efefef background */
+.form-container {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 5px;
-    max-width: 30vw;
-    margin: 0 auto;
+}
+
+/* on pc make form-container 30vw */
+@media (min-width: 768px) {
+    .form-container {
+        width: 30vw;
+        margin: 0 auto;
+    }
 }
 
 h1 {
