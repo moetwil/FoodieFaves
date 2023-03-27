@@ -2,12 +2,6 @@
     <div class="bg-light py-5">
         <div class="container ">
             <h2>Recent toegevoegde reviews</h2>
-            <!-- <div class="review-list row">
-                <ul>
-                    <ReviewComponent v-for="review in reviews" :key="review.id" :review="review" />
-                </ul>
-            </div> -->
-
             <div class="row bg-light">
                 <ReviewComponent v-for="(review, index) in reviews" :key="index" :review="review" />
             </div>
@@ -34,7 +28,7 @@ onMounted(() => {
 
 async function fetchReviews() {
     try {
-        const response = await axios.get(`/reviews`);
+        const response = await axios.get(`/reviews?limit=2&order=DESC`);
         reviews.value = response.data;
     } catch (error) {
         console.error(error);
