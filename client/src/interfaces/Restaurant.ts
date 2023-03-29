@@ -1,5 +1,5 @@
 interface Restaurant {
-  id: number | null;
+  id?: number;
   name: string;
   street: string;
   house_number: string;
@@ -7,8 +7,8 @@ interface Restaurant {
   zip_code: string;
   country: string;
   phone_number: string;
-  owner_id: number | null;
-  profile_picture: string | null;
+  owner_id?: number;
+  profile_picture?: string;
   restaurant_type_id: number;
 }
 
