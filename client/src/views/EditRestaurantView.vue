@@ -34,7 +34,11 @@
                                 <div class="field">
                                     <label class="label" for="category">Categorie</label>
                                     <select class="form-select" v-model="category">
-                                        <option selected value="1">Kies een categorie</option>
+                                        <option v-for="restaurantType in restaurantTypes" :key="restaurantType.id"
+                                            :value="restaurantType.id">{{ restaurantType.name }}
+
+                                            rest
+                                        </option>
                                     </select>
                                     <div class="d-flex">
                                         <span class="icon px-2"><i></i></span>
@@ -134,10 +138,13 @@ import {
     setFieldMessage, clearFieldMessages, hasAnyFieldErrors,
 } from "../utils/formUtils.js";
 import Restaurant from '../interfaces/Restaurant';
+import RestaurantType from '../interfaces/RestaurantType';
 const router = useRouter();
 const authenticationStore = useAuthenticationStore();
 
 // VARIABLES
+const restaurantTypes = ref<RestaurantType[]>([]);
+
 const id = ref<number | null>(null);
 const name = ref('');
 const ownerId = ref<number | null>(null);
@@ -151,6 +158,7 @@ const category = ref(0) as any;
 const imageFile = ref('');
 
 onMounted(async () => {
+    await fetchRestaurantTypes();
     await fetchRestaurant();
 
     // check if user is owner of restaurant
@@ -218,7 +226,7 @@ async function fetchRestaurantTypes() {
     try {
         const response = await axios.get('/restaurant-types');
         if (response.status === 200) {
-            return response.data;
+            restaurantTypes.value = response.data;
         }
     } catch (error) {
         console.log(error);
