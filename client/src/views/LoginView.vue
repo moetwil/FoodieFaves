@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="login-container my-5">
+                <div class="form-container my-5">
                     <h1>Login</h1>
                     <form>
                         <div class="field">
@@ -78,12 +78,19 @@ async function handleLogin() {
 
 
 <style>
-.login-container {
+/* make container on pc efefef background */
+.form-container {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 5px;
-    max-width: 30vw;
-    margin: 0 auto;
+}
+
+/* on pc make form-container 30vw */
+@media (min-width: 768px) {
+    .form-container {
+        width: 30vw;
+        margin: 0 auto;
+    }
 }
 
 h1 {

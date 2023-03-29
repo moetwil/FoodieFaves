@@ -11,36 +11,38 @@
             </div>
             <div class="row d-flex justify-content-center">
                 <div class="col">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Afbeelding</th>
-                                <th scope="col">Restaurant</th>
-                                <th scope="col">Adres</th>
-                                <th scope="col">Postcode</th>
-                                <th scope="col">City</th>
-                                <th scope="col">Bewerk</th>
-                                <th scope="col">Beheer reviews</th>
-                                <th scope="col">Verwijder</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(restaurant, index) in restaurants" :key="index">
-                                <td><img v-if="restaurant && restaurant.profile_picture" :src="restaurant.profile_picture"
-                                        alt="" /></td>
-                                <td>{{ restaurant.name }}</td>
-                                <td>{{ restaurant.street }} {{ restaurant.house_number }}</td>
-                                <td>{{ restaurant.zip_code }}</td>
-                                <td>{{ restaurant.city }}</td>
-                                <td><font-awesome-icon class="action" @click="handleEdit(restaurant)"
-                                        icon="fa-solid fa-pen-to-square" /></td>
-                                <td><font-awesome-icon class="action" @click="handleManageReviews(restaurant)"
-                                        icon="fa-solid fa-quote-left" /></td>
-                                <td><font-awesome-icon class="action" @click="handleDelete(restaurant)"
-                                        icon="fa-solid fa-trash" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Afbeelding</th>
+                                    <th scope="col">Restaurant</th>
+                                    <th scope="col">Adres</th>
+                                    <th scope="col">Postcode</th>
+                                    <th scope="col">Stad</th>
+                                    <th scope="col">Bewerk</th>
+                                    <th scope="col">Beheer reviews</th>
+                                    <th scope="col">Verwijder</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(restaurant, index) in restaurants" :key="index">
+                                    <td><img v-if="restaurant && restaurant.profile_picture"
+                                            :src="restaurant.profile_picture" alt="" /></td>
+                                    <td>{{ restaurant.name }}</td>
+                                    <td>{{ restaurant.street }} {{ restaurant.house_number }}</td>
+                                    <td>{{ restaurant.zip_code }}</td>
+                                    <td>{{ restaurant.city }}</td>
+                                    <td><font-awesome-icon class="action" @click="handleEdit(restaurant)"
+                                            icon="fa-solid fa-pen-to-square" /></td>
+                                    <td><font-awesome-icon class="action" @click="handleManageReviews(restaurant)"
+                                            icon="fa-solid fa-quote-left" /></td>
+                                    <td><font-awesome-icon class="action" @click="handleDelete(restaurant)"
+                                            icon="fa-solid fa-trash" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

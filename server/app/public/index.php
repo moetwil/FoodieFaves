@@ -39,7 +39,7 @@ $router->get('/api/restaurants/search/(\w+)', 'RestaurantController@search');
 
 // reviews endpoints
 $router->post('/api/reviews', 'ReviewController@create');
-$router->get('/api/reviews', 'ReviewController@getLastThree');
+$router->get('/api/reviews', 'ReviewController@getReviews');
 $router->get('/api/reviews/(\d+)', 'ReviewController@getById');
 $router->get('/api/reviews/restaurant/(\d+)', 'ReviewController@getByRestaurant');
 $router->get('/api/reviews/user/(\d+)', 'ReviewController@getByUser');
@@ -48,6 +48,9 @@ $router->delete('/api/reviews/(\d+)', 'ReviewController@delete');
 $router->put('/api/reviews/(\d+)/flag', 'ReviewController@flag');
 $router->put('/api/reviews/(\d+)/unflag', 'ReviewController@unflag');
 $router->put('/api/reviews/(\d+)/approve', 'ReviewController@approve');
+
+// restaurant types endpoints
+$router->get('/api/restaurant-types', 'RestaurantTypeController@getAll');
 
 
 // Run it!

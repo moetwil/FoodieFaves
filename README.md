@@ -4,6 +4,7 @@
 
 General
 [] - Alles naar Nederlands
+[] - Reviews alleen tonen als ze approved zijn
 
 Client
 [] - Restaurants page: filters
@@ -18,10 +19,7 @@ Client
 [] - Admin: approve review
 [] - Admin: admin page in menu
 
-[x] - My restaurants: overzicht pagina
-[x] - My restaurants: restaurant aanmaken pagina
-[x] - My restaurants: restaurant edit pagina
-[] - My restaurants: flag een review
+[] - My restaurants: categorieen uit de database
 
 
 [] - Review page: Textarea max aantal karakters

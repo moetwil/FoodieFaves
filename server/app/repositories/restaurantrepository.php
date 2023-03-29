@@ -5,12 +5,12 @@ use PDO;
 use Models\{Restaurant, User};
 use PDOException;
 
-class RestaurantRepository  extends Repository{
+class RestaurantRepository extends Repository{
 
     public function getRestaurantById($id)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id FROM Restaurant WHERE id = :id");
+            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id, profile_picture FROM Restaurant WHERE id = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 

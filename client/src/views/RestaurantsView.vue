@@ -9,7 +9,7 @@
                 <div class="col-12">
                     <!-- Add filters options for the restaurant -->
                 </div>
-                <RestaurantComponent v-for="restaurant in displayedRestaurants" :key="restaurant.id"
+                <RestaurantComponent v-for="(restaurant, index) in displayedRestaurants" :key="index"
                     :restaurant="restaurant" />
             </div>
             <nav aria-label="Page navigation">
@@ -70,4 +70,30 @@ async function fetchRestaurants() {
     console.log(restaurants.value);
 }
 </script>
-<style scoped></style>
+<style scoped>
+/* Style for the pagination */
+.pagination .page-link {
+    color: black;
+    border-color: black;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: black;
+    border-color: black;
+}
+
+.pagination .page-link:focus,
+.pagination .page-link:hover {
+    color: black;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+</style>

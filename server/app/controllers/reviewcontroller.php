@@ -184,9 +184,21 @@ class ReviewController extends Controller
         }
     }
 
-    public function getLastThree(){
+    public function getReviews(){
         try {
-            $reviews = $this->service->getLastThree();
+            $limit = $_GET['limit'] ?? null;
+            $offset = $_GET['offset'] ?? null;
+            $order = $_GET['order'] ?? null;
+
+            if($order=='asc'){
+                $order = false;
+            }else if($order == 'desc'){
+                $order = true;
+            }
+
+            // $this->respond($order);
+
+            $reviews = $this->service->getReviews($limit, $offset, $order);
 
             if ($reviews == null) {
                 $this->respondWithError(404, "Reviews not found");

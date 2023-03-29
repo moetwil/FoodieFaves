@@ -5,10 +5,10 @@
                 Kies het perfecte restaurant voor jou
             </h1>
             <div>
-                <input class="w-50" type="text" name="search" id="searchInput" placeholder="Zoek een restaurant of stad"
+                <input class="" type="text" name="search" id="searchInput" placeholder="Zoek een restaurant of stad"
                     v-model="searchQuery" />
                 <div class="search-results">
-                    <div v-for="(result, index) in paginatedResults" :key="result.id" class="search-result"
+                    <div v-for="(result, index) in paginatedResults" :key="index" class="search-result"
                         @click="goToRestaurant(result)">
                         <div class="result-name">{{ result.name }}</div>
                         <div class="result-location">{{ result.city }}</div>
@@ -93,12 +93,24 @@ function goToRestaurant(restaurant: Restaurant) {
 
 <style scoped>
 #searchInput {
-    width: 100%;
+    /* width: 100%; */
     height: 50px;
     border: 1px solid #ccc;
     border-radius: 15px;
     padding: 0 10px;
     font-size: 16px;
+}
+
+@media (min-width: 768px) {
+    #searchInput {
+        width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    #searchInput {
+        width: 80%;
+    }
 }
 
 #searchInput:focus {

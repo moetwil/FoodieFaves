@@ -39,9 +39,45 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function getLastThree(){
+    public function getReviews($limit, $offset, $order){
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM Review ORDER BY id DESC LIMIT 3");
+            $sql = "SELECT * FROM Review";
+
+            // if order is set, add it to the query
+            if($order){
+                $sql .= " ORDER BY date DESC";
+            }
+            else{
+                $sql .= " ORDER BY date ASC";
+            }
+
+            // if limit and offset are set, add them to the query
+            if(isset($limit) && isset($offset)){
+                $sql .= " LIMIT :limit OFFSET :offset";
+            }
+            else if(isset($limit) && !isset($offset)){
+                $sql .= " LIMIT :limit";
+            }
+            else if(!isset($limit) && isset($offset)){
+                $sql .= " OFFSET :offset";
+            }
+
+
+            
+
+            $stmt = $this->connection->prepare($sql);
+
+            if($limit != null && $offset != null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+            else if($limit != null && $offset == null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            }
+            else if($limit == null && $offset != null){
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Review');

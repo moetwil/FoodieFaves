@@ -117,7 +117,7 @@ class UserController extends Controller
         $audience = "FoodieFaves";
         $issuedAt = time();
         $notbefore = $issuedAt;
-        $expire = $issuedAt + 600;
+        $expire = $issuedAt + 1200;
 
         $payload = array(
             "iss" => $issuer,
