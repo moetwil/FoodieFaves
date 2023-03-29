@@ -1,7 +1,7 @@
 <template>
     <div class="bg-light py-5">
         <div class="container ">
-            <h2>Recent toegevoegde reviews</h2>
+            <h2>Nieuwe reviews</h2>
             <div class="row bg-light">
                 <ReviewComponent v-for="(review, index) in reviews" :key="index" :review="review" />
             </div>

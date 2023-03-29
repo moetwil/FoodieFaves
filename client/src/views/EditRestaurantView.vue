@@ -114,11 +114,8 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
-
                 <button @click="handleSubmit" class="nav-link btn btn-primary" type="button">Maak restaurant</button>
             </form>
         </div>
@@ -215,6 +212,18 @@ async function fetchRestaurant() {
     } catch (error) {
         console.log(error);
     }
+}
+
+async function fetchRestaurantTypes() {
+    try {
+        const response = await axios.get('/restaurant-types');
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 function checkForErrors() {

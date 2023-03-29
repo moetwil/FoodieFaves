@@ -49,6 +49,9 @@ $router->put('/api/reviews/(\d+)/flag', 'ReviewController@flag');
 $router->put('/api/reviews/(\d+)/unflag', 'ReviewController@unflag');
 $router->put('/api/reviews/(\d+)/approve', 'ReviewController@approve');
 
+// restaurant types endpoints
+$router->get('/api/restaurant-types', 'RestaurantTypeController@getAll');
+
 
 // Run it!
 $router->run();

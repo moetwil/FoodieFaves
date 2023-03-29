@@ -4,7 +4,6 @@
         <div class="create-restaurant-container my-5">
             <form @keydown.enter="handleSubmit">
                 <div class="row">
-
                     <!-- linker column -->
                     <div class="col">
                         <h2>Restaurant gegevens</h2>
@@ -223,8 +222,15 @@ function checkForErrors() {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 5px;
-    max-width: 60vw;
+    /* max-width: 60vw; */
     margin: 0 auto;
+}
+
+/* on mobile create-restaurant-container 80% */
+@media only screen and (max-width: 600px) {
+    .create-restaurant-container {
+        max-width: 80%;
+    }
 }
 
 h1 {
