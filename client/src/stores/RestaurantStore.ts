@@ -24,7 +24,9 @@ export const useRestaurantStore = defineStore({
     },
     async fetchReviews(id: string) {
       try {
-        const response = await axios.get(`/reviews/restaurant/${id}`);
+        const response = await axios.get(
+          `/reviews/restaurant/${id}?order=desc`
+        );
         this.reviews = response.data;
         this.calculateRatings();
       } catch (error) {

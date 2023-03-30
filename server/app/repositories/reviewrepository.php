@@ -23,16 +23,48 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function getByRestaurant($restaurantId)
+    public function getByRestaurant($id, $limit, $offset, $order, $filter)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM Review WHERE restaurant_id = :restaurant_id");
-            $stmt->bindParam(':restaurant_id', $restaurantId);
+            $sql = "SELECT * FROM Review WHERE restaurant_id = :restaurant_id";
+
+            // FILTER OPTIONS
+            if($filter === 'flagged'){
+                $sql .= " AND flagged = 1";
+            }
+            if($filter === 'approved'){
+                $sql .= " AND (flagged = 0 AND approved = 0 OR flagged = 1 AND approved = 1)";
+            }
+
+
+            // ORDER OPTIONS
+            if($order) $sql .= " ORDER BY id DESC";
+            else $sql .= " ORDER BY id ASC";
+
+            // PAGINATION OPTIONS
+            if(isset($limit) && isset($offset)) $sql .= " LIMIT :limit OFFSET :offset";
+            if(isset($limit) && !isset($offset)) $sql .= " LIMIT :limit";
+            if(!isset($limit) && isset($offset)) $sql .= " OFFSET :offset";
+
+            $stmt = $this->connection->prepare($sql);
+
+            // bind params
+            $stmt->bindParam(':restaurant_id', $id);
+            if($limit != null && $offset != null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+            if($limit != null && $offset == null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            }
+            if($limit == null && $offset != null){
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Review');
             $reviews = $stmt->fetchAll();
-
             return $reviews;
         } catch (PDOException $e) {
             echo $e;

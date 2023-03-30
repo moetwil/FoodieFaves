@@ -23,9 +23,9 @@ class ReviewService {
         return $this->reviewRepository->getById($id);
     }
 
-    public function getReviewsByRestaurant($restaurantId)
+    public function getReviewsByRestaurant($id, $limit, $offset, $order, $filter)
     {
-        return $this->reviewRepository->getByRestaurant($restaurantId);
+        return $this->reviewRepository->getByRestaurant($id, $limit, $offset, $order, $filter);
     }
 
     public function getReviewsByUser($userId)

@@ -37,7 +37,19 @@ class ReviewController extends Controller
     public function getByRestaurant($id)
     {
         try {
-            $reviews = $this->service->getReviewsByRestaurant($id);
+            $limit = $_GET['limit'] ?? null;
+            $offset = $_GET['offset'] ?? null;
+            $order = $_GET['order'] ?? null;
+            $filter = $_GET['filter'] ?? null;
+
+            // $this->respond($filter);
+
+            if($order=='asc' || $order == 'ASC'){
+                $order = false;
+            }else if($order == 'desc' || $order == 'DESC'){
+                $order = true;
+            }
+            $reviews = $this->service->getReviewsByRestaurant($id, $limit, $offset, $order, $filter);
 
             if ($reviews == null) {
                 $this->respondWithError(404, "Reviews not found");
