@@ -11,6 +11,7 @@ import WriteReview from '../views/WriteReviewView.vue';
 import Restaurant from '../views/RestaurantView.vue';
 import Restaurants from '../views/RestaurantsView.vue';
 import errorView from '../views/404View.vue';
+import AdminView from '../views/AdminView.vue';
 
 const routes = [
   { path: '/', component: Home },
@@ -20,6 +21,11 @@ const routes = [
     path: '/mijn-account',
     component: MyAccount,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/admin',
+    component: AdminView,
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: '/mijn-restaurants',
@@ -68,6 +74,8 @@ router.beforeEach((to, from, next) => {
     to.meta.requiresRestaurantOwner &&
     (!isLoggedIn || userRole !== '1')
   ) {
+    next('/');
+  } else if (to.meta.requiresAdmin && !isLoggedIn) {
     next('/');
   } else {
     next();

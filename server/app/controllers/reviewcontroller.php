@@ -189,16 +189,17 @@ class ReviewController extends Controller
             $limit = $_GET['limit'] ?? null;
             $offset = $_GET['offset'] ?? null;
             $order = $_GET['order'] ?? null;
+            $filter = $_GET['filter'] ?? null;
 
-            if($order=='asc'){
+            // $this->respond($filter);
+
+            if($order=='asc' || $order == 'ASC'){
                 $order = false;
-            }else if($order == 'desc'){
+            }else if($order == 'desc' || $order == 'DESC'){
                 $order = true;
             }
 
-            // $this->respond($order);
-
-            $reviews = $this->service->getReviews($limit, $offset, $order);
+            $reviews = $this->service->getReviews($limit, $offset, $order, $filter);
 
             if ($reviews == null) {
                 $this->respondWithError(404, "Reviews not found");

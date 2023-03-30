@@ -10,7 +10,7 @@ class UserRepository extends Repository
     public function getUserById($id)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type, profile_picture FROM User WHERE id = :id");
+            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, is_admin, user_type, profile_picture FROM User WHERE id = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 

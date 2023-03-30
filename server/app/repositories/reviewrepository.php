@@ -39,28 +39,37 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function getReviews($limit, $offset, $order){
+    public function getReviews($limit, $offset, $order, $filter){
         try {
             $sql = "SELECT * FROM Review";
+            // if filter is set to flagged, add it to the query
+            if($filter === 'flagged'){
+                $sql .= " WHERE flagged = 1";
+            }if($filter === 'flaggedAndNotApproved'){
+                $sql .= " WHERE flagged = 1 AND approved = 0";
+            }
 
             // if order is set, add it to the query
             if($order){
-                $sql .= " ORDER BY date DESC";
+                $sql .= " ORDER BY id DESC";
             }
             else{
-                $sql .= " ORDER BY date ASC";
+                $sql .= " ORDER BY id ASC";
             }
 
             // if limit and offset are set, add them to the query
             if(isset($limit) && isset($offset)){
                 $sql .= " LIMIT :limit OFFSET :offset";
             }
-            else if(isset($limit) && !isset($offset)){
+            if(isset($limit) && !isset($offset)){
                 $sql .= " LIMIT :limit";
             }
-            else if(!isset($limit) && isset($offset)){
+            if(!isset($limit) && isset($offset)){
                 $sql .= " OFFSET :offset";
             }
+            
+
+            // $flagged = 1;
 
 
             
@@ -71,12 +80,15 @@ class ReviewRepository extends Repository
                 $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
                 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             }
-            else if($limit != null && $offset == null){
+            if($limit != null && $offset == null){
                 $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
             }
-            else if($limit == null && $offset != null){
+            if($limit == null && $offset != null){
                 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             }
+            // if($filter === 'flagged'){
+            //     $stmt->bindParam(':flagged', $flagged, PDO::PARAM_INT);
+            // }
 
             $stmt->execute();
 

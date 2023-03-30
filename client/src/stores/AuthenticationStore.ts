@@ -26,6 +26,9 @@ export const useAuthenticationStore = defineStore({
     getIsRestaurantOwner(state) {
       return state.user?.user_type === 1;
     },
+    getIsAdmin(state) {
+      return state.user?.is_admin;
+    },
   },
   actions: {
     async login(data: Login) {

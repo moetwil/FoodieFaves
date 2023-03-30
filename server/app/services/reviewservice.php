@@ -33,8 +33,8 @@ class ReviewService {
         return $this->reviewRepository->getByUser($userId);
     }
 
-    public function getReviews($limit, $offset, $order){
-        return $this->reviewRepository->getReviews($limit, $offset, $order);
+    public function getReviews($limit, $offset, $order, $filter){
+        return $this->reviewRepository->getReviews($limit, $offset, $order, $filter);
     }
 
     public function updateReview($id, Review $review)
