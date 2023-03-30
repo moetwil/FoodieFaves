@@ -25,7 +25,10 @@
                             </div>
                         </div>
                         <button @click="handleLogin" class="nav-link btn btn-primary" type="button">Log In</button>
+                        <div class="alert alert-danger my-3" role="alert">
+                        </div>
                     </form>
+
                     <div class="py-3">
                         <p>Heb je nog geen account? <router-link to="/register" class="nav-link"
                                 active-class="active">Registreer je hier!</router-link>
@@ -71,13 +74,27 @@ async function handleLogin() {
 
     if (hasAnyFieldErrors()) return;
 
-    await authenticationStore.login(loginData.value);
+    const response = await authenticationStore.login(loginData.value);
 
+    if (response.response.status === 401) {
+        displayDanger("Invalid username or password.");
+    }
+
+}
+
+function displayDanger(message: string) {
+    const alert = document.querySelector(".alert") as HTMLDivElement;
+    alert.style.display = "block";
+    alert.innerText = message;
 }
 </script>
 
 
 <style>
+.alert {
+    display: none;
+}
+
 /* make container on pc efefef background */
 .form-container {
     background-color: #f2f2f2;

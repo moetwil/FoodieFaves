@@ -29,14 +29,17 @@ export const useAuthenticationStore = defineStore({
   },
   actions: {
     async login(data: Login) {
-      const response = await axios.post('/users/login', {
-        username: data.username,
-        password: data.password,
-      });
-
-      if (response.status === 200) {
-        this.setUser(response.data.user, response.data.jwt);
-        this.router.push('/');
+      try {
+        const response = await axios.post('/users/login', {
+          username: data.username,
+          password: data.password,
+        });
+        if (response.status === 200) {
+          this.setUser(response.data.user, response.data.jwt);
+          this.router.push('/');
+        }
+      } catch (error: any) {
+        return error;
       }
     },
     logout() {
@@ -63,6 +66,7 @@ export const useAuthenticationStore = defineStore({
       this.user = updateUser;
       try {
         const response = await axios.put(`/users/${updateUser.id}`, updateUser);
+        this.user.password = undefined;
         console.log(response);
         if (response.status === 200) return true;
       } catch (error: any) {
