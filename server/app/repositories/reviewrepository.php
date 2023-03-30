@@ -180,6 +180,8 @@ class ReviewRepository extends Repository
 
     public function flagReview($id, $flagged)
     {
+
+        // check of user owner is
         try {
             $state = $flagged ? 1 : 0;
             $stmt = $this->connection->prepare("UPDATE Review SET flagged = :flagged WHERE id = :id");
@@ -197,6 +199,8 @@ class ReviewRepository extends Repository
 
     public function approveReview($id)
     {
+        // check of user owner is
+
         try {
             $stmt = $this->connection->prepare("UPDATE Review SET approved = 1 WHERE id = :id");
             $stmt->bindParam(':id', $id);

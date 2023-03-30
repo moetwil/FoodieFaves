@@ -9,7 +9,7 @@ interface Review {
   user_id: number;
   image: string | null;
   flagged: boolean | null;
-  approved: boolean | null;
+  approved: boolean;
 }
 
 export default Review;

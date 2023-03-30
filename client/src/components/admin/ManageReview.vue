@@ -98,6 +98,15 @@ async function handleApprove() {
 }
 
 async function handleDelete() {
+    try {
+        const response = await axios.delete(`reviews/${review.id}`);
+
+        if (response.status === 200) {
+            emits('reload');
+        }
+    } catch (error) {
+        console.error(error);
+    }
 
 }
 

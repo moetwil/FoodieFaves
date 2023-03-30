@@ -111,8 +111,8 @@ function handleSubmit() {
         review_text: reviewText.value,
         id: null,
         user_id: userId,
-        flagged: null,
-        approved: null,
+        flagged: false,
+        approved: false,
         date: null,
         // image: imageFile.value ? imageFile.value.name : null
         image: imageFile.value
