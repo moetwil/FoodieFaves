@@ -120,6 +120,7 @@ class ReviewRepository extends Repository
     public function createReview(Review $review) 
     {
         try {
+            $reviewStatus = 0;
             $stmt = $this->connection->prepare("INSERT INTO Review (food_rating, service_rating, price_value_rating, review_text, restaurant_id, user_id, image, flagged, approved) VALUES (:food_rating, :service_rating, :price_value_rating, :review_text, :restaurant_id, :user_id, :image, :flagged, :approved)");
             $stmt->bindParam(':food_rating', $review->food_rating);
             $stmt->bindParam(':service_rating', $review->service_rating);
@@ -128,8 +129,8 @@ class ReviewRepository extends Repository
             $stmt->bindParam(':restaurant_id', $review->restaurant_id);
             $stmt->bindParam(':user_id', $review->user_id);
             $stmt->bindParam(':image', $review->image);
-            $stmt->bindParam(':flagged', $review->flagged);
-            $stmt->bindParam(':approved', $review->approved);
+            $stmt->bindParam(':flagged', $reviewStatus);
+            $stmt->bindParam(':approved', $reviewStatus);
             $stmt->execute();
 
             // set the id of the review to the id of the newly created review
