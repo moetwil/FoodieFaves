@@ -85,21 +85,30 @@ class RestaurantController extends Controller
     public function update($id)
     {
         try {
-            $this->checkForJwt();
+            // check for jwt
+            $decoded = $this->checkForJwt();
 
+            // get restaurant
             $restaurant = $this->service->getRestaurantById($id);
             if($restaurant == null) {
                 $this->respondWithError(404, "Restaurant not found");
                 return;
             }
+            
+            // check if user is owner of restaurant
+            $owner = $decoded -> data -> id;
+            if($restaurant->owner_id != $owner) {
+                $this->respondWithError(401, "You are not authorized to update this restaurant");
+                return;
+            }
 
+            // update restaurant
             $postedRestaurant = $this->createObjectFromPostedJson("Models\\Restaurant");
             $restaurant = $this->service->updateRestaurant($id, $postedRestaurant);
+            $this->respond($restaurant);    
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
-
-        $this->respond($restaurant);
     }
 
     public function delete($id)

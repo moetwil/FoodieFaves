@@ -124,7 +124,7 @@ class UserController extends Controller
             "aud" => $audience,
             "iat" => $issuedAt,
             "nbf" => $notbefore,
-            "exp" => $expire,
+            // "exp" => $expire,
             "data" => array(
                 "id" => $user->id,
                 "username" => $user->username,
@@ -137,7 +137,7 @@ class UserController extends Controller
                 "message" => "Successful login.",
                 "jwt" => $jwt,
                 "user" => $user,
-                "expireAt" => $expire
+                // "expireAt" => $expire
             );
     }    
 }
