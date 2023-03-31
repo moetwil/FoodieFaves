@@ -63,7 +63,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="field">
-                                    <label class="label" for="password">Password</label>
+                                    <label class="label" for="password">Wachtwoord</label>
                                     <input v-model="user.password" @keydown.enter="handleUserUpdate"
                                         class="input has-background-dark" type="password" name="password" id="password"
                                         tabindex="5">
@@ -75,7 +75,7 @@
                             </div>
                             <div class="col">
                                 <div class="field">
-                                    <label class="label" for="passwordConfirm">Password herhalen</label>
+                                    <label class="label" for="passwordConfirm">Wachtwoord herhalen</label>
                                     <input v-model="passwordConfirm" @keydown.enter="handleUserUpdate"
                                         class="input has-background-dark" type="password" name="passwordConfirm"
                                         id="passwordConfirm" tabindex="6">
@@ -144,7 +144,7 @@ onMounted(() => {
 
     // get userdata from store
     const retreivedUser = authenticationStore.user;
-    if (user) {
+    if (retreivedUser) {
         user.value = retreivedUser;
     }
 });

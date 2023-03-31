@@ -1,6 +1,18 @@
-import axios from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-const instance = axios.create({
+// custom instance of axios with a method to update the authorization header
+interface CustomAxiosInstance extends AxiosInstance {
+  updateAuthorizationHeader(token: string): void;
+}
+
+// custom request config with an authorization header
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  headers: {
+    Authorization?: string;
+  };
+}
+
+const instance: CustomAxiosInstance = axios.create({
   baseURL: 'http://localhost/api',
   headers: {
     'Content-Type': 'application/json',
@@ -8,6 +20,12 @@ const instance = axios.create({
       ? `Bearer ${localStorage.getItem('token')}`
       : '',
   },
-});
+}) as CustomAxiosInstance;
+
+// Add a method to update the authorization header
+instance.updateAuthorizationHeader = function (token) {
+  const config = this.defaults as CustomAxiosRequestConfig;
+  config.headers.Authorization = `Bearer ${token}`;
+};
 
 export default instance;

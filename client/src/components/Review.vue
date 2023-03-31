@@ -35,7 +35,7 @@
                         <img :src="review.image" alt="" class="review-image">
                     </div>
 
-                    <span class="publish py-3 d-inline-block w-100">Published: {{ review.date }}</span>
+                    <span class="publish py-3 d-inline-block w-100">Geschreven op: {{ review.date }}</span>
                 </div>
             </div>
         </li>

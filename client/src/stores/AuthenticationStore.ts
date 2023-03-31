@@ -39,6 +39,7 @@ export const useAuthenticationStore = defineStore({
         });
         if (response.status === 200) {
           this.setUser(response.data.user, response.data.jwt);
+          axios.updateAuthorizationHeader(response.data.jwt);
           this.router.push('/');
         }
       } catch (error: any) {
@@ -49,6 +50,7 @@ export const useAuthenticationStore = defineStore({
       localStorage.removeItem('token');
       localStorage.removeItem('user_id');
       localStorage.removeItem('user_type');
+      axios.updateAuthorizationHeader('');
       this.user = null;
       this.isLoggedIn = false;
 
@@ -59,6 +61,7 @@ export const useAuthenticationStore = defineStore({
         const response = await axios.post('/users/register', newUser);
         if (response.status === 200) {
           this.setUser(response.data.user, response.data.jwt);
+          axios.updateAuthorizationHeader(response.data.jwt);
           this.router.push('/');
         }
       } catch (error: any) {
@@ -73,7 +76,7 @@ export const useAuthenticationStore = defineStore({
         console.log(response);
         if (response.status === 200) return true;
       } catch (error: any) {
-        alert(error.message);
+        console.error(error);
         return false;
       }
     },
