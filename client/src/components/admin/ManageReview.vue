@@ -1,14 +1,22 @@
 <template>
-    <div class="col-md-6">
+    <div class="col-md-12">
         <li class="card py-3 px-3 col my-3">
-            <div class="row d-flex">
-                <div class="col-md-6 d-flex justify-content-between align-items-center flex-row px-3">
-
+            <!-- review header -->
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-2 d-flex justify-content-between align-items-center flex-row px-3">
                     <img v-if="user && user.profile_picture" :src="user.profile_picture" class="profile-pict-img img-fluid"
                         alt="" />
-
                     <h4>{{ fullName }}</h4>
                 </div>
+                <div class="col-md-4" id="manage-review-controls">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-success mx-3" @click="handleApprove">Approve</button>
+                        <button type="button" class="btn btn-danger" @click="handleDelete">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <!-- review content -->
+            <div class="row">
                 <div class="col-md-12 mt-4">
                     <h4>
                         <span class="gig-rating text-body-2">
@@ -35,7 +43,7 @@
                         <img :src="review.image" alt="" class="review-image">
                     </div>
 
-                    <span class="publish py-3 d-inline-block w-100">Geschreven op: {{ review.date }}</span>
+                    <span class="publish py-3 d-inline-block w-100">Published: {{ review.date }}</span>
                 </div>
             </div>
         </li>
@@ -44,9 +52,9 @@
 
 <script setup lang="ts">
 import { onMounted, PropType, ref, computed } from 'vue';
-import Review from "../interfaces/Review";
-import User from "../interfaces/User";
-import axios from "../utils/axios";
+import Review from "../../interfaces/Review";
+import User from "../../interfaces/User";
+import axios from "../../utils/axios";
 
 // VARIABLES
 const user = ref<User>();
@@ -56,6 +64,9 @@ const { review } = defineProps({
         required: true
     }
 })
+
+const emits = defineEmits(['reload']);
+
 
 // COMPUTED
 const fullName = computed(() => {
@@ -71,6 +82,33 @@ const averageRating = computed(() => {
 onMounted(() => {
     fetchUser();
 });
+
+async function handleApprove() {
+    try {
+        const response = await axios.put(`reviews/${review.id}/approve`, {});
+
+        if (response.status === 200) {
+            emits('reload');
+
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+async function handleDelete() {
+    try {
+        const response = await axios.delete(`reviews/${review.id}`);
+
+        if (response.status === 200) {
+            emits('reload');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+}
 
 async function fetchUser() {
     try {

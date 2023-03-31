@@ -4,8 +4,8 @@ interface User {
   last_name: string;
   username: string;
   email: string;
-  password: string | null;
-  profile_picture: string | null;
+  password?: string;
+  profile_picture?: string;
   is_admin: number;
   user_type: number;
 }

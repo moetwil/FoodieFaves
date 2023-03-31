@@ -22,6 +22,11 @@
               <font-awesome-icon icon="fa-solid fa-building" />
               Mijn restaurants</router-link>
           </li>
+          <li v-if="isAdmin" class="nav-item">
+            <router-link to="/admin" class="nav-link" active-class="active">
+              <font-awesome-icon icon="fa-solid fa-building" />
+              Admin</router-link>
+          </li>
           <li v-if="isLoggedIn" class="nav-item">
             <router-link to="/mijn-account" class="nav-link" active-class="active">
               <font-awesome-icon icon="fa-solid fa-user" />
@@ -49,6 +54,7 @@ const router = useRouter();
 
 const isLoggedIn = computed(() => authenticationStore.getIsLoggedIn);
 const isRestaurantOwner = computed(() => authenticationStore.getIsRestaurantOwner);
+const isAdmin = computed(() => authenticationStore.getIsAdmin);
 
 function goToLogin() {
   router.push('/login');

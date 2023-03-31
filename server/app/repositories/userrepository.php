@@ -10,7 +10,7 @@ class UserRepository extends Repository
     public function getUserById($id)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, password, is_admin, user_type, profile_picture FROM User WHERE id = :id");
+            $stmt = $this->connection->prepare("SELECT id, first_name, last_name, username, email, is_admin, user_type, profile_picture FROM User WHERE id = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
@@ -57,9 +57,6 @@ class UserRepository extends Repository
                 return ;
             }
 
-            // get the user's profile picture
-            $user->profile_picture = $this->getUserPicture($user->id);
-
             return $user;
         } catch (PDOException $e) {
             echo $e;
@@ -71,7 +68,7 @@ class UserRepository extends Repository
     public function checkUsernamePassword($username, $password)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM User WHERE username = :username");
+            $stmt = $this->connection->prepare("SELECT password FROM User WHERE username = :username");
             $stmt->bindParam(':username', $username);
             $stmt->execute();
 
@@ -176,26 +173,5 @@ class UserRepository extends Repository
     function verifyPassword($input, $hash)
     {
         return password_verify($input, $hash);
-    }
-
-    function getUserPicture($id){
-        try {
-            $stmt = $this->connection->prepare("SELECT profile_picture FROM User WHERE id = :id");
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-
-            $userPicture = $stmt->fetchColumn();
-
-            if($userPicture == null){
-                return null;
-            }
-            // convert blob to base64
-            $userPicture = base64_encode($userPicture);
-
-
-            return $userPicture;
-        } catch (PDOException $e) {
-            echo $e;
-        }
     }
 }

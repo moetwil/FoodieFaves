@@ -7,17 +7,17 @@
                     <form>
                         <div class="">
                             <div class=" form-group row d-flex justify-content-start align-items-center">
-                                <RatingSelect :value="foodRating" id="1" label="het eten"
+                                <RatingSelect :value="review.food_rating" id="1" label="het eten"
                                     description="Laat weten wat je van het eten vond. Denk hierbij aan de smaak, de porties."
                                     @input="handleStarsInput" />
                             </div>
                             <div class="form-group row d-flex justify-content-start align-items-center">
-                                <RatingSelect :value="serviceRating" id="2" label="de service"
+                                <RatingSelect :value="review.service_rating" id="2" label="de service"
                                     description="Laat weten wat je van de service vond. Denk hierbij aan de bediening, de sfeer en de snelheid."
                                     @input="handleStarsInput" />
                             </div>
                             <div class="form-group row d-flex justify-content-start align-items-center">
-                                <RatingSelect :value="priceValueRating" id="3" label="de prijs/kwaliteit"
+                                <RatingSelect :value="review.price_value_rating" id="3" label="de prijs/kwaliteit"
                                     description="Laat weten wat je van de prijs en kwaliteit vond. Denk hierbij aan de prijs van het eten en de kwaliteit van het eten."
                                     @input="handleStarsInput" />
                             </div>
@@ -27,7 +27,7 @@
                             <label for="name">Beschrijf je bezoek</label>
                             <textarea class="form-control" id="description" rows="3"
                                 placeholder="Laat weten wat jij goed of juist minder goed vond."
-                                v-model="reviewText"></textarea>
+                                v-model="review.review_text"></textarea>
                         </div>
                         <ImageUpload class="mt-5" @file-selected="handleImageUpload" />
 
@@ -56,79 +56,62 @@ const authenticationStore = useAuthenticationStore();
 
 const router = useRouter();
 
-// get from paremeter url
+// VARIABLES
 const restaurantId = +router.currentRoute.value.params.id;
-
-// ratings
-const foodRating = ref(0);
-const serviceRating = ref(0);
-const priceValueRating = ref(0);
-const reviewText = ref('');
-const imageFile = ref<string | null>(null);
+const review = ref<Review>({
+    id: undefined,
+    restaurant_id: restaurantId,
+    user_id: undefined,
+    food_rating: 0,
+    service_rating: 0,
+    price_value_rating: 0,
+    review_text: '',
+    flagged: false,
+    approved: false,
+    date: undefined,
+    image: undefined
+});
 
 function handleStarsInput(value: number, id: string) {
     switch (id) {
         case '1':
-            foodRating.value = value;
+            review.value.food_rating = value;
             break;
         case '2':
-            serviceRating.value = value;
+            review.value.service_rating = value;
             break;
         case '3':
-            priceValueRating.value = value;
+            review.value.price_value_rating = value;
             break;
     }
-
-    console.log(id);
 }
-
-// function handleImageUpload(file: File) {
-
-//     console.log(file);
-
-//     // imageFile.value = file;
-// }
 
 
 function handleImageUpload(image: string) {
     console.log(image);
-    imageFile.value = image;
+    // imageFile.value = image;
+    review.value.image = image;
 }
 
 function handleSubmit() {
 
+    // check if user is logged in
     const userId = authenticationStore.getUser?.id;
     if (!userId) {
         router.push('/login');
         return;
     }
 
-    const review: Review = {
-        restaurant_id: restaurantId,
-        food_rating: foodRating.value,
-        service_rating: serviceRating.value,
-        price_value_rating: priceValueRating.value,
-        review_text: reviewText.value,
-        id: null,
-        user_id: userId,
-        flagged: null,
-        approved: null,
-        date: null,
-        // image: imageFile.value ? imageFile.value.name : null
-        image: imageFile.value
-    };
+    // set user id
+    review.value.user_id = userId;
 
-    console.log(review);
-
-    reviewStore.setReview(review);
-    console.log(reviewStore.getReview);
+    // set date
+    reviewStore.setReview(review.value);
     reviewStore.createReview();
 
+    // redirect to restaurant page
     router.push(`/restaurant/${restaurantId}`);
 }
-
-
-
 </script>
 
 <style scoped>

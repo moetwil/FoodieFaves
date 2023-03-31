@@ -23,44 +23,85 @@ class ReviewRepository extends Repository
         }
     }
 
-    public function getByRestaurant($restaurantId)
+    public function getByRestaurant($id, $limit, $offset, $order, $filter)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM Review WHERE restaurant_id = :restaurant_id");
-            $stmt->bindParam(':restaurant_id', $restaurantId);
+            $sql = "SELECT * FROM Review WHERE restaurant_id = :restaurant_id";
+
+            // FILTER OPTIONS
+            if($filter === 'flagged'){
+                $sql .= " AND flagged = 1";
+            }
+            if($filter === 'approved'){
+                $sql .= " AND (flagged = 0 AND approved = 0 OR flagged = 1 AND approved = 1)";
+            }
+
+
+            // ORDER OPTIONS
+            if($order) $sql .= " ORDER BY id DESC";
+            else $sql .= " ORDER BY id ASC";
+
+            // PAGINATION OPTIONS
+            if(isset($limit) && isset($offset)) $sql .= " LIMIT :limit OFFSET :offset";
+            if(isset($limit) && !isset($offset)) $sql .= " LIMIT :limit";
+            if(!isset($limit) && isset($offset)) $sql .= " OFFSET :offset";
+
+            $stmt = $this->connection->prepare($sql);
+
+            // bind params
+            $stmt->bindParam(':restaurant_id', $id);
+            if($limit != null && $offset != null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+            if($limit != null && $offset == null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            }
+            if($limit == null && $offset != null){
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Review');
             $reviews = $stmt->fetchAll();
-
             return $reviews;
         } catch (PDOException $e) {
             echo $e;
         }
     }
 
-    public function getReviews($limit, $offset, $order){
+    public function getReviews($limit, $offset, $order, $filter){
         try {
             $sql = "SELECT * FROM Review";
+            // if filter is set to flagged, add it to the query
+            if($filter === 'flagged'){
+                $sql .= " WHERE flagged = 1";
+            }if($filter === 'flaggedAndNotApproved'){
+                $sql .= " WHERE flagged = 1 AND approved = 0";
+            }
 
             // if order is set, add it to the query
             if($order){
-                $sql .= " ORDER BY date DESC";
+                $sql .= " ORDER BY id DESC";
             }
             else{
-                $sql .= " ORDER BY date ASC";
+                $sql .= " ORDER BY id ASC";
             }
 
             // if limit and offset are set, add them to the query
             if(isset($limit) && isset($offset)){
                 $sql .= " LIMIT :limit OFFSET :offset";
             }
-            else if(isset($limit) && !isset($offset)){
+            if(isset($limit) && !isset($offset)){
                 $sql .= " LIMIT :limit";
             }
-            else if(!isset($limit) && isset($offset)){
+            if(!isset($limit) && isset($offset)){
                 $sql .= " OFFSET :offset";
             }
+            
+
+            // $flagged = 1;
 
 
             
@@ -71,12 +112,15 @@ class ReviewRepository extends Repository
                 $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
                 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             }
-            else if($limit != null && $offset == null){
+            if($limit != null && $offset == null){
                 $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
             }
-            else if($limit == null && $offset != null){
+            if($limit == null && $offset != null){
                 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             }
+            // if($filter === 'flagged'){
+            //     $stmt->bindParam(':flagged', $flagged, PDO::PARAM_INT);
+            // }
 
             $stmt->execute();
 
@@ -108,6 +152,7 @@ class ReviewRepository extends Repository
     public function createReview(Review $review) 
     {
         try {
+            $reviewStatus = 0;
             $stmt = $this->connection->prepare("INSERT INTO Review (food_rating, service_rating, price_value_rating, review_text, restaurant_id, user_id, image, flagged, approved) VALUES (:food_rating, :service_rating, :price_value_rating, :review_text, :restaurant_id, :user_id, :image, :flagged, :approved)");
             $stmt->bindParam(':food_rating', $review->food_rating);
             $stmt->bindParam(':service_rating', $review->service_rating);
@@ -116,8 +161,8 @@ class ReviewRepository extends Repository
             $stmt->bindParam(':restaurant_id', $review->restaurant_id);
             $stmt->bindParam(':user_id', $review->user_id);
             $stmt->bindParam(':image', $review->image);
-            $stmt->bindParam(':flagged', $review->flagged);
-            $stmt->bindParam(':approved', $review->approved);
+            $stmt->bindParam(':flagged', $reviewStatus);
+            $stmt->bindParam(':approved', $reviewStatus);
             $stmt->execute();
 
             // set the id of the review to the id of the newly created review
@@ -168,6 +213,8 @@ class ReviewRepository extends Repository
 
     public function flagReview($id, $flagged)
     {
+
+        // check of user owner is
         try {
             $state = $flagged ? 1 : 0;
             $stmt = $this->connection->prepare("UPDATE Review SET flagged = :flagged WHERE id = :id");
@@ -185,6 +232,8 @@ class ReviewRepository extends Repository
 
     public function approveReview($id)
     {
+        // check of user owner is
+
         try {
             $stmt = $this->connection->prepare("UPDATE Review SET approved = 1 WHERE id = :id");
             $stmt->bindParam(':id', $id);

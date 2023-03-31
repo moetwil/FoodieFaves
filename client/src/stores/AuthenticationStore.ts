@@ -26,23 +26,31 @@ export const useAuthenticationStore = defineStore({
     getIsRestaurantOwner(state) {
       return state.user?.user_type === 1;
     },
+    getIsAdmin(state) {
+      return state.user?.is_admin;
+    },
   },
   actions: {
     async login(data: Login) {
-      const response = await axios.post('/users/login', {
-        username: data.username,
-        password: data.password,
-      });
-
-      if (response.status === 200) {
-        this.setUser(response.data.user, response.data.jwt);
-        this.router.push('/');
+      try {
+        const response = await axios.post('/users/login', {
+          username: data.username,
+          password: data.password,
+        });
+        if (response.status === 200) {
+          this.setUser(response.data.user, response.data.jwt);
+          axios.updateAuthorizationHeader(response.data.jwt);
+          this.router.push('/');
+        }
+      } catch (error: any) {
+        return error;
       }
     },
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('user_id');
       localStorage.removeItem('user_type');
+      axios.updateAuthorizationHeader('');
       this.user = null;
       this.isLoggedIn = false;
 
@@ -53,6 +61,7 @@ export const useAuthenticationStore = defineStore({
         const response = await axios.post('/users/register', newUser);
         if (response.status === 200) {
           this.setUser(response.data.user, response.data.jwt);
+          axios.updateAuthorizationHeader(response.data.jwt);
           this.router.push('/');
         }
       } catch (error: any) {
@@ -63,10 +72,11 @@ export const useAuthenticationStore = defineStore({
       this.user = updateUser;
       try {
         const response = await axios.put(`/users/${updateUser.id}`, updateUser);
+        this.user.password = undefined;
         console.log(response);
         if (response.status === 200) return true;
       } catch (error: any) {
-        alert(error.message);
+        console.error(error);
         return false;
       }
     },
