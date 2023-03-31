@@ -18,93 +18,122 @@ class UserController extends Controller
     }
 
     public function login() {
+        try{
+            // read user data from request body
+            $postedUser = $this->createObjectFromPostedJson("Models\\User");
 
-        // read user data from request body
-        $postedUser = $this->createObjectFromPostedJson("Models\\User");
+            // get user from db and check if valid
+            $user = $this->service->authenticateUser($postedUser->username, $postedUser->password);
+            if(!$user) {
+                $this->respondWithError(401, "Invalid login");
+                return;
+            }
 
-        // get user from db
-        $user = $this->service->authenticateUser($postedUser->username, $postedUser->password);
-
-        // if the method returned false, the username and/or password were incorrect
-        if(!$user) {
-            $this->respondWithError(401, "Invalid login");
-            return;
+            // generate jwt
+            $tokenResponse = $this->generateJwt($user);       
+            $this->respond($tokenResponse); 
+        } catch(Exception $e){
+            $this->respondWithError(500, $e->getMessage());
         }
-
-        // generate jwt
-        $tokenResponse = $this->generateJwt($user);       
-
-        $this->respond($tokenResponse);    
+           
     }
 
     public function register() {
-        // read user data from request body
-        $postedUser = $this->createObjectFromPostedJson("Models\\User");
+        try{
+            // read user data from request body
+            $postedUser = $this->createObjectFromPostedJson("Models\\User");
 
-        // check if the username already exists
-        $user = $this->service->getUserByUsername($postedUser->username);
-        if($user) {
-            $this->respondWithError(409, "Username already exists");
-            return;
+            // check if the username already exists
+            $user = $this->service->getUserByUsername($postedUser->username);
+            if($user) {
+                $this->respondWithError(409, "Username already exists");
+                return;
+            }
+
+            // check if the email already exists
+            $user = $this->service->getUserByEmail($postedUser->email);
+            if($user) {
+                $this->respondWithError(409, "Email already exists");
+                return;
+            }
+
+            //create user
+            $user = $this->service->createUser($postedUser);
+
+            // generate jwt
+            $tokenResponse = $this->generateJwt($user);       
+            $this->respond($tokenResponse);   
+        } catch(Exception $e){
+            $this->respondWithError(500, $e->getMessage());
         }
-
-        // check if the email already exists
-        $user = $this->service->getUserByEmail($postedUser->email);
-        if($user) {
-            $this->respondWithError(409, "Email already exists");
-            return;
-        }
-
-        //create user
-        $user = $this->service->createUser($postedUser);
-
-        // generate jwt
-        $tokenResponse = $this->generateJwt($user);       
-
-        $this->respond($tokenResponse);    
     }
 
     public function update($id){
-        // read user data from request body
-        $postedUser = $this->createObjectFromPostedJson("Models\\User");
+        try{
+            // verify JWT and check if user is authorized
+            $decoded = $this->checkForJwt();
+            if(!$decoded) return;
+
+            // check if the user is authorized to update the user
+            if($decoded->data->id != $id) {
+                $this->respondWithError(401, "Unauthorized, you can only update your own user");
+                return;
+            }
+
+            // read user data from request body
+            $postedUser = $this->createObjectFromPostedJson("Models\\User");
+            
+            // check if the username already exists
+            $user = $this->service->getUserByUsername($postedUser->username);
+            if($user && $user->id != $id) {
+                $this->respondWithError(409, "Username already exists");
+                return;
+            }
+
+            // check if the email already exists
+            $user = $this->service->getUserByEmail($postedUser->email);
+            if($user && $user->id != $id) {
+                $this->respondWithError(409, "Email already exists");
+                return;
+            }
+
+            // update user
+            $user = $this->service->updateUser($id, $postedUser);
+            $this->respond($user);
+        } catch(Exception $e){
+            $this->respondWithError(500, $e->getMessage());
+        }
         
-        // check if the username already exists
-        $user = $this->service->getUserByUsername($postedUser->username);
-        if($user && $user->id != $id) {
-            $this->respondWithError(409, "Username already exists");
-            return;
-        }
-
-        // check if the email already exists
-        $user = $this->service->getUserByEmail($postedUser->email);
-        if($user && $user->id != $id) {
-            $this->respondWithError(409, "Email already exists");
-            return;
-        }
-
-        // update user
-        $user = $this->service->updateUser($id, $postedUser);
-
-        $this->respond($user);
     }
 
     public function delete($id){
-        $res = $this->service->deleteUser($id);
-        
-        if($res) {
-            $this->respond("User deleted");
-        } else {
-            $this->respondWithError(500, "User could not be deleted");
+        try{
+            // delete the user
+            $res = $this->service->deleteUser($id);
+            
+            // check if the user was deleted and send response accordingly
+            if($res) {
+                $this->respond("User deleted");
+            } else {
+                $this->respondWithError(500, "User could not be deleted");
+            }
+        }
+        catch(Exception $e){
+            $this->respondWithError(500, $e->getMessage());
         }
     }
 
     public function getById($id) {
-        $user = $this->service->getUserById($id);
+        try{
+            $user = $this->service->getUserById($id);
 
-        if($user) {
-            $this->respond($user);
-        } else {
-            $this->respondWithError(404, "User not found");
+            if($user) {
+                $this->respond($user);
+            } else {
+                $this->respondWithError(404, "User not found");
+            }
+        }catch(Exception $e){
+            $this->respondWithError(500, $e->getMessage());
         }
     }
 
@@ -119,6 +148,7 @@ class UserController extends Controller
         $notbefore = $issuedAt;
         $expire = $issuedAt + 1200;
 
+        // PAYLOAD DATA
         $payload = array(
             "iss" => $issuer,
             "aud" => $audience,
@@ -130,6 +160,7 @@ class UserController extends Controller
                 "username" => $user->username,
         ));
 
+        // ENCODE JWT
         $jwt = JWT::encode($payload, $secret_key, 'HS256');
 
         return 

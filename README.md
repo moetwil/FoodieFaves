@@ -20,7 +20,7 @@ Server
 [] - Controller: Secret-key to .env
 [] - password weghalen bij users
 [] - UserRepository: password alleen updaten als hij veranderd
-[] - Register/edit: Check of username en email al taken is
+[x] - Register/edit: Check of username en email al taken is
 [] - GetAllRestaurants: filter/order/pagination
 
 
