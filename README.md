@@ -22,5 +22,7 @@ Server
 [] - UserRepository: password alleen updaten als hij veranderd
 [x] - Register/edit: Check of username en email al taken is
 [] - GetAllRestaurants: filter/order/pagination
+[x] - Select * weghalen
+
 
 
