@@ -10,7 +10,7 @@
                     <!-- Add filters options for the restaurant -->
                 </div>
                 <RestaurantComponent v-for="(restaurant, index) in displayedRestaurants" :key="index"
-                    :restaurant="restaurant" />
+                    :restaurant="restaurant" @click="goToRestaurant(restaurant)" />
             </div>
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
@@ -34,11 +34,14 @@ import SearchSection from "../components/SearchSection.vue";
 import RestaurantComponent from "../components/Restaurant.vue";
 import axios from "./../utils/axios";
 import Restaurant from "./../interfaces/Restaurant";
+import { useRouter } from "vue-router";
+
 
 // VARIABLES
 const restaurants = ref<Restaurant[]>([]);
 const currentPage = ref(1);
 const itemsPerPage = 6;
+const router = useRouter();
 
 // COMPUTED PROPERTIES
 const totalPages = computed(() => {
@@ -60,6 +63,10 @@ const pages = computed(() => {
 });
 
 // METHODS
+function goToRestaurant(restaurant: Restaurant) {
+    router.push(`/restaurant/${restaurant.id}`);
+}
+
 onMounted(() => {
     fetchRestaurants();
 });

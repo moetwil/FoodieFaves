@@ -7,13 +7,12 @@ General
 
 Client
 [] - Restaurants page: filters
-[] - Restaurants page: pagination stylen
-[] - Restaurants page: restaurants clickable maken
-[] - Restaurant store: ombouwen met getters
-[] - Review page: Textarea max aantal karakters
-[] - Review page: click on same amount = 0
-[] - My account: password alleen updaten als hij veranderd
-[] - My account: change role?
+[x] - Restaurants page: pagination stylen
+[x] - Restaurants page: restaurants clickable maken
+[x] - Restaurant store: ombouwen met getters
+[x] - Review page: Textarea max aantal karakters
+[x] - My account: password alleen updaten als hij veranderd
+[x] - My account: change role?
 [x] - Searchbar: Als input leeg is de preview weghalen
 
 Server

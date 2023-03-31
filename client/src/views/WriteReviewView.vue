@@ -25,7 +25,7 @@
 
                         <div class="form-group">
                             <label for="name">Beschrijf je bezoek</label>
-                            <textarea class="form-control" id="description" rows="3"
+                            <textarea class="form-control" id="description" maxlength="200" rows="3"
                                 placeholder="Laat weten wat jij goed of juist minder goed vond."
                                 v-model="review.review_text"></textarea>
                         </div>
