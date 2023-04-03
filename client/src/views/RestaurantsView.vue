@@ -7,14 +7,11 @@
                     <h1 class="text-center">Restaurants</h1>
                     <div class="col-12">
                         <div class="btn-group" role="group" aria-label="Restaurant Types">
+                            <button class="btn btn-outline-secondary" @click="fetchRestaurants()">All</button>
                             <button v-for="(type, index) in restaurantTypes" :key="index" class="btn btn-outline-secondary"
                                 @click="fetchRestaurantsByType(type)">{{ type.name }}</button>
                         </div>
                     </div>
-
-                </div>
-                <div class="col-12">
-                    <!-- Add filters options for the restaurant -->
                 </div>
                 <RestaurantComponent v-for="(restaurant, index) in restaurants" :key="index" :restaurant="restaurant"
                     @click="goToRestaurant(restaurant)" />
