@@ -43,7 +43,7 @@ import Banner from "../components/Banner.vue";
 import axios from "./../utils/axios";
 import Review from "./../interfaces/Review";
 import Restaurant from "./../interfaces/Restaurant";
-import { useAuthenticationStore } from "../stores/authenticationStore";
+import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import router from "../router";
 
 const authenticationStore = useAuthenticationStore();
@@ -55,16 +55,16 @@ const ownerId = ref<number | null>(null);
 
 // METHODS
 
-onMounted(async () => {
-    await authenticationStore.checkAuth();
-    await fetchRestaurant();
+onMounted(() => {
+    authenticationStore.checkAuth();
+    fetchRestaurant();
 
     // check if user is owner of restaurant
     if (authenticationStore.user?.id !== ownerId.value) {
         router.push('/mijn-restaurants');
     }
 
-    await fetchReviews();
+    fetchReviews();
 });
 
 async function handleFlag(review: Review) {
@@ -87,18 +87,29 @@ async function handleUnflag(review: Review) {
 }
 
 async function fetchRestaurant() {
-    // get restaurant id from url
-    const restaurantId = router.currentRoute.value.params.id;
-    const response = await axios.get(`/restaurants/${restaurantId}`);
-    restaurant.value = response.data;
-    ownerId.value = response.data.owner_id;
-    console.log(restaurant.value);
+    try {
+        // get restaurant id from url
+        const restaurantId = router.currentRoute.value.params.id;
+        const response = await axios.get(`/restaurants/${restaurantId}`);
+        restaurant.value = response.data;
+        ownerId.value = response.data.owner_id;
+    }
+    catch (e) {
+        console.log(e);
+    }
+
 }
 
 async function fetchReviews() {
-    const restaurantId = router.currentRoute.value.params.id;
-    const response = await axios.get(`/reviews/restaurant/${restaurantId}`);
-    reviews.value = response.data;
+    try {
+        // get restaurant id from url
+        const restaurantId = router.currentRoute.value.params.id;
+        const response = await axios.get(`/reviews/restaurant/${restaurantId}`);
+        reviews.value = response.data;
+    }
+    catch (e) {
+        console.log(e);
+    }
 }
 </script>
 <style scoped>

@@ -40,7 +40,6 @@ const { id, label, value, description } = defineProps({
     },
 });
 
-// make a ref to the value prop
 const rating = ref(value)
 
 // watch for changes in the value prop
@@ -51,9 +50,12 @@ watch(rating, (newValue) => {
 // create an array of stars
 const stars = computed(() => {
     const highlightedCount = Math.floor(rating.value);
+
+    // create an array of stars
     const stars = Array.from({ length: 5 }).map((_, index) => ({
         highlighted: index < highlightedCount,
     }));
+
     const decimal = rating.value - highlightedCount;
     if (decimal > 0) {
         stars[highlightedCount].highlighted = true;

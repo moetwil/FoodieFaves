@@ -13,6 +13,29 @@ export const useRestaurantStore = defineStore({
     averageServiceRating: 0,
     averagePriceValueRating: 0,
   }),
+  getters: {
+    getReviewCount(): number {
+      return this.reviews.length;
+    },
+    getAverageRating(): number {
+      return this.averageRating;
+    },
+    getAverageFoodRating(): number {
+      return this.averageFoodRating;
+    },
+    getAverageServiceRating(): number {
+      return this.averageServiceRating;
+    },
+    getAveragePriceValueRating(): number {
+      return this.averagePriceValueRating;
+    },
+    getReviews(): Review[] {
+      return this.reviews;
+    },
+    getRestaurant(): Restaurant | null {
+      return this.restaurant;
+    },
+  },
   actions: {
     async fetchRestaurant(id: string) {
       try {

@@ -5,9 +5,6 @@
             <div class="row bg-light">
                 <ReviewComponent v-for="(review, index) in reviews" :key="index" :review="review" />
             </div>
-
-
-
         </div>
     </div>
 </template>
@@ -16,7 +13,6 @@
 import axios from './../../utils/axios';
 import ReviewComponent from "../Review.vue";
 import { onMounted, ref } from "vue";
-import RestaurantComponent from "../Restaurant.vue";
 import Review from "./../../interfaces/Review";
 
 const reviews = ref<Review[]>([]);

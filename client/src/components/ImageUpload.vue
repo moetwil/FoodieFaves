@@ -45,6 +45,7 @@ function handleFileUpload(event: any) {
     reader.readAsDataURL(file);
 }
 
+// clear the image
 function clearImage() {
     imageUrl.value = '';
     emits('file-selected', '');

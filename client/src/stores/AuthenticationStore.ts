@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 // import { useRouter } from 'vue-router';
 import axios from '../utils/axios';
 import User from '../interfaces/User';
-import Login from '../interfaces/login';
+import Login from '../interfaces/Login';
 
 interface AuthState {
   user: User | null;

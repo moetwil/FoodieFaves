@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import axios from '../utils/axios';
-// import Restaurant from '../interfaces/Restaurant';
 import Review from '../interfaces/Review';
 
 export const useReviewStore = defineStore({
@@ -31,8 +30,12 @@ export const useReviewStore = defineStore({
         image: this.review!.image,
       };
 
-      const response = await axios.post('/reviews', newReview);
-      this.review = response.data;
+      try {
+        const response = await axios.post('/reviews', newReview);
+        this.review = response.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

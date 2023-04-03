@@ -92,6 +92,24 @@
                                     :initial-image="user.profile_picture ? user.profile_picture : undefined" />
                             </div>
                         </div>
+                        <div class="row pt-1">
+                            <div class="col">
+                                <div class="field">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="checkbox" name="restaurant-owner" id="restaurant-owner"
+                                                :checked="user.user_type == 1 ? true : false" @change="handleCheck">
+                                            <label class="px-2" for="restaurant-owner">Ik ben een restaurant
+                                                eigenaar</label>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <span class="icon px-2"><i></i></span>
+                                        <p class="help"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <button @click="handleUserUpdate" class="nav-link btn btn-primary" type="button">Update
                             account</button>
                         <div class="mt-4">
@@ -108,7 +126,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from '../components/Banner.vue';
-import { useAuthenticationStore } from '../stores/authenticationStore';
+import { useAuthenticationStore } from '../stores/AuthenticationStore';
 import ImageUpload from '../components/ImageUpload.vue';
 import {
     FieldMessageType,
@@ -135,8 +153,11 @@ const passwordConfirm = ref('');
 const successMessage = ref('');
 
 // METHODS
-onMounted(() => {
+function handleCheck() {
+    user.value.user_type = user.value.user_type ? 0 : 1;
+}
 
+onMounted(() => {
     // if the authentication store has no user object, redirect to login page
     if (!authenticationStore.user) {
         router.push('/login');
@@ -146,6 +167,7 @@ onMounted(() => {
     const retreivedUser = authenticationStore.user;
     if (retreivedUser) {
         user.value = retreivedUser;
+        console.log(user.value);
     }
 });
 
@@ -155,20 +177,25 @@ async function handleUserUpdate() {
         return;
     }
 
+    // set user_type to 1 if checked
+    user.value.user_type = user.value.user_type ? 1 : 0;
 
-    const res = await authenticationStore.updateUser(user.value);
+    try {
+        const res = await authenticationStore.updateUser(user.value);
 
-    if (await res === true) {
-        // set success message
-        successMessage.value = "Je profiel is succesvol aangepast!";
-        user.value.password = '';
-        passwordConfirm.value = '';
+        if (await res === true) {
+            // set success message
+            successMessage.value = "Je profiel is succesvol aangepast!";
+            user.value.password = '';
+            passwordConfirm.value = '';
+        }
+        else {
+            // set error message
+            successMessage.value = "Er is iets fout gegaan. Probeer het later opnieuw.";
+        }
+    } catch (e) {
+        console.log(e);
     }
-    else {
-        // set error message
-        successMessage.value = "Er is iets fout gegaan. Probeer het later opnieuw.";
-    }
-
 }
 
 function handleImageUpload(image: string) {

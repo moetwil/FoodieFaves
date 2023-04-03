@@ -43,8 +43,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Banner from './../components/Banner.vue';
-import { useAuthenticationStore } from '../stores/authenticationStore';
-import Login from './../interfaces/login';
+import { useAuthenticationStore } from '../stores/AuthenticationStore';
+import Login from './../interfaces/Login';
 import {
     FieldMessageType,
     setFieldMessage, clearFieldMessages, hasAnyFieldErrors,

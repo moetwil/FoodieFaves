@@ -2,21 +2,18 @@ import { defineStore } from 'pinia';
 import Restaurant from '../interfaces/Restaurant';
 import Review from '../interfaces/Review';
 
-// Define the shape of our state
+// type for the state
 interface State {
   restaurants: Restaurant[];
   latestReviews: Review[];
 }
 
-// Define a default state to use when initializing the store
-const defaultState: State = {
-  restaurants: [],
-  latestReviews: [],
-};
-
 export const useRestaurantReviewStore = defineStore({
   id: 'restaurant-review-store',
-  state: defaultState,
+  state: (): State => ({
+    restaurants: [],
+    latestReviews: [],
+  }),
   getters: {
     // Getter to return 3 random restaurants
     randomRestaurants(state) {
@@ -30,20 +27,28 @@ export const useRestaurantReviewStore = defineStore({
   actions: {
     // Action to fetch all restaurants and store them in state
     async fetchAllRestaurants() {
-      const response = await fetch('/api/restaurants');
-      const restaurants = await response.json();
-      this.state.restaurants = restaurants;
+      try {
+        const response = await fetch('/api/restaurants');
+        const restaurants = await response.json();
+        this.restaurants = restaurants;
+      } catch (error) {
+        console.log(error);
+      }
     },
     // Action to fetch the latest reviews and user information for each review
     async fetchLatestReviews() {
-      const response = await fetch('/api/reviews?limit=2');
-      const reviews = await response.json();
-      for (const review of reviews) {
-        const userResponse = await fetch(`/api/users/${review.userId}`);
-        const user = await userResponse.json();
-        review.user = user;
+      try {
+        const response = await fetch('/api/reviews?limit=2');
+        const reviews = await response.json();
+        for (const review of reviews) {
+          const userResponse = await fetch(`/api/users/${review.userId}`);
+          const user = await userResponse.json();
+          review.user = user;
+        }
+        this.latestReviews = reviews;
+      } catch (error) {
+        console.log(error);
       }
-      this.state.latestReviews = reviews;
     },
   },
 });

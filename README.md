@@ -1,29 +1,17 @@
 # Webdev2-eindopdracht
  
 # TODO:
-
 General
-[x] - Alles naar Nederlands
+[] - Database met dummy content vullen
+
 
 Client
 [] - Restaurants page: filters
-[] - Restaurants page: pagination stylen
-[] - Restaurants page: restaurants clickable maken
-[] - Restaurant store: ombouwen met getters
-[] - Review page: Textarea max aantal karakters
-[] - Review page: click on same amount = 0
-[] - My account: password alleen updaten als hij veranderd
-[] - My account: change role?
-[x] - Searchbar: Als input leeg is de preview weghalen
 
 Server
-[x] - API's: JWT secure maken
 [] - Controller: Secret-key to .env
 [] - password weghalen bij users
-[] - UserRepository: password alleen updaten als hij veranderd
-[x] - Register/edit: Check of username en email al taken is
 [] - GetAllRestaurants: filter/order/pagination
-[x] - Select * weghalen
 
 
 

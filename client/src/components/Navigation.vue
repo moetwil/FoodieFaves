@@ -2,12 +2,10 @@
   <nav class="navbar navbar-expand-lg sticky bg-white navbar-light">
     <div class="container">
       <router-link to="/" class="nav-link" active-class="active navbar-brand">FoodieFaves</router-link>
-
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item">
@@ -43,19 +41,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, computed } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthenticationStore } from '../stores/authenticationStore';
+import { useAuthenticationStore } from '../stores/AuthenticationStore';
 
 // VARIABLES
 const authenticationStore = useAuthenticationStore();
 const router = useRouter();
 
-
+// computed variables for authentication
 const isLoggedIn = computed(() => authenticationStore.getIsLoggedIn);
 const isRestaurantOwner = computed(() => authenticationStore.getIsRestaurantOwner);
 const isAdmin = computed(() => authenticationStore.getIsAdmin);
 
+// redirect to login page
 function goToLogin() {
   router.push('/login');
 }
