@@ -29,8 +29,8 @@ class RestaurantService {
         return $this->restaurantRepository->deleteRestaurant($id);
     }
 
-    public function getAllRestaurants(): ?array {
-        return $this->restaurantRepository->getAllRestaurants();
+    public function getAllRestaurants($limit, $offset, $order, $filter, $type): ?array {
+        return $this->restaurantRepository->getAllRestaurants($limit, $offset, $order, $filter, $type);
     }
 
     public function getAllRestaurantsByOwner(int $ownerId): ?array {

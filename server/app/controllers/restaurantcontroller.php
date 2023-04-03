@@ -37,8 +37,22 @@ class RestaurantController extends Controller
     public function getAll()
     {
         try {
+            // get information from the query string
+            $limit = $_GET['limit'] ?? null;
+            $offset = $_GET['offset'] ?? null;
+            $order = $_GET['order'] ?? null;
+            $filter = $_GET['filter'] ?? null;
+            $type = $_GET['type'] ?? null;
+            
+            // check if the order is valid
+            if($order=='asc' || $order == 'ASC'){
+                $order = false;
+            }else if($order == 'desc' || $order == 'DESC'){
+                $order = true;
+            }
+
             // get all restaurants and check if any are found
-            $restaurants = $this->service->getAllRestaurants();
+            $restaurants = $this->service->getAllRestaurants($limit, $offset, $order, $filter, $type);
             if (!$restaurants) {
                 $this->respondWithError(404, "No restaurants found");
                 return;

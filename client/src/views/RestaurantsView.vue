@@ -67,7 +67,7 @@ async function fetchRestaurantTypes() {
 
 async function fetchRestaurantsByType(type: RestaurantType) {
     try {
-        const response = await axios.get(`/restaurants?typeId=${type.id}`);
+        const response = await axios.get(`/restaurants?type=${type.id}`);
         restaurants.value = response.data;
     } catch (error) {
         console.error(error);
