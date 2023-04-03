@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import Navigation from './components/Navigation.vue';
-import { useAuthenticationStore } from './stores/authenticationStore';
+import Footer from './components/Footer.vue';
+import { useAuthenticationStore } from './stores/AuthenticationStore';
 
 const authenticationStore = useAuthenticationStore();
 
@@ -13,8 +14,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <navigation />
+  <Navigation />
   <RouterView />
+  <Footer />
 </template>
 
 <style scoped></style>

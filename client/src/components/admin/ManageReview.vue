@@ -73,6 +73,7 @@ const fullName = computed(() => {
     return user.value?.first_name + " " + user.value?.last_name;
 })
 
+// calculate the average rating of the review
 const averageRating = computed(() => {
     const rating = (review.food_rating + review.service_rating + review.price_value_rating) / 3;
     return rating % 1 === 0 ? rating : rating.toFixed(1);
@@ -87,9 +88,9 @@ async function handleApprove() {
     try {
         const response = await axios.put(`reviews/${review.id}/approve`, {});
 
+        // if the review is approved, reload the page
         if (response.status === 200) {
             emits('reload');
-
         }
     } catch (error) {
         console.error(error);
@@ -101,13 +102,13 @@ async function handleDelete() {
     try {
         const response = await axios.delete(`reviews/${review.id}`);
 
+        // if the review is deleted, reload the page
         if (response.status === 200) {
             emits('reload');
         }
     } catch (error) {
         console.error(error);
     }
-
 }
 
 async function fetchUser() {

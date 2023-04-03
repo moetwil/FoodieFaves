@@ -35,10 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from "vue";
+import { onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import Banner from "./../components/Banner.vue";
-import RatingBrakedown from "./../components/Restaurant/RatingBrakedown.vue";
+import RatingBrakedown from "./../components/restaurant/RatingBrakedown.vue";
 import Review from "./../components/Review.vue";
 import { useRestaurantStore } from '../stores/RestaurantStore';
 import Restaurant from "../interfaces/Restaurant";

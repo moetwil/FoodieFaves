@@ -22,7 +22,6 @@
                                     @input="handleStarsInput" />
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="name">Beschrijf je bezoek</label>
                             <textarea class="form-control" id="description" maxlength="200" rows="3"
@@ -30,7 +29,6 @@
                                 v-model="review.review_text"></textarea>
                         </div>
                         <ImageUpload class="mt-5" @file-selected="handleImageUpload" />
-
                     </form>
                     <!-- add a submit button -->
                     <button type="button" class="btn btn-primary mt-3" @click="handleSubmit">Verstuur</button>

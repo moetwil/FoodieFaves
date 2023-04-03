@@ -119,9 +119,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import Banner from '../components/Banner.vue';
-import { useAuthenticationStore } from '../stores/authenticationStore';
+import { useAuthenticationStore } from '../stores/AuthenticationStore';
 import ImageUpload from '../components/ImageUpload.vue';
 import User from '../interfaces/User';
 import {

@@ -126,7 +126,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Banner from '../components/Banner.vue';
-import { useAuthenticationStore } from '../stores/authenticationStore';
+import { useAuthenticationStore } from '../stores/AuthenticationStore';
 import ImageUpload from '../components/ImageUpload.vue';
 import {
     FieldMessageType,
@@ -180,20 +180,22 @@ async function handleUserUpdate() {
     // set user_type to 1 if checked
     user.value.user_type = user.value.user_type ? 1 : 0;
 
+    try {
+        const res = await authenticationStore.updateUser(user.value);
 
-    const res = await authenticationStore.updateUser(user.value);
-
-    if (await res === true) {
-        // set success message
-        successMessage.value = "Je profiel is succesvol aangepast!";
-        user.value.password = '';
-        passwordConfirm.value = '';
+        if (await res === true) {
+            // set success message
+            successMessage.value = "Je profiel is succesvol aangepast!";
+            user.value.password = '';
+            passwordConfirm.value = '';
+        }
+        else {
+            // set error message
+            successMessage.value = "Er is iets fout gegaan. Probeer het later opnieuw.";
+        }
+    } catch (e) {
+        console.log(e);
     }
-    else {
-        // set error message
-        successMessage.value = "Er is iets fout gegaan. Probeer het later opnieuw.";
-    }
-
 }
 
 function handleImageUpload(image: string) {

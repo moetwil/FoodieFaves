@@ -3,10 +3,8 @@
         <li class="card py-3 px-3 col my-3">
             <div class="row d-flex">
                 <div class="col-md-6 d-flex justify-content-between align-items-center flex-row px-3">
-
                     <img v-if="user && user.profile_picture" :src="user.profile_picture" class="profile-pict-img img-fluid"
                         alt="" />
-
                     <h4>{{ fullName }}</h4>
                 </div>
                 <div class="col-md-12 mt-4">
@@ -34,7 +32,6 @@
                     <div class="review-image review-image-container" v-if="review.image">
                         <img :src="review.image" alt="" class="review-image">
                     </div>
-
                     <span class="publish py-3 d-inline-block w-100">Geschreven op: {{ review.date }}</span>
                 </div>
             </div>
@@ -91,28 +88,6 @@ body {
 
 .text-body-3 {
     font-size: 14px;
-}
-
-.review-list ul li .left span {
-    width: 32px;
-    height: 32px;
-    display: inline-block;
-}
-
-.review-list ul li .left {
-    flex: none;
-    max-width: none;
-    margin: 0 10px 0 0;
-}
-
-.review-list ul li .left span img {
-    border-radius: 50%;
-}
-
-.review-list ul li .right h4 {
-    font-size: 16px;
-    margin: 0;
-    display: flex;
 }
 
 ul,

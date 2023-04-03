@@ -40,7 +40,7 @@ import { useRouter } from "vue-router";
 // VARIABLES
 const restaurants = ref<Restaurant[]>([]);
 const currentPage = ref(1);
-const itemsPerPage = 6;
+const itemsPerPage = 9;
 const router = useRouter();
 
 // COMPUTED PROPERTIES
@@ -48,12 +48,14 @@ const totalPages = computed(() => {
     return Math.ceil(restaurants.value.length / itemsPerPage);
 });
 
+// return the restaurants that should be displayed on the current page
 const displayedRestaurants = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     return restaurants.value.slice(start, end);
 });
 
+// calculate the amount of pages
 const pages = computed(() => {
     const pagesArray = [];
     for (let i = 1; i <= totalPages.value; i++) {
@@ -72,9 +74,12 @@ onMounted(() => {
 });
 
 async function fetchRestaurants() {
-    const response = await axios.get("/restaurants");
-    restaurants.value = response.data;
-    console.log(restaurants.value);
+    try {
+        const response = await axios.get("/restaurants");
+        restaurants.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
 }
 </script>
 <style scoped>

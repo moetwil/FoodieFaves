@@ -127,7 +127,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthenticationStore } from '../stores/authenticationStore';
+import { useAuthenticationStore } from '../stores/AuthenticationStore';
 import {
     FieldMessageType,
     setFieldMessage, clearFieldMessages, hasAnyFieldErrors,
@@ -145,10 +145,10 @@ const authenticationStore = useAuthenticationStore();
 const restaurantTypes = ref<RestaurantType[]>([]);
 const restaurant = ref<Restaurant | null>(null);
 
-onMounted(async () => {
+onMounted(() => {
     // retreive data from backend
-    await fetchRestaurantTypes();
-    await fetchRestaurant();
+    fetchRestaurantTypes();
+    fetchRestaurant();
 
     // check if user is owner of restaurant
     if (authenticationStore.user?.id !== restaurant.value?.owner_id) {
@@ -162,10 +162,13 @@ async function handleSubmit() {
         return;
     }
 
-    // fetch the new data to the backend
-    const response = await axios.put(`/restaurants/${restaurant.value?.id}`, restaurant.value);
-    router.push('/mijn-restaurants');
-
+    try {
+        // fetch the new data to the backend
+        const response = await axios.put(`/restaurants/${restaurant.value?.id}`, restaurant.value);
+        router.push('/mijn-restaurants');
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function handleImageUpload(image: string) {
@@ -194,7 +197,6 @@ async function fetchRestaurantTypes() {
     } catch (error) {
         console.log(error);
     }
-
 }
 
 function checkForErrors() {

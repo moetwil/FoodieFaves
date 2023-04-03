@@ -116,11 +116,8 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
-
                 <button @click="handleSubmit" class="nav-link btn btn-primary" type="button">Maak restaurant</button>
             </form>
         </div>
@@ -130,7 +127,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthenticationStore } from '../stores/authenticationStore';
 import {
     FieldMessageType,
     setFieldMessage, clearFieldMessages, hasAnyFieldErrors,
@@ -166,9 +162,12 @@ async function handleSubmit() {
         return;
     }
 
-    // post restaurant
-    const response = await axios.post('/restaurants', restaurant.value);
-    router.push('/mijn-restaurants');
+    try {
+        const response = await axios.post('/restaurants', restaurant.value);
+        router.push('/mijn-restaurants');
+    } catch (error) {
+        console.log(error);
+    }
 
 }
 

@@ -15,7 +15,7 @@ import axios from './../utils/axios';
 
 const flaggedReviews = ref([]);
 
-onMounted(async () => {
+onMounted(() => {
     fetchFlaggedReviews();
 });
 

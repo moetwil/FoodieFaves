@@ -12,6 +12,7 @@ import Restaurant from '../views/RestaurantView.vue';
 import Restaurants from '../views/RestaurantsView.vue';
 import errorView from '../views/404View.vue';
 import AdminView from '../views/AdminView.vue';
+import PrivacyPolcyView from '../views/PrivacyPolicyView.vue';
 
 const routes = [
   { path: '/', component: Home },
@@ -54,7 +55,7 @@ const routes = [
   },
   { path: '/restaurant/:id', component: Restaurant },
   { path: '/restaurants', component: Restaurants },
-  // create a 404 page
+  { path: '/privacy-policy', component: PrivacyPolcyView },
   { path: '/:pathMatch(.*)*', component: errorView },
 ];
 

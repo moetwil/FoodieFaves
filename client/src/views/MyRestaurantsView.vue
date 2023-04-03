@@ -68,10 +68,14 @@ function handleManageReviews(restaurant: Restaurant) {
 }
 
 async function handleDelete(restaurant: Restaurant) {
-    const confirmRes = confirm(`Weet je zeker dat je restaurant: ${restaurant.name} wilt verwijderen?`);
-    if (!confirmRes) return;
-    await axios.delete(`/restaurants/${restaurant.id}`);
-    fetchRestaurants();
+    try {
+        const confirmRes = confirm(`Weet je zeker dat je restaurant: ${restaurant.name} wilt verwijderen?`);
+        if (!confirmRes) return;
+        await axios.delete(`/restaurants/${restaurant.id}`);
+        fetchRestaurants();
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 onMounted(() => {
@@ -79,9 +83,13 @@ onMounted(() => {
 });
 
 async function fetchRestaurants() {
-    const response = await axios.get(`/restaurants/owner/${localStorage.getItem("user_id")}`);
-    restaurants.value = response.data;
-    console.log(restaurants.value);
+    try {
+        const response = await axios.get(`/restaurants/owner/${localStorage.getItem("user_id")}`);
+        restaurants.value = response.data;
+        console.log(restaurants.value);
+    } catch (error) {
+        console.log(error);
+    }
 }
 </script>
 <style scoped>

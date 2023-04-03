@@ -5,7 +5,6 @@
                 <div class="d-flex flex-row align-items-center">
                     <div class="icon">
                         <img v-if="restaurant && restaurant.profile_picture" :src="restaurant.profile_picture" alt="" />
-                        <!-- <img src="https://img.icons8.com/ios/50/000000/restaurant.png" /> -->
                     </div>
                 </div>
                 <div class="badge" v-if="averageRating"> <span>{{ averageRating }}/5 ⭐</span> </div>
@@ -48,6 +47,7 @@ onMounted(() => {
     fetchRating();
 });
 
+// calculate the average rating of the review
 const averageRating = computed(() => {
     if (rating.value) {
         return Math.round(rating.value * 10) / 10;
@@ -87,11 +87,6 @@ async function fetchRating() {
 .card {
     border: none;
     border-radius: 10px;
-}
-
-.c-details span {
-    font-weight: 300;
-    font-size: 13px
 }
 
 .icon {

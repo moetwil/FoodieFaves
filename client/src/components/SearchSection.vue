@@ -56,10 +56,20 @@ watch(searchQuery, async (newQuery: string) => {
         return;
     }
 
-    const response = await axios.get(`restaurants/search/${newQuery}`);
-    const results = response.data;
-    searchResults.value = results.length ? results : [];
+    try {
+        const response = await axios.get(`restaurants/search/${newQuery}`);
+        const results = response.data;
+
+        // if there are no results show a message
+        searchResults.value = results.length ? results : [];
+    } catch (error) {
+        console.error(error);
+
+        // if there is an error show no results
+        searchResults.value = [];
+    }
 });
+
 
 // calculate the pagination amount of pages
 const totalPages = computed(() => Math.ceil(searchResults.value.length / perPage));
@@ -71,6 +81,7 @@ const pages = computed(() => {
     return pagesArray;
 });
 
+// return the restaurants that should be displayed on the current page
 const paginatedResults = computed(() => {
     const startIndex = (currentPage.value - 1) * perPage;
     const endIndex = startIndex + perPage;
