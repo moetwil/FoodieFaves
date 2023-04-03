@@ -5,6 +5,13 @@
             <div class="row">
                 <div class="col-12 py-3">
                     <h1 class="text-center">Restaurants</h1>
+                    <div class="col-12">
+                        <div class="btn-group" role="group" aria-label="Restaurant Types">
+                            <button v-for="(type, index) in restaurantTypes" :key="index" class="btn btn-outline-secondary"
+                                @click="fetchRestaurantsByType(type)">{{ type.name }}</button>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="col-12">
                     <!-- Add filters options for the restaurant -->
@@ -16,17 +23,19 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import SearchSection from "../components/SearchSection.vue";
 import RestaurantComponent from "../components/Restaurant.vue";
 import axios from "./../utils/axios";
 import Restaurant from "./../interfaces/Restaurant";
+import RestaurantType from "./../interfaces/RestaurantType";
 import { useRouter } from "vue-router";
 
 
 // VARIABLES
 const restaurants = ref<Restaurant[]>([]);
 const router = useRouter();
+const restaurantTypes = ref<RestaurantType[]>([]);
 
 // METHODS
 function goToRestaurant(restaurant: Restaurant) {
@@ -35,6 +44,7 @@ function goToRestaurant(restaurant: Restaurant) {
 
 onMounted(() => {
     fetchRestaurants();
+    fetchRestaurantTypes();
 });
 
 async function fetchRestaurants() {
@@ -45,5 +55,24 @@ async function fetchRestaurants() {
         console.error(error);
     }
 }
+
+async function fetchRestaurantTypes() {
+    try {
+        const response = await axios.get("/restaurant-types");
+        restaurantTypes.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function fetchRestaurantsByType(type: RestaurantType) {
+    try {
+        const response = await axios.get(`/restaurants?typeId=${type.id}`);
+        restaurants.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 </script>
 <style scoped></style>
