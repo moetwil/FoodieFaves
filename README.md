@@ -2,11 +2,7 @@
  
 # TODO:
 General
-[] - Database met dummy content vullen
-
-
-Client
-[] - Restaurants page: filters
+[x] - Database met dummy content vullen
 
 Server
 [] - Controller: Secret-key to .env

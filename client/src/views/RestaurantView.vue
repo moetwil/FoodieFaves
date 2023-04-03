@@ -25,7 +25,11 @@
                 </div>
                 <div class="col-md-9 bg-light px-4 py-3">
                     <div class="row">
-                        <Review v-for="(review, index) in restaurantStore.getReviews || []" :review="review" :key="index" />
+                        <Review v-if="restaurantStore.getReviews.length > 0"
+                            v-for="(review, index) in restaurantStore.getReviews || []" :review="review" :key="index" />
+                        <div v-else class="col-12">
+                            <h3 class="text-center">Er zijn nog geen reviews voor dit restaurant</h3>
+                        </div>
                     </div>
 
                 </div>
