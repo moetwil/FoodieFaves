@@ -40,10 +40,11 @@ class ReviewController extends Controller
     {
         try {
             // get information from the query string
-            $limit = $_GET['limit'] ?? null;
-            $offset = $_GET['offset'] ?? null;
-            $order = $_GET['order'] ?? null;
-            $filter = $_GET['filter'] ?? null;
+            $limit = isset($_GET['limit']) ? htmlspecialchars($_GET['limit']) : null;
+            $offset = isset($_GET['offset']) ? htmlspecialchars($_GET['offset']) : null;
+            $order = isset($_GET['order']) ? htmlspecialchars($_GET['order']) : null;
+            $filter = isset($_GET['filter']) ? htmlspecialchars($_GET['filter']) : null;
+
 
             // check if the order is valid
             if($order=='asc' || $order == 'ASC'){
@@ -181,10 +182,11 @@ class ReviewController extends Controller
     public function getReviews(){
         try {
             // get information from the query string
-            $limit = $_GET['limit'] ?? null;
-            $offset = $_GET['offset'] ?? null;
-            $order = $_GET['order'] ?? null;
-            $filter = $_GET['filter'] ?? null;
+            $limit = isset($_GET['limit']) ? htmlspecialchars($_GET['limit']) : null;
+            $offset = isset($_GET['offset']) ? htmlspecialchars($_GET['offset']) : null;
+            $order = isset($_GET['order']) ? htmlspecialchars($_GET['order']) : null;
+            $filter = isset($_GET['filter']) ? htmlspecialchars($_GET['filter']) : null;
+
             
             // check if the order is valid
             if($order=='asc' || $order == 'ASC'){

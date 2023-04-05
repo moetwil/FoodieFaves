@@ -38,11 +38,11 @@ class RestaurantController extends Controller
     {
         try {
             // get information from the query string
-            $limit = $_GET['limit'] ?? null;
-            $offset = $_GET['offset'] ?? null;
-            $order = $_GET['order'] ?? null;
-            $filter = $_GET['filter'] ?? null;
-            $type = $_GET['type'] ?? null;
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : null;
+            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : null;
+            $order = isset($_GET['order']) ? htmlspecialchars($_GET['order'], ENT_QUOTES) : null;
+            $filter = isset($_GET['filter']) ? htmlspecialchars($_GET['filter'], ENT_QUOTES) : null;
+            $type = isset($_GET['type']) ? htmlspecialchars($_GET['type'], ENT_QUOTES) : null;
             
             // check if the order is valid
             if($order=='asc' || $order == 'ASC'){
@@ -68,11 +68,15 @@ class RestaurantController extends Controller
     public function getAllByOwner($id)
     {
         try {
-                // PAGINATION
+                // get information from the query string
+                $limit = isset($_GET['limit']) ? intval($_GET['limit']) : null;
+                $offset = isset($_GET['offset']) ? intval($_GET['offset']) : null;
+                $order = isset($_GET['order']) ? htmlspecialchars($_GET['order'], ENT_QUOTES) : null;
+                $type = isset($_GET['type']) ? htmlspecialchars($_GET['type'], ENT_QUOTES) : null;
 
 
                 // get restaurants by owner id and check if any are found
-                $restaurants = $this->service->getAllRestaurantsByOwner($id);
+                $restaurants = $this->service->getAllRestaurantsByOwner($id, $limit, $offset, $order, $type);
                 if ($restaurants == null) {
                     $this->respondWithError(404, "No restaurants found");
                     return;

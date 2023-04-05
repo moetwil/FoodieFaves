@@ -23,8 +23,6 @@ password: 123
 
 
 # TODO:
-[x] - readme schrijven
-[] - htmlspecialchars
 [] - register restaurant eigenaar
 
 Server
