@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col my-5">
                 <h2>Privacy Policy</h2>
-                <p>At [Company Name], we take privacy seriously and are committed to protecting the personal information of
+                <p>At FoodieFaves, we take privacy seriously and are committed to protecting the personal information of
                     our users.</p>
                 <h3>Information We Collect</h3>
                 <p>We collect information you provide when you register on our site, place an order, subscribe to our

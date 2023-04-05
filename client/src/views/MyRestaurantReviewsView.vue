@@ -13,11 +13,11 @@
                                 <th scope="col">Prijs/kwaliteit</th>
                                 <th scope="col">Review</th>
                                 <th scope="col">Datum</th>
-                                <th scope="col">Datum</th>
+                                <th scope="col">Rapporteer</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(review, index) in reviews" :key="index">
+                            <tr v-if="reviews.length !== 0" v-for="(review, index) in reviews" :key="index">
                                 <td><img v-if="review && review.image" :src="review.image" alt="" /></td>
                                 <td>{{ review.food_rating }}/5</td>
                                 <td>{{ review.service_rating }}/5</td>
@@ -29,6 +29,9 @@
                                 <td v-else><font-awesome-icon class="flag" @click="handleUnflag(review)"
                                         :icon="['fas', 'flag']" style="color: #ff0000;" />
                                 </td>
+                            </tr>
+                            <tr v-else>
+                                <td colspan="7">Geen reviews gevonden</td>
                             </tr>
                         </tbody>
                     </table>
@@ -44,23 +47,23 @@ import axios from "./../utils/axios";
 import Review from "./../interfaces/Review";
 import Restaurant from "./../interfaces/Restaurant";
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
-import router from "../router";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const authenticationStore = useAuthenticationStore();
 // VARIABLES
 const reviews = ref<Review[]>([]);
 const restaurant = ref<Restaurant>({} as Restaurant);
-const ownerId = ref<number | null>(null);
 
 
 // METHODS
 
-onMounted(() => {
+onMounted(async () => {
     authenticationStore.checkAuth();
-    fetchRestaurant();
+    await fetchRestaurant();
 
     // check if user is owner of restaurant
-    if (authenticationStore.user?.id !== ownerId.value) {
+    if (authenticationStore.user?.id !== restaurant.value.owner_id) {
         router.push('/mijn-restaurants');
     }
 
@@ -92,7 +95,7 @@ async function fetchRestaurant() {
         const restaurantId = router.currentRoute.value.params.id;
         const response = await axios.get(`/restaurants/${restaurantId}`);
         restaurant.value = response.data;
-        ownerId.value = response.data.owner_id;
+        // ownerId.value = response.data.owner_id;
     }
     catch (e) {
         console.log(e);

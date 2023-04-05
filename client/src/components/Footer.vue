@@ -11,9 +11,6 @@
                             <a href="/privacy-policy" class="text-dark">Privacy Policy</a>
                         </li>
                         <li class="list-inline-item">&middot;</li>
-                        <li class="list-inline-item">
-                            <a href="/mijn-account" class="text-dark">Mijn account</a>
-                        </li>
                     </ul>
                 </div>
             </div>

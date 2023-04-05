@@ -99,9 +99,9 @@ class ReviewController extends Controller
             $response = $this->service->deleteReview($id);
             
             if ($response) {
-                $this->respond("Review deleted");
+                $this->respond("Review: $id deleted");
             } else {
-                $this->respondWithError(500, "Review could not be deleted");
+                $this->respondWithError(500, "Review: $id could not be deleted");
             }
             
         } catch (Exception $e) {
@@ -118,10 +118,11 @@ class ReviewController extends Controller
             // flag the review
             $response = $this->service->flagReview($id);
             
+            // send response
             if ($response) {
-                $this->respond("Review flagged");
+                $this->respond("Review: $id flagged");
             } else {
-                $this->respondWithError(500, "Review could not be flagged");
+                $this->respondWithError(500, "Review: $id could not be flagged");
             }
             
         } catch (Exception $e) {
@@ -137,10 +138,11 @@ class ReviewController extends Controller
             // unflag the review
             $response = $this->service->unflagReview($id);
             
+            // send response
             if ($response) {
-                $this->respond("Review unflagged");
+                $this->respond("Review: $id unflagged");
             } else {
-                $this->respondWithError(500, "Review could not be flagged");
+                $this->respondWithError(500, "Review: $id could not be flagged");
             }
             
         } catch (Exception $e) {
@@ -156,17 +158,19 @@ class ReviewController extends Controller
 
             $review = $this->service->getReviewById($id);
             
+            // check if the review is found
             if($review == null) {
-                $this->respondWithError(404, "Review not found");
+                $this->respondWithError(404, "Review: $id not found");
                 return;
             }
             
             $response = $this->service->approveReview($id);
             
+            // send response
             if ($response) {
-                $this->respond("Review approved");
+                $this->respond("Review: $id approved");
             } else {
-                $this->respondWithError(500, "Review could not be approved");
+                $this->respondWithError(500, "Review: $id could not be approved");
             }
             
         } catch (Exception $e) {
@@ -244,41 +248,4 @@ class ReviewController extends Controller
         
         return true;
     }
-
-    // public function update($id)
-    // {
-    //     try {
-    //         $review = $this->service->getReviewById($id);
-    
-    //         if($review == null) {
-    //             $this->respondWithError(404, "Review not found");
-    //             return;
-    //         }
-    
-    //         $postedReview = $this->createObjectFromPostedJson("Models\\Review");
-    //         $review = $this->service->updateReview($id, $postedReview);
-    
-    //     } catch (Exception $e) {
-    //         $this->respondWithError(500, $e->getMessage());
-    //     }
-    
-    //     $this->respond($review);
-    // }
-
-    // public function getByUser($id)
-    // {
-    //     try {
-    //         // get reviews by user id from the database and check if it is found
-    //         $reviews = $this->service->getReviewsByUser($id);
-    //         if ($reviews == null) {
-    //             $this->respondWithError(404, "Reviews not found");
-    //             return;
-    //         }
-
-    //         $this->respond($reviews);
-
-    //     } catch (Exception $e) {
-    //         $this->respondWithError(500, $e->getMessage());
-    //     }
-    // }
 }

@@ -67,6 +67,9 @@ class RestaurantRepository extends Repository{
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
+            // get the updated restaurant
+            $restaurant = $this->getRestaurantById($id);
+
             return $restaurant;
         } catch (PDOException $e) {
             echo $e;

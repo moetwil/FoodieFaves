@@ -33,7 +33,7 @@ function goToRestaurant(restaurant: Restaurant) {
 
 async function fetchRestaurants() {
     try {
-        const response = await axios.get("/restaurants");
+        const response = await axios.get("/restaurants?limit=3&order=DESC");
         restaurants.value = response.data;
     } catch (error) {
         console.log(error);
