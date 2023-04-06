@@ -23,10 +23,6 @@ password: 123
 
 
 # TODO:
-[] - register restaurant eigenaar
-
-Server
-[] - getAllByOwner pagination
 
 
 

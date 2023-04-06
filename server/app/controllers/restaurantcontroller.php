@@ -78,7 +78,7 @@ class RestaurantController extends Controller
                 // get restaurants by owner id and check if any are found
                 $restaurants = $this->service->getAllRestaurantsByOwner($id, $limit, $offset, $order, $type);
                 if ($restaurants == null) {
-                    $this->respondWithError(404, "No restaurants found");
+                    $this->respondWithError(204, "No restaurants found");
                     return;
                 }
 

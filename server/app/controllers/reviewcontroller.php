@@ -55,7 +55,7 @@ class ReviewController extends Controller
             // get reviews by restaurant id from the database and check if it is found
             $reviews = $this->service->getReviewsByRestaurant($id, $limit, $offset, $order, $filter);
             if ($reviews == null) {
-                $this->respondWithError(404, "Reviews not found");
+                $this->respondWithError(204, "Reviews not found");
                 return;
             }
 
@@ -198,7 +198,7 @@ class ReviewController extends Controller
             // get reviews from the database and check if it is found
             $reviews = $this->service->getReviews($limit, $offset, $order, $filter);
             if ($reviews == null) {
-                $this->respondWithError(404, "Reviews not found");
+                $this->respondWithError(204, "Reviews not found");
                 return;
             }
             

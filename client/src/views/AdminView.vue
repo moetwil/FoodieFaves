@@ -2,7 +2,11 @@
     <Banner page-title="Admin panel" />
     <div class="container">
         <div class="row">
-            <ManageReview v-for="review in flaggedReviews" :review="review" @reload="reloadReviews" />
+            <ManageReview v-if="flaggedReviews.length !== 0" v-for="review in flaggedReviews" :review="review"
+                @reload="reloadReviews" />
+            <div v-else class="col-12 text-center py-5">
+                <h3>Er zijn geen reviews die beheerd moeten worden.</h3>
+            </div>
         </div>
     </div>
 </template>

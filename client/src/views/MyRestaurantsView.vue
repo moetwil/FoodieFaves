@@ -26,7 +26,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(restaurant, index) in restaurants" :key="index">
+                                <tr v-if="restaurants.length !== 0" v-for="(restaurant, index) in restaurants" :key="index">
                                     <td><img v-if="restaurant && restaurant.profile_picture"
                                             :src="restaurant.profile_picture" alt="" /></td>
                                     <td>{{ restaurant.name }}</td>
@@ -39,6 +39,9 @@
                                             icon="fa-solid fa-quote-left" /></td>
                                     <td><font-awesome-icon class="action" @click="handleDelete(restaurant)"
                                             icon="fa-solid fa-trash" /></td>
+                                </tr>
+                                <tr v-else>
+                                    <td colspan="8" class="text-center">Je hebt nog geen restaurants aangemaakt.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -85,8 +88,7 @@ onMounted(() => {
 async function fetchRestaurants() {
     try {
         const response = await axios.get(`/restaurants/owner/${localStorage.getItem("user_id")}`);
-        restaurants.value = response.data;
-        console.log(restaurants.value);
+        restaurants.value = response.status === 404 ? [] : response.data;
     } catch (error) {
         console.log(error);
     }

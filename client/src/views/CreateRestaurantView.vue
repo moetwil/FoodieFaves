@@ -33,7 +33,7 @@
                             <div class="col">
                                 <div class="field">
                                     <label class="label" for="category">Categorie</label>
-                                    <select class="form-select" v-model="restaurant.restaurant_type_id">
+                                    <select class="form-select" v-model="restaurant.restaurant_type_id" name="category">
                                         <option selected value="0">Kies een restaurant type</option>
                                         <option v-for="restaurantType in restaurantTypes" :key="restaurantType.id"
                                             :value="restaurantType.id">{{ restaurantType.name }}
@@ -195,6 +195,7 @@ function checkForErrors() {
     const houseNumberEl = document.querySelector("input[name=house-number]") as HTMLDivElement;
     const zipCodeEl = document.querySelector("input[name=zip-code]") as HTMLDivElement;
     const cityEl = document.querySelector("input[name=city]") as HTMLDivElement;
+    const categoryEl = document.querySelector("select[name=category]") as HTMLDivElement;
 
     // ERROR HANDLING
     clearFieldMessages();
@@ -217,6 +218,9 @@ function checkForErrors() {
     if (!restaurant.value?.city)
         setFieldMessage(cityEl, FieldMessageType.Error, "Vul alstublieft een stad in.");
 
+    if (!restaurant.value?.restaurant_type_id)
+        setFieldMessage(categoryEl, FieldMessageType.Error, "Vul alstublieft een type restaurant in.");
+
     return hasAnyFieldErrors();
 }
 </script>
@@ -227,11 +231,9 @@ function checkForErrors() {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 5px;
-    /* max-width: 60vw; */
     margin: 0 auto;
 }
 
-/* on mobile create-restaurant-container 80% */
 @media only screen and (max-width: 600px) {
     .create-restaurant-container {
         max-width: 80%;
