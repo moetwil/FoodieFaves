@@ -118,9 +118,6 @@ class ReviewRepository extends Repository
             if($limit == null && $offset != null){
                 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             }
-            // if($filter === 'flagged'){
-            //     $stmt->bindParam(':flagged', $flagged, PDO::PARAM_INT);
-            // }
 
             $stmt->execute();
 

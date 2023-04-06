@@ -67,8 +67,11 @@ class Controller
             if(is_object($value)) {
                 continue;
             }
-            $object->{$key} = $value;
+            // Sanitize the input of the user
+            $sanitizedValue = is_string($value) ? htmlspecialchars($value, ENT_QUOTES) : $value;
+            $object->{$key} = $sanitizedValue;
         }
         return $object;
     }
+
 }

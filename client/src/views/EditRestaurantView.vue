@@ -150,10 +150,10 @@ onMounted(() => {
     fetchRestaurantTypes();
     fetchRestaurant();
 
-    // check if user is owner of restaurant
-    if (authenticationStore.user?.id !== restaurant.value?.owner_id) {
-        router.push('/mijn-restaurants');
-    }
+    // // check if user is owner of restaurant
+    // if (authenticationStore.getUser?.id !== restaurant.value?.owner_id) {
+    //     router.push('/mijn-restaurants');
+    // }
 });
 
 async function handleSubmit() {

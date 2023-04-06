@@ -10,8 +10,8 @@
                 </div>
                 <div class="col-md-4" id="manage-review-controls">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-success mx-3" @click="handleApprove">Approve</button>
-                        <button type="button" class="btn btn-danger" @click="handleDelete">Delete</button>
+                        <button type="button" class="btn btn-success mx-3" @click="handleApprove">Approve review</button>
+                        <button type="button" class="btn btn-danger" @click="handleDelete">Delete review</button>
                     </div>
                 </div>
             </div>

@@ -76,7 +76,7 @@ async function handleLogin() {
 
     // LOGIN
     const response = await authenticationStore.login(loginData.value);
-    if (response.response.status === 401) {
+    if (response && response.response.status === 401) {
         displayDanger("Invalid username or password.");
     }
 

@@ -78,6 +78,8 @@ router.beforeEach((to, from, next) => {
     next('/');
   } else if (to.meta.requiresAdmin && !isLoggedIn) {
     next('/');
+  } else if (to.path === '/register' && isLoggedIn) {
+    next('/');
   } else {
     next();
   }

@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-// import { useRouter } from 'vue-router';
 import axios from '../utils/axios';
 import User from '../interfaces/User';
 import Login from '../interfaces/Login';
@@ -62,7 +61,8 @@ export const useAuthenticationStore = defineStore({
         if (response.status === 200) {
           this.setUser(response.data.user, response.data.jwt);
           axios.updateAuthorizationHeader(response.data.jwt);
-          this.router.push('/');
+          // refresh page to update navbar
+          window.location.reload();
         }
       } catch (error: any) {
         console.error(error);

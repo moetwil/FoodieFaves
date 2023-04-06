@@ -59,7 +59,7 @@ const averageRating = computed(() => {
 async function fetchReviewAmount() {
     try {
         const response = await axios.get(`/restaurants/${restaurant.id}/reviews`);
-        reviewAmount.value = response.data;
+        reviewAmount.value = response.data.amount;
     } catch (error) {
         console.error(error);
     }
@@ -68,7 +68,7 @@ async function fetchReviewAmount() {
 async function fetchRating() {
     try {
         const response = await axios.get(`/restaurants/${restaurant.id}/rating`);
-        rating.value = response.data;
+        rating.value = response.data.rating;
 
     } catch (error) {
         console.error(error);

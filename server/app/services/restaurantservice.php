@@ -29,12 +29,12 @@ class RestaurantService {
         return $this->restaurantRepository->deleteRestaurant($id);
     }
 
-    public function getAllRestaurants(): ?array {
-        return $this->restaurantRepository->getAllRestaurants();
+    public function getAllRestaurants($limit, $offset, $order, $filter, $type): ?array {
+        return $this->restaurantRepository->getAllRestaurants($limit, $offset, $order, $filter, $type);
     }
 
-    public function getAllRestaurantsByOwner(int $ownerId): ?array {
-        return $this->restaurantRepository->getAllRestaurantsByOwner($ownerId);
+    public function getAllRestaurantsByOwner(int $ownerId, $limit, $offset, $order, $type): ?array {
+        return $this->restaurantRepository->getAllRestaurantsByOwner($ownerId, $limit, $offset, $order, $type);
     }
 
     public function getRestaurantReviewsAmount($id){

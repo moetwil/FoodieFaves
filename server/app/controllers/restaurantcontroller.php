@@ -37,8 +37,22 @@ class RestaurantController extends Controller
     public function getAll()
     {
         try {
+            // get information from the query string
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : null;
+            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : null;
+            $order = isset($_GET['order']) ? htmlspecialchars($_GET['order'], ENT_QUOTES) : null;
+            $filter = isset($_GET['filter']) ? htmlspecialchars($_GET['filter'], ENT_QUOTES) : null;
+            $type = isset($_GET['type']) ? htmlspecialchars($_GET['type'], ENT_QUOTES) : null;
+            
+            // check if the order is valid
+            if($order=='asc' || $order == 'ASC'){
+                $order = false;
+            }else if($order == 'desc' || $order == 'DESC'){
+                $order = true;
+            }
+
             // get all restaurants and check if any are found
-            $restaurants = $this->service->getAllRestaurants();
+            $restaurants = $this->service->getAllRestaurants($limit, $offset, $order, $filter, $type);
             if (!$restaurants) {
                 $this->respondWithError(404, "No restaurants found");
                 return;
@@ -54,12 +68,19 @@ class RestaurantController extends Controller
     public function getAllByOwner($id)
     {
         try {
-            // get restaurants by owner id and check if any are found
-            $restaurants = $this->service->getAllRestaurantsByOwner($id);
-            if ($restaurants == null) {
-                $this->respondWithError(404, "No restaurants found");
-                return;
-            }
+                // get information from the query string
+                $limit = isset($_GET['limit']) ? intval($_GET['limit']) : null;
+                $offset = isset($_GET['offset']) ? intval($_GET['offset']) : null;
+                $order = isset($_GET['order']) ? htmlspecialchars($_GET['order'], ENT_QUOTES) : null;
+                $type = isset($_GET['type']) ? htmlspecialchars($_GET['type'], ENT_QUOTES) : null;
+
+
+                // get restaurants by owner id and check if any are found
+                $restaurants = $this->service->getAllRestaurantsByOwner($id, $limit, $offset, $order, $type);
+                if ($restaurants == null) {
+                    $this->respondWithError(204, "No restaurants found");
+                    return;
+                }
 
             $this->respond($restaurants);
         } catch (Exception $e) {
@@ -112,15 +133,15 @@ class RestaurantController extends Controller
     {
         try {
             // verify jwt and check if the user is the owner of the restaurant
-            if(!$this->authorizeOwnerAction($id))return;
+            if(!$this->authorizeOwnerAction($id)) return;
 
             // delete restaurant
             $response = $this->service->deleteRestaurant($id);
             if(!$response) {
-                $this->respondWithError(500, "Restaurant could not be deleted");
+                $this->respondWithError(500, "Restaurant: $id could not be deleted");
                 return;
             }
-            $this->respond($id);
+            $this->respond("Restaurant: $id deleted");
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
@@ -138,7 +159,12 @@ class RestaurantController extends Controller
 
             // get amount of reviews
             $amount = $this->service->getRestaurantReviewsAmount($id);
-            $this->respond($amount);
+
+            // create amount object
+            $amountObject = new \stdClass();
+            $amountObject->restaurantId = $id;
+            $amountObject->amount = $amount;
+            $this->respond($amountObject);
 
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
@@ -156,7 +182,13 @@ class RestaurantController extends Controller
 
             // get rating
             $rating = $this->service->getRestaurantRating($id);
-            $this->respond($rating);
+
+            // create rating object 
+            $ratingObject = new \stdClass();
+            $ratingObject->restaurantId = $id;
+            $ratingObject->rating = $rating;
+
+            $this->respond($ratingObject);
 
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
@@ -166,10 +198,18 @@ class RestaurantController extends Controller
     public function search($query){
         try {
             $restaurants = $this->service->search($query);
+
+            // check if any restaurants are found
+            if($restaurants == null) {
+                $this->respondWithError(404, "No restaurants found");
+                return;
+            }
+
+            $this->respond($restaurants);
+
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
-        $this->respond($restaurants);
     }
 
     private function authorizeOwnerAction($restaurantId){
@@ -202,6 +242,4 @@ class RestaurantController extends Controller
         
         return true;
     }
-
-
 }

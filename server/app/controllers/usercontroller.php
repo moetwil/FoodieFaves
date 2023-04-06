@@ -30,12 +30,11 @@ class UserController extends Controller
             }
 
             // generate jwt
-            $tokenResponse = $this->generateJwt($user);       
+            $tokenResponse = $this->generateJwt($user, "login");       
             $this->respond($tokenResponse); 
         } catch(Exception $e){
             $this->respondWithError(500, $e->getMessage());
         }
-           
     }
 
     public function register() {
@@ -61,7 +60,7 @@ class UserController extends Controller
             $user = $this->service->createUser($postedUser);
 
             // generate jwt
-            $tokenResponse = $this->generateJwt($user);       
+            $tokenResponse = $this->generateJwt($user, "registration");       
             $this->respond($tokenResponse);   
         } catch(Exception $e){
             $this->respondWithError(500, $e->getMessage());
@@ -103,7 +102,6 @@ class UserController extends Controller
         } catch(Exception $e){
             $this->respondWithError(500, $e->getMessage());
         }
-        
     }
 
     public function delete($id){
@@ -113,9 +111,9 @@ class UserController extends Controller
             
             // check if the user was deleted and send response accordingly
             if($res) {
-                $this->respond("User deleted");
+                $this->respond("User: $id deleted");
             } else {
-                $this->respondWithError(500, "User could not be deleted");
+                $this->respondWithError(500, "User: $id could not be deleted");
             }
         }
         catch(Exception $e){
@@ -137,8 +135,7 @@ class UserController extends Controller
         }
     }
 
-    public function generateJwt($user) {
-        // SECRET KEY TODO: change and store in .env
+    public function generateJwt($user, $type) {
         $secret_key = "gF9yx9bszP9em3f4";
 
         // JWT DATA
@@ -165,7 +162,7 @@ class UserController extends Controller
 
         return 
             array(
-                "message" => "Successful login.",
+                "message" => "Successful $type",
                 "jwt" => $jwt,
                 "user" => $user,
                 // "expireAt" => $expire

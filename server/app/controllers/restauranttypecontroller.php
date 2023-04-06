@@ -22,6 +22,7 @@ class RestaurantTypeController extends Controller
         try {
             $restaurantTypes = $this->service->getAllRestaurantTypes();
 
+            // check if any restaurant types are found
             if ($restaurantTypes == null) {
                 $this->respondWithError(404, "No restaurants types found");
                 return;

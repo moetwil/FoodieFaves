@@ -67,6 +67,9 @@ class RestaurantRepository extends Repository{
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
+            // get the updated restaurant
+            $restaurant = $this->getRestaurantById($id);
+
             return $restaurant;
         } catch (PDOException $e) {
             echo $e;
@@ -101,18 +104,40 @@ class RestaurantRepository extends Repository{
     }
 
 
-    public function getAllRestaurants() 
+    public function getAllRestaurants($limit, $offset, $order, $filter, $type) 
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id, profile_picture FROM Restaurant");
+            $sql = "SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id, profile_picture FROM Restaurant";
+
+            // if type is set, add it to the query
+            if($type)$sql .= " WHERE restaurant_type_id = :type";
+
+            // if order is set, add it to the query
+            if($order)$sql .= " ORDER BY id DESC";
+            else $sql .= " ORDER BY id ASC";
+
+            // if limit and offset are set, add them to the query
+            if(isset($limit) && isset($offset)) $sql .= " LIMIT :limit OFFSET :offset";
+            if(isset($limit) && !isset($offset)) $sql .= " LIMIT :limit";
+            if(!isset($limit) && isset($offset)) $sql .= " OFFSET :offset";
+
+            $stmt = $this->connection->prepare($sql);
+            if($limit != null && $offset != null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+            if($limit != null && $offset == null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            }
+            if($limit == null && $offset != null){
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+            if($type)$stmt->bindParam(':type', $type);
+
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
             $restaurants = $stmt->fetchAll();
-
-            // foreach($restaurants as $restaurant){
-            //     $restaurant->profile_picture = $this->getRestaurantPicture($restaurant->id);
-            // }
 
             return $restaurants;
         } catch (PDOException $e) {
@@ -121,11 +146,41 @@ class RestaurantRepository extends Repository{
     }
 
 
-    public function getAllRestaurantsByOwner($ownerId) 
+    public function getAllRestaurantsByOwner($ownerId, $limit, $offset, $order, $type) 
     {
         try {
-            $stmt = $this->connection->prepare("SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id, profile_picture FROM Restaurant WHERE owner_id = :owner_id");
+            $sql = "SELECT id, name, street, house_number, city, zip_code, country, phone_number, owner_id, restaurant_type_id, profile_picture FROM Restaurant WHERE owner_id = :owner_id";
+
+            // if type is set, add it to the query
+            if($type)$sql .= " AND restaurant_type_id = :type";
+
+            // if order is set, add it to the query
+            if($order)$sql .= " ORDER BY id DESC";
+            else $sql .= " ORDER BY id ASC";
+
+            // if limit and offset are set, add them to the query
+            if(isset($limit) && isset($offset)) $sql .= " LIMIT :limit OFFSET :offset";
+            if(isset($limit) && !isset($offset)) $sql .= " LIMIT :limit";
+            if(!isset($limit) && isset($offset)) $sql .= " OFFSET :offset";
+
+
+
+
+            $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':owner_id', $ownerId);
+            if($limit != null && $offset != null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+            if($limit != null && $offset == null){
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            }
+            if($limit == null && $offset != null){
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
+            if($type)$stmt->bindParam(':type', $type);
+
+
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\Restaurant');
