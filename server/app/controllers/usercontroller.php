@@ -136,7 +136,6 @@ class UserController extends Controller
     }
 
     public function generateJwt($user, $type) {
-        // SECRET KEY TODO: change and store in .env
         $secret_key = "gF9yx9bszP9em3f4";
 
         // JWT DATA
